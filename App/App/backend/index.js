@@ -3,12 +3,11 @@ const mongoose = require('mongoose');
 const express = require('express');
 const properties = require('./config/properties');
 const db = require('./config/db');
+const router = require('./app/routes');
 
 db();
 
 const app = express();
-const router = express.Router();
-
 app.use(express.json());
 
 app.get('/', (req, res) => {
