@@ -14,8 +14,13 @@
     "nodemon": "^3.0.3"
   },
   "nodemonConfig": {
-    "watch": ["index.js"],
+    "watch": [
+      "index.js"
+    ],
     "ext": "js",
     "exec": "node index.js"
+  },
+  "dependencies": {
+    "mongoose": "^8.2.0"
   }
 }
