@@ -8,16 +8,16 @@
                     type="text"
                     class="form-control"
                     placeholder="Username"
-                    #txtInput
+                    #emailInput
                     >
                     <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="vpn_key"></mat-icon>
                     <input
                     type="password"
                     class="form-control"
                     placeholder="Password"
-                    #txtInput
+                    #passwordInput
                     >
-                    <button class="btn btn-primary">
+                    <button class="btn btn-primary" (click)="login()">
                         Log In
                     </button>
                   </div>

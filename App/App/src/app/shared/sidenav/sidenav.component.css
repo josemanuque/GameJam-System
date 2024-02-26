@@ -1,0 +1,80 @@
+h1{
+    color: white;
+    padding-top: 0.5rem;
+    margin: 0;
+    margin-top: 8px;
+    font-weight: normal;
+    font-size: 1.8rem;
+  }
+  
+  p{
+    margin-top: 2px;
+    font-size: 0.7rem;
+    color: rgb(155, 155, 155);
+  }
+  
+  .btn-sn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 1rem;
+  
+    span{
+      color: white;
+    }
+  
+    mat-icon{
+      color: #FFA500;
+      margin-right: 8px;
+    }
+  }
+
+  .btn-sn:hover{
+    background-color: #FFA500;
+    mat-icon{
+      color: white;
+    }
+  }
+  
+  mat-divider{
+    margin-top: 16px;
+    margin-bottom: 16px;
+    background-color: rgba(155,155,155,0.5);
+  }
+  
+  mat-sidenav {
+    margin: 16px;
+    margin-top: 2rem !important;
+    width: 250px;
+    height: calc(100vh - 4rem);
+    border-right: none;
+    background: #212121;
+    color: white;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.19), 0px 6px 6px rgba(0, 0, 0, 0.23);
+  }
+  
+  mat-toolbar{
+    width: auto;
+    height: 5rem;
+    border-right: none;
+    background: #212121;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.19), 0px 6px 6px rgba(0, 0, 0, 0.23);
+    mat-icon{
+      color: white;
+    }
+    span{
+      color: white;
+    }
+    
+  }
+  
+  .avatar {
+  margin-top: 2rem;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  }
