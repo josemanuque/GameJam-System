@@ -1,0 +1,43 @@
+@use '@angular/material' as mat;
+
+// Define your custom palette and theme
+$custom-primary: mat.define-palette(mat.$orange-palette, 500);
+$custom-accent: mat.define-palette(mat.$orange-palette, A200, A100, A400);
+
+// $custom-theme: mat.define-light-theme((
+//   color: (
+//     primary: $custom-primary,
+//     accent: $custom-accent
+//   ),
+//   foreground: (
+//     base: #ffffff // Base foreground color (text color)
+//   )
+// ));
+
+$custom-theme: mat.define-dark-theme((
+  color: (
+    primary: $custom-primary,
+    accent: $custom-accent
+  ),
+  foreground: (
+    base: #eeeeee // Base foreground color (text color)
+  ),
+  background: (
+    background: #141414, // Dark background color for elements
+    status: #222222 // Dark background color for status bar
+  ),
+  density: -1,
+));
+
+// Include Angular Material core styles and apply your custom theme to all components
+@include mat.core();
+
+// Include your custom theme
+@include mat.all-component-themes($custom-theme);
+
+
+/* You can add global styles to this file, and also import other style files */
+body {
+    background-color: #121212;
+    overflow-x: hidden;
+}

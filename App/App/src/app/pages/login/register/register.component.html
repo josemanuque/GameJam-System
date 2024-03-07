@@ -1,0 +1,75 @@
+<div class="container flex-container">
+    <div class="row" class="d-flex justify-content-center">
+        <mat-card>
+            <mat-card-content class="d-flex justify-content-center">
+                <div class="example-container flexx-container">
+                    <form #loginForm="ngForm">
+                        <div class="d-flex justify-content-center">
+                            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="person_add"></mat-icon>
+                        </div>
+                        <input
+                        type="text"
+                        class="form-control"
+                        placeholder="E-mail"
+                        #emailInput
+                        > 
+                        <div class="d-flex justify-content-center">
+                            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="phone"></mat-icon>
+                        </div>
+                        <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Phone Number"
+                        #phoneInput
+                        > 
+                        <div class="d-flex justify-content-center">
+                            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="discord"></mat-icon>
+                        </div>
+                        <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Discord Username"
+                        #discordInput
+                        > 
+                        <div class="d-flex justify-content-center">
+                            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="vpn_key"></mat-icon>
+                        </div> 
+                        <input
+                        type="password"
+                        class="form-control"
+                        placeholder="Password"
+                        #passwordInput
+                        >
+                        <div class="d-flex justify-content-center">
+                            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="location_on"></mat-icon>
+                        </div>
+                        <mat-form-field>
+                            <mat-label>Select Region</mat-label>
+                            <mat-select>
+                              @for (food of foods; track food) {
+                                <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+                              }
+                            </mat-select>
+                          </mat-form-field>
+
+                          <!-- <div class="d-flex justify-content-center">
+                            <button class="cmenu" mat-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">Menu <mat-icon>dialpad</mat-icon></button>
+                            <mat-menu  #menu="matMenu">
+                              <button style="width: 100%;" mat-menu-item>Item 1</button>
+                              <button mat-menu-item>Item 2</button>
+                            </mat-menu> 
+                          </div>
+                            -->
+
+                        <button class="btn btn-primary cbutton" (click)="register()">
+                            Register
+                        </button>
+                        <div class="d-flex justify-content-center">
+                            <p>Already have an account? <a [routerLink]="['/login']">Log In!</a></p>
+                        </div>
+                    </form>
+                  </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

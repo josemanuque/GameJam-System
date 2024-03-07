@@ -48,10 +48,9 @@ export class SidenavComponent {
   ngOnInit(): void {
     const margin = 32;
     this.entries = this.getEntries();
-    if (localStorage.getItem("currentType") === "User"){
-      this.currentName = "Usuario";
-      this.currentAt = localStorage.getItem("currentUsername") + "";
-      this.currentPhoto = localStorage.getItem("currentPhoto") + "";
+    if (localStorage.getItem("currentType") === "jammer"){
+      this.currentName = localStorage.getItem("email") + "";
+      this.currentAt = localStorage.getItem("currentType") + "";
     }
   }
 

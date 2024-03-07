@@ -4,21 +4,36 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
-import { AuthServiceService } from '../../services/auth-service.service';
+import {MatSelectModule} from '@angular/material/select';
+import { AuthServiceService } from '../../../services/auth-service.service';
 import { Router, RouterModule  } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import {MatMenuModule} from '@angular/material/menu';
+
+interface Region {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
-  imports: [MatCardModule,MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormsModule, RouterModule ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  imports: [MatCardModule,MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormsModule, RouterModule, MatSelectModule, MatMenuModule],
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.scss'
 })
-export class LoginComponent {
+export class RegisterComponent {
   @ViewChild('emailInput') emailInput!: ElementRef;
   @ViewChild('passwordInput') passwordInput!: ElementRef;
+
+  foods: Region[] = [
+    {value: 'steak-0', viewValue: 'North America'},
+    {value: 'pizza-1', viewValue: 'LATAM'},
+    {value: 'tacos-2', viewValue: 'Europe'},
+    {value: 'tacos-3', viewValue: 'Asia'},
+    {value: 'tacos-4', viewValue: 'MENA'},
+  ];
 
   hide = true;
   currentUser: any;
@@ -27,7 +42,7 @@ export class LoginComponent {
   ngOnInit(){
   }
 
-  login(){
+  register(){
     const email = this.emailInput.nativeElement.value;
     const password = this.passwordInput.nativeElement.value;
     this.authService.login(email, password).subscribe(
@@ -43,14 +58,4 @@ export class LoginComponent {
     );
   }
 
-  onSubmit(form: NgForm) {
-    if (form.valid) {
-      const username = form.value.username;
-      const password = form.value.password;
-      
-      // Now you can perform your login logic here
-      console.log('Username:', username);
-      console.log('Password:', password);
-    }
-  }
 }

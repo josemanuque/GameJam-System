@@ -4,46 +4,53 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
-import { AuthServiceService } from '../../services/auth-service.service';
+import { AuthServiceService } from '../../../services/auth-service.service';
 import { Router, RouterModule  } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 
+
 @Component({
-  selector: 'app-login',
+  selector: 'app-forgot-password',
   standalone: true,
-  imports: [MatCardModule,MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormsModule, RouterModule ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  imports: [MatCardModule,MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormsModule, RouterModule],
+  templateUrl: './forgot-password.component.html',
+  styleUrl: './forgot-password.component.css'
 })
-export class LoginComponent {
+export class ForgotPasswordComponent {
   @ViewChild('emailInput') emailInput!: ElementRef;
-  @ViewChild('passwordInput') passwordInput!: ElementRef;
+  @ViewChild('codeInput') codeInput!: ElementRef;
+  @ViewChild('newPasswordInput') newPasswordInput!: ElementRef;
+  @ViewChild('confirmPasswordInput') confirmPasswordInput!: ElementRef;
 
   hide = true;
   currentUser: any;
+  coded = false;
+  confirmed = false;
   constructor(private authService: AuthServiceService, private router: Router){}
 
   ngOnInit(){
   }
 
-  login(){
+  sendCode(){
     const email = this.emailInput.nativeElement.value;
-    const password = this.passwordInput.nativeElement.value;
-    this.authService.login(email, password).subscribe(
-      (auth) => {
-        if(auth){
-          localStorage.setItem('currentType', 'jammer');
-          localStorage.setItem('email', auth.email);
-          this.router.navigate(['/dashboard']);
-        } else {
-          alert('Invalid credentials');
-        }
-      }
-    );
+    this.coded = true;
+  }
+
+  verifyCode(){
+    const code = this.codeInput.nativeElement.value;
+    this.coded = false;
+    this.confirmed = true;
+  }
+
+  confirmPass(){
+    const newPassword = this.newPasswordInput.nativeElement.value;
+    const confirmPassword = this.confirmPasswordInput.nativeElement.value;
+    this.router.navigate(['/login']);
   }
 
   onSubmit(form: NgForm) {
+    alert(this.coded)
     if (form.valid) {
       const username = form.value.username;
       const password = form.value.password;
@@ -53,4 +60,5 @@ export class LoginComponent {
       console.log('Password:', password);
     }
   }
+
 }

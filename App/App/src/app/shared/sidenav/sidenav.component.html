@@ -1,9 +1,13 @@
-<mat-toolbar *ngIf="toggleMenu">
+<!-- <mat-toolbar *ngIf="toggleMenu">
+    
+  </mat-toolbar> -->
+
+  @if (toggleMenu) {
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openSN()">
       <mat-icon>menu</mat-icon>
     </button>
     <span>Settings</span>
-  </mat-toolbar>
+  }
   
   <mat-sidenav #sidenav="matSidenav">
     @if (toggleMenu) {
@@ -15,6 +19,7 @@
     <p>{{currentAt}}</p>
   
     <mat-divider></mat-divider>
+
     @for (entry of entries; track entry.value1) {
         <button class="btn btn-sn" mat-button>
             <mat-icon>{{ entry.value1 }}</mat-icon>

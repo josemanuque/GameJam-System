@@ -3,23 +3,35 @@
         <mat-card>
             <mat-card-content class="d-flex justify-content-center">
                 <div class="example-container flexx-container">
-                    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="person_add"></mat-icon>
-                    <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Username"
-                    #emailInput
-                    >
-                    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="vpn_key"></mat-icon>
-                    <input
-                    type="password"
-                    class="form-control"
-                    placeholder="Password"
-                    #passwordInput
-                    >
-                    <button class="btn btn-primary" (click)="login()">
-                        Log In
-                    </button>
+                    <form #loginForm="ngForm" (ngSubmit)="login()">
+                        <div class="d-flex justify-content-center">
+                            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="person_add"></mat-icon>
+                        </div>
+                        <input
+                        type="text"
+                        class="form-control email"
+                        placeholder="Username"
+                        #emailInput
+                        > 
+                        <div class="d-flex justify-content-center">
+                            <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="vpn_key"></mat-icon>
+                        </div> 
+                        <input
+                        type="password"
+                        class="form-control password"
+                        placeholder="Password"
+                        #passwordInput
+                        >
+                        <div class="d-flex justify-content-center">
+                            <p>Forgot <a class="forgot-password" [routerLink]="['/login/forgot-password']"> password? </a></p>
+                        </div>
+                        <button class="btn btn-primary">
+                            Log In
+                        </button>
+                        <div class="d-flex justify-content-center">
+                            <p>Doesn't have an account? <a [routerLink]="['/login/register']">Register here!</a></p>
+                        </div>
+                    </form>
                   </div>
             </mat-card-content>
         </mat-card>
