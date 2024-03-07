@@ -2,6 +2,8 @@ require("dotenv").config()
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
+const fs = require('fs');
+const path = require('path');
 
 const createTransporterGmail = async () => {
     try {
@@ -66,4 +68,32 @@ const sendEmail = async(to, subject, text) => {
     }    
 };
 
-module.exports = { sendEmail }
+
+const sendEmailTemplate = async(to, subject, template, token) => {
+    try {
+        const templatePath = path.join(__dirname, '..', 'templates', template);
+        const emailHTML = fs.readFileSync(templatePath, 'utf-8');
+        const changePasswordLink = `http://localhost:4200/${token}`;
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
+            to,
+            subject,
+            html: emailHTML.replace('${changePasswordLink}', changePasswordLink),
+        }
+        let emailTransporter = await createTransporterGmail();
+        await emailTransporter.sendMail(
+            mailOptions, 
+            (err, info) => {
+            if (err) {
+                console.error('Error sending email:', err);
+            } else {
+                console.log('Email Sent:', info.response);
+            }
+        });
+    } catch (err) {
+        console.log("ERROR: ", err)
+    }    
+};
+
+
+module.exports = { sendEmail, sendEmailTemplate }

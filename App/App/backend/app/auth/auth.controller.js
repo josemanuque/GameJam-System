@@ -73,12 +73,13 @@ exports.forgotPassword = async (req, res) => {
     const email = req.body.email;
     try {
         const user = await UserModel.findOne({email});
-
         if (!user) {
             return res.status(409).send({ message: "Error changing password" });
         }
-
-        emailUtils.sendEmail(email, "Reset Password", "Test");
+        const resetToken = authUtils.generateToken();
+        user.resetToken = resetToken;
+        user.save();
+        emailUtils.sendEmailTemplate(email, "Reset Password", 'forgotPasswordMail.html', resetToken);
         res.send({ message: "Success" });
     }
     catch (err) {

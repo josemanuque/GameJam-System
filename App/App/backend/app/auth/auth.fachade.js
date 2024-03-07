@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 function hashPassword(password) {
     return bcrypt.hashSync(password);
@@ -23,10 +24,15 @@ function verifyToken(token, SECRET_KEY) {
 function getPayload(token){
     return jwt.decode(token, verify=false);
 }
+
+function generateToken() {
+    return crypto.randomBytes(20).toString('hex');
+}
 module.exports = {
   hashPassword,
   comparePasswords,
   generateAccessToken,
   verifyToken,
-  getPayload
+  getPayload,
+  generateToken
 };
