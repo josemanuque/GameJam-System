@@ -6,5 +6,6 @@ const mainRouter = express.Router();
 mainRouter.post("/auth", authController.register);
 mainRouter.get("/auth/:email/:password", authController.login);
 mainRouter.post("/forgotPassword", authController.forgotPassword);
+mainRouter.post("/resetPassword", authController.resetPassword);
 
 module.exports = mainRouter;

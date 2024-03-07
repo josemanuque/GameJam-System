@@ -86,3 +86,24 @@ exports.forgotPassword = async (req, res) => {
         res.send({ message: err });
     }
 };
+
+exports.resetPassword = async (req, res) => {
+    const email = req.body.email;
+    const token = req.body.token;
+    const newPassword = req.body.password;
+
+    try {
+        const user = await UserModel.findOne({email, resetToken: token});
+        if (!user){
+            return res.status(400).send({ message: "Invalid email or token"});
+        }
+
+        user.password = authUtils.hashPassword(newPassword);
+        user.resetToken = null;
+        user.save();
+        res.send({ message: "Password reset successful"});
+
+    } catch (err){
+        res.send({ message: err});
+    }
+};
