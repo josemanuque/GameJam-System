@@ -69,16 +69,16 @@ const sendEmail = async(to, subject, text) => {
 };
 
 
-const sendEmailTemplate = async(to, subject, template, token) => {
+const sendEmailTemplate = async(to, subject, template, OTP) => {
     try {
         const templatePath = path.join(__dirname, '..', 'templates', template);
         const emailHTML = fs.readFileSync(templatePath, 'utf-8');
-        const changePasswordLink = `http://localhost:4200/${token}`;
+        const changePasswordOTP = OTP;
         const mailOptions = {
             from: process.env.USER_EMAIL,
             to,
             subject,
-            html: emailHTML.replace('${changePasswordLink}', changePasswordLink),
+            html: emailHTML.replace('${OTP}', changePasswordOTP),
         }
         let emailTransporter = await createTransporterGmail();
         await emailTransporter.sendMail(

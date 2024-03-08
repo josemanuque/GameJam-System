@@ -76,10 +76,10 @@ exports.forgotPassword = async (req, res) => {
         if (!user) {
             return res.status(409).send({ message: "Error changing password" });
         }
-        const resetToken = authUtils.generateToken();
-        user.resetToken = resetToken;
+        const resetOTP = authUtils.generateOTP();
+        user.resetOTP = authUtils.hashPassword(resetOTP);
         user.save();
-        emailUtils.sendEmailTemplate(email, "Reset Password", 'forgotPasswordMail.html', resetToken);
+        emailUtils.sendEmailTemplate(email, "Reset Password", 'forgotPasswordMail.html', resetOTP);
         res.send({ message: "Success" });
     }
     catch (err) {

@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
         roles: {
             type: [String], required: true, default: ['jammer']
         },
-        resetToken: {
+        resetOTP: {
             type: String,
             default: null,
             expires: 900
