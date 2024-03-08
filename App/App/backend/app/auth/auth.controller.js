@@ -1,5 +1,5 @@
 const authUtils = require('./auth.fachade');
-const UserModel = require('./user.model');
+const UserModel = require('../models/user.model');
 const emailUtils = require('../utils/emailUtils');
 
 SECRET_KEY = process.env.SECRET_KEY;
