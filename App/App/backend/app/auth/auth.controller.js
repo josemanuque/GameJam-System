@@ -89,17 +89,20 @@ exports.forgotPassword = async (req, res) => {
 
 exports.resetPassword = async (req, res) => {
     const email = req.body.email;
-    const token = req.body.token;
+    const OTP = req.body.OTP;
     const newPassword = req.body.password;
 
     try {
-        const user = await UserModel.findOne({email, resetToken: token});
+        const user = await UserModel.findOne({email});
         if (!user){
             return res.status(400).send({ message: "Invalid email or token"});
         }
-
+        const isOTPCorrect = authUtils.comparePasswords(OTP, user.resetOTP);
+        if(!isOTPCorrect){
+            return res.status(400).send({ message: "Incorrect OTP" });
+        }
         user.password = authUtils.hashPassword(newPassword);
-        user.resetToken = null;
+        user.resetOTP = null;
         user.save();
         res.send({ message: "Password reset successful"});
 
