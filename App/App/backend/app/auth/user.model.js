@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
         password: {
             type: String, required: true, unique: true, trim: true
         },
-        resetToken: {
+        resetOTP: {
             type: String,
             default: null,
             expires: 900
