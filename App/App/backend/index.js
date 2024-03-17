@@ -4,7 +4,7 @@ const express = require('express');
 const properties = require('./config/properties');
 const db = require('./config/db');
 const router = require('./app/routes');
-
+const roleController = require('./app/controllers/role.controller');
 db();
 
 const app = express();
@@ -27,6 +27,9 @@ app.get('/db-status', (req, res) => {
     const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
     res.send(`Database status: ${dbStatus}`);
 });
+
+// Creates All Roles In Mongo if not stored
+roleController.createRolesIfNotExist();
 
 app.use(router);
 app.listen(properties.PORT, properties.IP, () => {

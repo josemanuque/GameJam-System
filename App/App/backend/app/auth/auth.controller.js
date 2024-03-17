@@ -1,6 +1,8 @@
 const authUtils = require('./auth.fachade');
 const UserModel = require('../models/user.model');
+const OTPModel = require('../models/otp.model');
 const emailUtils = require('../utils/emailUtils');
+const roleController = require('../controllers/role.controller');
 
 SECRET_KEY = process.env.SECRET_KEY;
 KEY_EXPIRES_IN = process.env.KEY_EXPIRES_IN;
@@ -8,15 +10,22 @@ KEY_EXPIRES_IN = process.env.KEY_EXPIRES_IN;
 exports.register = async (req, res) => {
     try {
         const userReq = {
+            username: req.body.username,
             email: req.body.email,
             password: authUtils.hashPassword(req.body.password)
         };
+
+        const defaultRoleID = await roleController.getDefaultRoleID();
+        userReq.roles = [defaultRoleID];
+
         const user = new UserModel(userReq);
         await user.save();
 
         const resUser = {
-            message: "logged in",
+            message: "Logged in",
             email: user.email,
+            username: user.username,
+            roles: ["Jammer"]
         };
 
         const accessToken = authUtils.generateAccessToken(resUser, SECRET_KEY, KEY_EXPIRES_IN);
@@ -52,10 +61,12 @@ exports.login = async (req, res) => {
         if (!isPasswordCorrect) {
             return res.status(409).send({ message: 'Authentication failed' });
         }
-
+        
+        const userRoles = await roleController.getRoleNamesFromIDs(foundPerson.roles);
         const user = {
-            message: "logged in",
-            email: userReq.email
+            message: "Logged in",
+            email: userReq.email,
+            roles: userRoles
         };
         const accessToken = authUtils.generateAccessToken(user, SECRET_KEY, KEY_EXPIRES_IN);
 
@@ -73,13 +84,25 @@ exports.forgotPassword = async (req, res) => {
     const email = req.body.email;
     try {
         const user = await UserModel.findOne({email});
-        if (!user) {
+        if(!user) {
             return res.status(409).send({ message: "Error changing password" });
         }
+        
+        const existingOTP = await OTPModel.findOne({ userID: user._id });
+        if(existingOTP){
+            await existingOTP.deleteOne();
+        }
         const resetOTP = authUtils.generateOTP();
-        user.resetOTP = authUtils.hashPassword(resetOTP);
-        user.save();
+        const hashedOTP = authUtils.hashPassword(resetOTP);
+
+        const otpEntry = {
+            userID: user._id, 
+            resetOTP: hashedOTP
+        }
+        const otpObject = new OTPModel(otpEntry);
+        otpObject.save();
         emailUtils.sendEmailTemplate(email, "Reset Password", 'forgotPasswordMail.html', resetOTP);
+        //console.log(resetOTP);
         res.send({ message: "Success" });
     }
     catch (err) {
@@ -95,14 +118,19 @@ exports.resetPassword = async (req, res) => {
     try {
         const user = await UserModel.findOne({email});
         if (!user){
-            return res.status(400).send({ message: "Invalid email or token"});
+            return res.status(400).send({ message: "Invalid email or OTP"});
         }
-        const isOTPCorrect = authUtils.comparePasswords(OTP, user.resetOTP);
+        const otpEntry = await OTPModel.findOne({userID: user._id});
+        if (!otpEntry){
+            return res.status(400).send({ message: "Invalid email or OTP"});
+        }
+
+        const isOTPCorrect = authUtils.comparePasswords(OTP, otpEntry.resetOTP);
         if(!isOTPCorrect){
             return res.status(400).send({ message: "Incorrect OTP" });
         }
         user.password = authUtils.hashPassword(newPassword);
-        user.resetOTP = null;
+        await otpEntry.deleteOne();
         user.save();
         res.send({ message: "Password reset successful"});
 
@@ -110,3 +138,4 @@ exports.resetPassword = async (req, res) => {
         res.send({ message: err});
     }
 };
+

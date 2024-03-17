@@ -11,19 +11,11 @@ const userSchema = new mongoose.Schema(
         password: {
             type: String, required: true, trim: true
         },
-        roles: {
-            type: [String], required: true, default: ['jammer']
-        },
-        resetOTP: {
-            type: String,
-            default: null,
-            expires: 900
-        }
-    },
-    {
-        versionKey: false,
+        roles: [
+            { type: mongoose.Schema.Types.ObjectId, ref: 'Role' }
+        ]
     }
-)
+);
 
 const UserModel = mongoose.model('User', userSchema);
 

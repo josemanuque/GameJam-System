@@ -13,7 +13,6 @@ function comparePasswords(password, hashedPassword) {
 }
 
 function generateAccessToken(userInfo, SECRET_KEY, expiresIn) {
-    console.log(userInfo);
     return jwt.sign(userInfo, SECRET_KEY, { expiresIn });
 }
 
