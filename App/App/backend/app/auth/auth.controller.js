@@ -45,10 +45,10 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     const userReq = {
-        email: req.params.email,
-        password: req.params.password
+        email: req.body.email,
+        password: req.body.password
     };
-
+    
     try {
         const foundPerson = await UserModel.findOne({ email: userReq.email });
         if (!foundPerson) {

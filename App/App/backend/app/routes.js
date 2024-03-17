@@ -4,8 +4,8 @@ const roleController = require('./controllers/role.controller');
 
 const mainRouter = express.Router();
 
-mainRouter.post("/auth", authController.register);
-mainRouter.get("/auth/:email/:password", authController.login);
+mainRouter.post("/auth/register", authController.register);
+mainRouter.post("/auth/login", authController.login);
 mainRouter.post("/forgotPassword", authController.forgotPassword);
 mainRouter.post("/resetPassword", authController.resetPassword);
 mainRouter.post("/createRole", roleController.createRole);
