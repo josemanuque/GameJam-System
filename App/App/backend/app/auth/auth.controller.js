@@ -12,7 +12,8 @@ exports.register = async (req, res) => {
         const userReq = {
             username: req.body.username,
             email: req.body.email,
-            password: authUtils.hashPassword(req.body.password)
+            password: authUtils.hashPassword(req.body.password),
+            phoneNumber: req.body.phoneNumber
         };
 
         const defaultRoleID = await roleController.getDefaultRoleID();

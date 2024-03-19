@@ -1,3 +1,4 @@
+const { truncateSync } = require('fs');
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema(
@@ -9,6 +10,9 @@ const userSchema = new mongoose.Schema(
             type: String, required: true, unique: true, trim: true
         },
         password: {
+            type: String, required: true, trim: true
+        },
+        phoneNumber:{
             type: String, required: true, trim: true
         },
         roles: [
