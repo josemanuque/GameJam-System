@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
             message: "Logged in",
             email: user.email,
             username: user.username,
-            roles: ["Jammer"]
+            roles: userReq.roles
         };
 
         const accessToken = authUtils.generateAccessToken(resUser, SECRET_KEY, KEY_EXPIRES_IN);
@@ -36,7 +36,7 @@ exports.register = async (req, res) => {
 
     } catch (err) {
         if (err.code === 11000) {
-            res.status(409).send({ message: 'Email already exists' });
+            res.status(409).send({ message: 'Email or username already exists' });
         } else {
             console.log(err)
             res.status(500).send({ message: 'Server error' });
@@ -66,7 +66,8 @@ exports.login = async (req, res) => {
         const userRoles = await roleController.getRoleNamesFromIDs(foundPerson.roles);
         const user = {
             message: "Logged in",
-            email: userReq.email,
+            email: foundPerson.email,
+            username: foundPerson.username,
             roles: userRoles
         };
         const accessToken = authUtils.generateAccessToken(user, SECRET_KEY, KEY_EXPIRES_IN);

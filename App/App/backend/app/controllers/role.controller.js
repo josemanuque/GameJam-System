@@ -35,7 +35,8 @@ exports.asignRole = async (req, res) => {
             return res.status(409).send( { message: "Role not found"} );
         }
 
-        user.roles = user.roles.append(role._id);
+        user.roles = user.roles.push(role._id);
+        user.save();
     } catch (err){
         return res.status(500).send({ message: "Server error"} );
     }

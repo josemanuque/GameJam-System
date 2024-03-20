@@ -70,3 +70,27 @@ exports.joinTeam = async (req, res) => {
         return res.status(500).send({message: "Server error"});
     }
 };
+
+exports.addMember = async (req, res) => {
+    const userID = req.body.userID;
+    const team = TeamModel.findOne({ name: req.body.team} );
+
+    if(!team){
+        return res.status(409).send({ message: "Team not found"} );
+    }
+    team.members = team.members.push(userID);
+
+    team.save();
+}
+
+exports.removeMember = async (req, res) => {
+    const userID = req.body.userID;
+    const team = TeamModel.findOne({ name: req.body.team} );
+
+    if(!team){
+        return res.status(409).send({ message: "Team not found"} );
+    }
+    team.members = team.members.filter(value => value !== userID);
+
+    team.save();
+}
