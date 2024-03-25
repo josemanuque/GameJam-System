@@ -81,7 +81,7 @@ exports.addMember = async (req, res) => {
     team.members = team.members.push(userID);
 
     team.save();
-}
+};
 
 exports.removeMember = async (req, res) => {
     const userID = req.body.userID;
@@ -93,4 +93,21 @@ exports.removeMember = async (req, res) => {
     team.members = team.members.filter(value => value !== userID);
 
     team.save();
-}
+};
+
+exports.changeTeamName = async (req, res) => {
+    try {
+        const teamID = req.body.teamID;
+        const newName = req.body.newName;
+        const team = await TeamModel.findByIdAndUpdate(teamID, {name: newName}, {new: true});
+
+        if(!team){
+            return res.status(409).send({ message: "Team not found"} );
+        }
+        return res.status(200).send({ message: "Team name updated successfully" });
+
+    }catch (err){
+        console.error(err);
+        return res.status(500).send({message: "Server error"});
+    }
+};
