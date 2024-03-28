@@ -1,4 +1,3 @@
-const { toNamespacedPath } = require('path');
 const TeamModel = require('../models/team.model');
 const UserModel = require('../models/user.model');
 

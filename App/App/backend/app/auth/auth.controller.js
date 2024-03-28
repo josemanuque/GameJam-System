@@ -13,7 +13,7 @@ exports.register = async (req, res) => {
             username: req.body.username,
             email: req.body.email,
             password: authUtils.hashPassword(req.body.password),
-            phoneNumber: req.body.phoneNumber
+            phone: req.body.phone
         };
 
         const defaultRoleID = await roleController.getDefaultRoleID();
@@ -46,12 +46,12 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     const userReq = {
-        email: req.body.email,
+        username: req.body.username,
         password: req.body.password
     };
     
     try {
-        const foundPerson = await UserModel.findOne({ email: userReq.email });
+        const foundPerson = await UserModel.findOne({ username: userReq.username });
         if (!foundPerson) {
             // username doesn't exist
             return res.status(409).send({ message: 'Authentication failed' });
@@ -141,3 +141,16 @@ exports.resetPassword = async (req, res) => {
     }
 };
 
+exports.authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader;
+    if(token == null) {
+        return res.status(401).send({ message: 'Token is null' });
+    }
+    try{
+        const decodedToken = authUtils.verifyToken(token, SECRET_KEY);
+        res.send(decodedToken);
+    }catch {
+        return res.status(403).send({ message: 'Invalid token' });
+    } 
+}
