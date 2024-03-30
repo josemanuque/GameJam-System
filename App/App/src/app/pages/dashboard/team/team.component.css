@@ -1,0 +1,123 @@
+
+  mat-sidenav-container {
+    display: flex;
+    height: 100vh;
+    
+  }
+  
+  mat-sidenav-content {
+    flex: 1 1 auto;
+    overflow: auto;
+    background-color: #121212;
+  }
+  
+  .content{
+    margin-left: 18rem;
+    margin-top: 0.6rem !important;
+    margin-right: 16px;
+    border-radius: 10px;
+    min-height: calc(100vh - 4rem);
+    margin-bottom: 2rem;
+    background-color: #212121 !important;
+  }
+  
+  .custom-container {
+    margin-left: 100px;
+    margin-right: 100px;
+  }
+  
+  h1{
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+    color: white;
+  }
+  
+  
+  @media (max-width: 770px) {
+    .d-flex {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .btn-menu {
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 1350px) {
+    .content {
+      margin-left: 1rem;
+    }
+    .custom-container {
+      margin-left: 50px;
+      margin-right: 50px;
+    }
+  
+  }
+  
+  @media (max-height:900px) {
+    .content{
+      height: auto;
+      margin-bottom: 10px;
+    }
+  
+  }
+
+  .createButton{
+    background-color: #FFA500 !important;
+    border-color: #FFA500;
+    color: white;
+    width: 50%;
+    height: calc(75vh - 4rem);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.19), 0px 6px 6px rgba(0, 0, 0, 0.23);
+    margin-bottom: 15px;
+    margin-top: 15px;
+  }
+
+  mat-card-title{
+    color: #FFA500;
+  }	
+
+  mat-sidenav-container {
+    display: flex;
+    height: 100vh;
+    
+  }
+  .example-card {
+    max-width: 300px;
+    height: 200px;
+    transition: transform 0.3s;
+  }
+  
+  .example-card:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+  }
+  
+  .example-card.selected {
+    transform: scale(1.05) rotateY(10deg);
+  }
+  mat-card {
+    background-color: #313131;
+    margin: auto;
+    margin-bottom: 20px;
+  }
+
+  button {
+    width: 50%;
+    background-color: #FFA500 !important;
+    color: white !important;
+    border-color: #FFA500;
+}
+button:hover {
+    background-color: #313131 !important;
+    border-color: #313131;
+    color: white !important;
+}
+.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  }

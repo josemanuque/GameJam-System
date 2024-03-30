@@ -7,7 +7,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-import { Router } from '@angular/router';
+import { Router, RouterModule  } from '@angular/router';
 
 export interface SideNavToggle {
   screenWidth: number;
@@ -18,7 +18,7 @@ export interface SideNavToggle {
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [MatSidenav, MatDividerModule, MatIconModule, MatToolbarModule],
+  imports: [MatSidenav, MatDividerModule, MatIconModule, MatToolbarModule, RouterModule],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.css'
 })
@@ -26,9 +26,10 @@ export class SidenavComponent {
   userDict = new Dictionary<[string, string], string>([
     //icon // ruta //boton
     [['settings', '/dashboard'], 'Settings'],
-    [['games', '/dashboard'], 'Game'],
-    [['people', '/dashboard'], 'Team'],
-    [['info', '/dashboard'], 'Info'],
+    [['games', '/dashboard/submit-game'], 'Game'],
+    [['info', '/dashboard'], 'Notifications'],
+    [['people', '/dashboard/team'], 'Team'],
+    [['location_on', '/dashboard/sites'], 'Sites'],
     
   ]);
 

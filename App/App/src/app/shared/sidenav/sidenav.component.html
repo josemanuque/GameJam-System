@@ -21,7 +21,7 @@
     <mat-divider></mat-divider>
 
     @for (entry of entries; track entry.value1) {
-        <button class="btn btn-sn" mat-button>
+        <button class="btn btn-sn" mat-button [routerLink]="[ entry.value2 ]">
             <mat-icon>{{ entry.value1 }}</mat-icon>
             <span>{{ entry.key }}</span>
           </button>

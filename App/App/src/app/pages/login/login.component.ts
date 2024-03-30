@@ -32,6 +32,7 @@ export class LoginComponent {
     const password = this.passwordInput.nativeElement.value;
     this.authService.login(email, password).subscribe(
       (auth) => {
+        console.log(auth)
         if(auth){
           localStorage.setItem('currentType', 'jammer');
           localStorage.setItem('email', auth.email);

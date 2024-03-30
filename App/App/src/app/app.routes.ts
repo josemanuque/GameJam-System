@@ -3,6 +3,9 @@ import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ForgotPasswordComponent } from './pages/login/forgot-password/forgot-password.component';
 import { RegisterComponent } from './pages/login/register/register.component';
+import { CreateSiteComponent } from './pages/dashboard/create-site/create-site.component';
+import { SubmitGameComponent } from './pages/dashboard/submit-game/submit-game.component';
+import { TeamComponent } from './pages/dashboard/team/team.component';
 
 export const routes: Routes = [
     {
@@ -28,7 +31,24 @@ export const routes: Routes = [
     },
     {
         path:       'dashboard',
-        component:  DashboardComponent
+        children: [
+            {
+                path:   '',
+                component:  DashboardComponent,
+            },
+            {
+                path:   'sites',
+                component:  CreateSiteComponent
+            },
+            {
+                path:   'submit-game',
+                component:  SubmitGameComponent
+            },
+            {
+                path:   'team',
+                component:  TeamComponent
+            }
+        ]
     },
     {
         path:       '**',
