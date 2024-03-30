@@ -4,7 +4,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
-import { AuthServiceService } from '../../../services/auth-service.service';
+import { AuthService } from '../../../services/auth.service';
 import { Router, RouterModule  } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -27,7 +27,7 @@ export class ForgotPasswordComponent {
   currentUser: any;
   coded = false;
   confirmed = false;
-  constructor(private authService: AuthServiceService, private router: Router){}
+  constructor(private authService: AuthService, private router: Router){}
 
   ngOnInit(){
   }
