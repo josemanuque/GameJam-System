@@ -8,6 +8,7 @@ import { SubmitGameComponent } from './pages/dashboard/submit-game/submit-game.c
 import { TeamComponent } from './pages/dashboard/team/team.component';
 import { register } from 'module';
 import { RegisterUserComponent } from './pages/dashboard/register-user/register-user.component';
+import { NotificationsComponent } from './pages/dashboard/notifications/notifications.component';
 
 export const routes: Routes = [
     {
@@ -53,6 +54,10 @@ export const routes: Routes = [
             {
                 path:   'register-user',
                 component:  RegisterUserComponent
+            },
+            {
+                path:   'notifications',
+                component:  NotificationsComponent
             }
         ]
     },
