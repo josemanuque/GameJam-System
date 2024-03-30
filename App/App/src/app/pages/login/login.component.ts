@@ -27,19 +27,23 @@ export class LoginComponent {
   ngOnInit(){
   }
 
-  login(){
+  login() {
     const username = this.usernameInput.nativeElement.value;
     const password = this.passwordInput.nativeElement.value;
-    this.authService.login({username, password}).subscribe(
+    this.authService.login({ username, password }).subscribe(
       (auth) => {
-        console.log(auth)
-        if(auth){
+        console.log(auth);
+        if (auth) {
           localStorage.setItem('currentType', 'jammer');
           localStorage.setItem('email', auth.email);
           this.router.navigate(['/dashboard']);
         } else {
           alert('Invalid credentials');
         }
+      },
+      (error) => {
+        console.error('Error during login:', error);
+        // Handle error, maybe show a user-friendly message
       }
     );
   }

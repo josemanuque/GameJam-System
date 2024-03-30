@@ -28,9 +28,9 @@ export class SidenavComponent {
     [['settings', '/dashboard'], 'Settings'],
     [['games', '/dashboard/submit-game'], 'Game'],
     [['info', '/dashboard'], 'Notifications'],
-    [['people', '/dashboard/team'], 'Team'],
+    [['person', '/dashboard/register-user'], 'Register'],
     [['location_on', '/dashboard/sites'], 'Sites'],
-    
+    [['people', '/dashboard/team'], 'Team'],
   ]);
 
 
