@@ -6,6 +6,9 @@ import { RegisterComponent } from './pages/login/register/register.component';
 import { CreateSiteComponent } from './pages/dashboard/create-site/create-site.component';
 import { SubmitGameComponent } from './pages/dashboard/submit-game/submit-game.component';
 import { TeamComponent } from './pages/dashboard/team/team.component';
+import { register } from 'module';
+import { RegisterUserComponent } from './pages/dashboard/register-user/register-user.component';
+import { NotificationsComponent } from './pages/dashboard/notifications/notifications.component';
 
 export const routes: Routes = [
     {
@@ -47,6 +50,14 @@ export const routes: Routes = [
             {
                 path:   'team',
                 component:  TeamComponent
+            },
+            {
+                path:   'register-user',
+                component:  RegisterUserComponent
+            },
+            {
+                path:   'notifications',
+                component:  NotificationsComponent
             }
         ]
     },
