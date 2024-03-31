@@ -12,9 +12,7 @@ exports.createJam = async (req, res) => {
             description: req.body.description,
             startingDate: req.body.startingDate,
             endingDate: req.body.endingDate,
-            theme: req.body.theme,
-            modality: req.body.modality,
-            region: req.body.region
+            theme: req.body.theme
             // category array not yet implemented
         };
         const jam = new JamModel(jamReq);
@@ -30,3 +28,8 @@ exports.createJam = async (req, res) => {
         }
     }
 };
+
+
+exports.removeSitefromJam = async (req, res) => {
+
+}

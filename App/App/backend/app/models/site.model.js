@@ -5,8 +5,17 @@ const siteSchema = new mongoose.Schema({
         name: {
             type: String, required: true, unique: true, trim: true
         },
+        region: {
+            type: String, required: true, trim: true
+        },
         country: {
-            type: String, required: true, unique: true, trim: true
+            type: String, required: true, trim: true
+        },
+        city: {
+            type: String, required: true, trim: true
+        },
+        modality: {
+            type: String, required: true, trim: true
         },
         teams: [{
             type: mongoose.Schema.Types.ObjectId, ref: 'Team'

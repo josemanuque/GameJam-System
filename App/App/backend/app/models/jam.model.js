@@ -17,12 +17,9 @@ const jamSchema = new mongoose.Schema(
         theme : {
             type: String, required: true, trim: true
         },
-        modality : {
-            type: String, required: true, trim: true
-        },
-        region : {
-            type: String, trim: true, default: null
-        }
+        sites: [{
+            type: mongoose.Schema.Types.ObjectId, ref: 'Site'
+        }]
     },
     {
         versionKey: false,

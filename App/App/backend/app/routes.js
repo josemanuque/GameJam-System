@@ -5,6 +5,7 @@ const teamController = require('./controllers/team.controller');
 const userController = require('./controllers/user.controller');
 const categoryController = require('./controllers/category.controller');
 const gameController = require('./controllers/game.controller');
+const siteController = require('./controllers/site.controller');
 
 const mainRouter = express.Router();
 
@@ -27,6 +28,11 @@ mainRouter.post("/addMember", teamController.addMember);
 mainRouter.post("/kickMember", teamController.kickMember);
 mainRouter.put("/changeTeamName", teamController.changeTeamName);
 mainRouter.get("/getUserTeam/:username", teamController.getUserTeam);
+
+// Site
+mainRouter.post("/createSite", siteController.createSite);
+mainRouter.post("/removeSite", siteController.removeSite);
+mainRouter.get("/site/:country", siteController.getSitesFromCountry);
 
 // Categories
 mainRouter.post("/createCategory", categoryController.createCategory);

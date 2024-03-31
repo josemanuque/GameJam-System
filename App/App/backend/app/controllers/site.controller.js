@@ -5,13 +5,15 @@ const siteModel = require('../models/site.model');
  * @param {*} req: site object (name, country, array of team object id)
  * @param {*} res 
  */
-exports.addSite = async (req, res) => {
+exports.createSite = async (req, res) => {
     try {
         const siteData = req.body;
-        site = new siteModel(site);
+        const site = new siteModel(siteData);
     
     
-        await siteModel.save(site);
+        await site.save();
+        siteData.message = "Side created successfully"
+        res.send(siteData);
     }
     catch(err) {
         if (err.code === 11000) {
@@ -30,9 +32,10 @@ exports.addSite = async (req, res) => {
  */
 exports.removeSite = async (req, res) => {
     try {
-        const site = req.body;
+        const site = req.body.id;
 
-        await siteModel.deleteOne(site);
+        await siteModel.findByIdAndDelete(site);
+        res.send({ message: "Side deleted successfully"});
     } catch {
         res.status(500).send({ message: 'Server error'});
     }
@@ -46,7 +49,7 @@ exports.removeSite = async (req, res) => {
 
 exports.getSitesFromCountry = async (req, res) => {
     try {
-        const country = req.body.country;
+        const country = req.params.country;
 
         const foundSites = await siteModel.findAll({ country });
     
