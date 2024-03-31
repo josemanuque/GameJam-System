@@ -10,6 +10,8 @@ KEY_EXPIRES_IN = process.env.KEY_EXPIRES_IN;
 exports.register = async (req, res) => {
     try {
         const userReq = {
+            name: req.body.name,
+            lastname: req.body.lastname,
             username: req.body.username,
             email: req.body.email,
             password: authUtils.hashPassword(req.body.password),
@@ -66,8 +68,10 @@ exports.login = async (req, res) => {
         const userRoles = await roleController.getRoleNamesFromIDs(foundPerson.roles);
         const user = {
             message: "Logged in",
-            email: foundPerson.email,
+            name: foundPerson.name,
+            lastname: foundPerson.lastname,
             username: foundPerson.username,
+            email: foundPerson.email,
             roles: userRoles
         };
         const accessToken = authUtils.generateAccessToken(user, SECRET_KEY, KEY_EXPIRES_IN);

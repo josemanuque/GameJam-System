@@ -1,5 +1,10 @@
 const GameModel = require('../models/game.model')
 
+/**
+ * Submits game info to db
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.submitGame = async (req, res) => {
     try {
         const gameReq = {

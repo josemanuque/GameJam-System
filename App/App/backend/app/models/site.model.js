@@ -7,7 +7,10 @@ const siteSchema = new mongoose.Schema({
         },
         country: {
             type: String, required: true, unique: true, trim: true
-        }
+        },
+        teams: [{
+            type: mongoose.Schema.Types.ObjectId, ref: 'Team'
+        }]
 });
 
 const SiteModel = mongoose.model('Site', siteSchema);

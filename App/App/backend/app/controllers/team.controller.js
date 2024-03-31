@@ -1,12 +1,32 @@
 const TeamModel = require('../models/team.model');
 const UserModel = require('../models/user.model');
 
+/**
+ * Creates a new team of jammers in a site.
+ * Needs team name and an array of the username of the members
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.createTeam = async (req, res) => {
     try {
         const teamReq = {
-            name: req.body.name
+            name: req.body.name,
+            members: req.body.members
         };
-
+        
+        if(teamReq.members.length > 6){
+            return res.status(409).send({ message: "Maximum amount of members was exceeded" });
+        }
+        // Converts usernames to user ObjectIds
+        teamReq.members = await Promise.all(teamReq.members.map(
+            async username => {
+                const user = await UserModel.findOne({ username });
+                if(!user){
+                    throw new Error(`User ${username} not found`);
+                }
+                return user._id;
+            } 
+        ));
         const team = new TeamModel(teamReq);
         await team.save();
         res.send({ message: "Team created" });
@@ -21,6 +41,12 @@ exports.createTeam = async (req, res) => {
     }
 };
 
+/**
+ * Validates that a team doesn't exceed the 6 member limit
+ * @param {*} team 
+ * @param {*} user 
+ * @returns 
+ */
 async function validateTeamMembers(team, user) {
     try{
         if (team.members.length > 6){
@@ -39,7 +65,13 @@ async function validateTeamMembers(team, user) {
     }
 };
 
-exports.joinTeam = async (req, res) => {
+/**
+ * Adds an user to a team if it doesn't exceed 6 member limit.
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.addMember = async (req, res) => {
     try {
         const name = req.body.name;
         const username = req.body.username;
@@ -70,30 +102,42 @@ exports.joinTeam = async (req, res) => {
     }
 };
 
-exports.addMember = async (req, res) => {
-    const userID = req.body.userID;
-    const team = TeamModel.findOne({ name: req.body.team} );
+/**
+ * Removes member from a team
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+exports.kickMember = async (req, res) => {
+    try{
+        const name = req.body.name;
+        const username = req.body.username;
+        const team = await TeamModel.findOne({ name });
+        const user = await UserModel.findOne({ username });
+    
+        if(!team){
+            return res.status(409).send({ message: "Team not found"} );
+        }
+        if(!user){
+            return res.status(409).send( { message: "User not found"} );
+        }
 
-    if(!team){
-        return res.status(409).send({ message: "Team not found"} );
+        team.members = team.members.filter(value => !value.equals(user._id));
+        team.save();
+        return res.status(200).send({ message: "User removed from team successfully" });
     }
-    team.members = team.members.push(userID);
-
-    team.save();
+    catch (err){
+        console.error(err);
+        return res.status(500).send({message: "Server error"});
+    }
 };
 
-exports.removeMember = async (req, res) => {
-    const userID = req.body.userID;
-    const team = TeamModel.findOne({ name: req.body.team} );
-
-    if(!team){
-        return res.status(409).send({ message: "Team not found"} );
-    }
-    team.members = team.members.filter(value => value !== userID);
-
-    team.save();
-};
-
+/**
+ * Changes team name if not available already
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 exports.changeTeamName = async (req, res) => {
     try {
         const teamID = req.body.teamID;
@@ -110,3 +154,24 @@ exports.changeTeamName = async (req, res) => {
         return res.status(500).send({message: "Server error"});
     }
 };
+
+exports.getUserTeam = async (req, res) => {
+    try {
+        const username = req.params.username;
+
+        const user = await UserModel.findOne({ username });
+        if (!user){
+            return res.status(409).send({ message: "User not found" });
+        }
+
+        const team = await TeamModel.findOne({ members: { $in: [user._id]} });
+
+        if(!team) {
+            return res.status(409).send({ message: "User has no team assigned" });
+        }
+
+        return res.send(team);
+    } catch{
+
+    }
+}

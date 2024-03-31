@@ -1,5 +1,10 @@
 const JamModel = require('../models/jam.model');
 
+/**
+ * Creates a new Game Jam
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.createJam = async (req, res) => {
     try {
         const jamReq = {
@@ -10,6 +15,7 @@ exports.createJam = async (req, res) => {
             theme: req.body.theme,
             modality: req.body.modality,
             region: req.body.region
+            // category array not yet implemented
         };
         const jam = new JamModel(jamReq);
         await jam.save();
