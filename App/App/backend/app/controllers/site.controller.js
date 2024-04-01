@@ -22,7 +22,7 @@ exports.createSite = async (req, res) => {
             res.status(500).send({ message: 'Server error' });
         }
     }
-}
+};
 
 /**
  * Deletes site if found
@@ -41,7 +41,7 @@ exports.removeSite = async (req, res) => {
     } catch {
         res.status(500).send({ message: 'Server error'});
     }
-}
+};
 
 /**
  * Sends res with site name and country.
@@ -63,7 +63,7 @@ exports.getSitesFromCountry = async (req, res) => {
         console.log(err);
         res.status(500).send({ message: "Error getting sites"});
     }
-}
+};
 
 exports.getSitesFromRegion = async (req, res) => {
     try {
@@ -79,7 +79,7 @@ exports.getSitesFromRegion = async (req, res) => {
         console.log(err);
         res.status(500).send({ message: "Error getting sites"});
     }
-}
+};
 
 
 exports.getSites = async (req, res) => {
@@ -89,4 +89,24 @@ exports.getSites = async (req, res) => {
     } catch (err) {
         res.status(500).send({ message: "Error getting sites"});
     }
-}
+};
+
+exports.getSite = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const foundSite = await SiteModel
+            .findById(id)
+            .populate('teams')
+            .exec();
+        if (!foundSite){
+            return res.status(409).send({ message: "Site not found"});
+        }
+        console.log(foundSite);
+        res.send(foundSite);
+    }
+    catch {
+        res.status(500).send({ message: "Error getting site"});
+    }
+    
+};

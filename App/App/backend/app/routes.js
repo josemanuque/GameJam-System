@@ -41,6 +41,7 @@ mainRouter.post("/removeSite", siteController.removeSite);
 mainRouter.get("/sites/country/:country", siteController.getSitesFromCountry);
 mainRouter.get("/sites/region/:region", siteController.getSitesFromRegion);
 mainRouter.get("/sites", siteController.getSites);
+mainRouter.get("/sites/:id", siteController.getSite);
 
 // Jam
 mainRouter.post("/createJam", jamController.createJam);

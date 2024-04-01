@@ -97,13 +97,25 @@ exports.updateUser = async (req, res) => {
     try {
         const username = req.params.username;
         const user = req.body;
+        const roleNames = user.roles;
         user.roles = await roleController.getRoleIDs(user.roles);
         const updatedUser = await UserModel.findOneAndUpdate({ username }, user, { new: true });
 
         if (!updatedUser) {
             return res.status(404).send({ message: "User not found" });
         }
-        res.send(updatedUser);
+        const responseUserData = {
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            lastname: updatedUser.lastname,
+            username: updatedUser.username,
+            email: updatedUser.email,
+            phone: updatedUser.phone,
+            roles: roleNames,
+            region: updatedUser.region,
+            site: updatedUser.site
+        }
+        res.send(responseUserData);
     }
     catch (err){
         console.log(err);
