@@ -38,8 +38,8 @@ exports.asignRole = async (req, res) => {
         const username = req.body.username;
         const roleName = req.body.role;
 
-        const user = UserModel.findOne({ username });
-        const role = RoleModel.findOne({ roleName });
+        const user = await UserModel.findOne({ username });
+        const role = await RoleModel.findOne({ name: roleName });
         
         if (!user){
             return res.status(409).send( { message: "User not found"} );
@@ -47,12 +47,15 @@ exports.asignRole = async (req, res) => {
         if (!role){
             return res.status(409).send( { message: "Role not found"} );
         }
+        if(user.roles.includes(role._id)){
+            return res.status(409).send({ message: `User already has the role ${roleName} assigned`});
+        }
+        user.roles.push(role._id);
+        await user.save();
 
-        user.roles = user.roles.push(role._id);
-        user.save();
-
-        return res.send({ message: `Role ${roleName} successfully assigned to ${username}`});
+        res.send({ message: `Role ${roleName} successfully assigned to ${username}`});
     } catch (err){
+        console.log(err);
         return res.status(500).send({ message: "Server error"} );
     }
     
@@ -71,8 +74,8 @@ exports.unasignRole = async (req, res) => {
         const username = req.body.username;
         const roleName = req.body.role;
 
-        const user = UserModel.findOne({ username });
-        const role = RoleModel.findOne({ roleName });
+        const user = await UserModel.findOne({ username });
+        const role = await RoleModel.findOne({ name: roleName });
         
         if (!user){
             return res.status(409).send( { message: "User not found"} );
@@ -82,13 +85,14 @@ exports.unasignRole = async (req, res) => {
         }
 
         user.roles = user.roles.filter(roleID => {
-            if (roleID != role._id){
+            if (!roleID.equals(role._id)){
                 return roleID;
             }
         });
+        console.log(user.roles);
         user.save();
 
-        return res.send({ message: `Role ${roleName} successfully revoked to ${username}`});
+        return res.send({ message: `Role ${roleName} successfully revoked from user ${username}`});
     } catch (err){
         return res.status(500).send({ message: "Server error"} );
     }

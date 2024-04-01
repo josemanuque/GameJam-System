@@ -9,26 +9,38 @@ KEY_EXPIRES_IN = process.env.KEY_EXPIRES_IN;
 
 exports.register = async (req, res) => {
     try {
+        let roles = req.body.roles;
+        if (Array.isArray(roles)){
+            roles = await roleController.getRoleIDs(roles);
+        }
+        else if(!roles){
+            const defaultRoleID = await roleController.getDefaultRoleID();
+            roles = [defaultRoleID];
+        }
+        
         const userReq = {
             name: req.body.name,
             lastname: req.body.lastname,
             username: req.body.username,
             email: req.body.email,
             password: authUtils.hashPassword(req.body.password),
-            phone: req.body.phone
+            phone: req.body.phone,
+            roles: roles,
+            region: req.body.region,
+            site: siteID
         };
 
-        const defaultRoleID = await roleController.getDefaultRoleID();
-        userReq.roles = [defaultRoleID];
 
         const user = new UserModel(userReq);
         await user.save();
+
+        const userRoles = await roleController.getRoleNamesFromIDs(userReq.roles);
 
         const resUser = {
             message: "Logged in",
             email: user.email,
             username: user.username,
-            roles: userReq.roles
+            roles: userRoles
         };
 
         const accessToken = authUtils.generateAccessToken(resUser, SECRET_KEY, KEY_EXPIRES_IN);

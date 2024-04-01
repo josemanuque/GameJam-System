@@ -29,7 +29,37 @@ exports.createJam = async (req, res) => {
     }
 };
 
+exports.removeJam = async (req, res) => {
+    try {
+        const jamID = req.body.id
+        
+        const deletedJam = await JamModel.findByIdAndDelete(jamID);
+        if(!deletedJam){
+            return res.status(404).send({ message: "Jam doesn't exist" });
+        }
+        res.send({ message: "Jam deleted"});
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({ message: 'Server error' });
+    }
+};
 
 exports.removeSitefromJam = async (req, res) => {
+    try {
+        const jamID = req.body.jamID;
+        const siteID = req.body.siteID;
 
-}
+        const jam = await JamModel.findById({ jamID });
+
+        if(!jam){
+            return res.status(404).send({ message: "Invalid Jam ID" });
+        }
+
+        jam.sites = jam.sites.filter(value => !value.equals(siteID));
+        jam.save();
+    } catch(err){
+        console.log(err);
+        res.status(500).send({ message: "Server error" })
+    }
+};

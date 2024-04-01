@@ -35,7 +35,7 @@ exports.getUsersFromPrefix = async (req, res) => {
  */
 exports.getUserByUsername = async (req, res) => {
     try {
-        const username = req.body.username;
+        const username = req.params.username;
 
         const foundUser = await UserModel.findOne({ username });
 
@@ -44,13 +44,70 @@ exports.getUserByUsername = async (req, res) => {
         }
         const userRoles = await roleController.getRoleNamesFromIDs(foundUser.roles);
         const responseUserData = {
+            _id: foundUser._id,
+            name: foundUser.name,
+            lastname: foundUser.lastname,
             username: foundUser.username,
             email: foundUser.email,
-            roles: userRoles
+            phone: foundUser.phone,
+            roles: userRoles,
+            region: foundUser.region,
+            site: foundUser.site
         }
-        return res.send({ responseUserData });
+        return res.send(responseUserData);
     } catch {
         res.status(500).send({ message: "Error" });
+    }
+};
+
+/**
+ * Gets user data of a unique user being provided by the exact username. 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns user data
+ */
+exports.getUser = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const foundUser = await UserModel.findById(id);
+
+        if (!foundUser){
+            return res.status(409).send({ message: "User not found"});
+        }
+        const userRoles = await roleController.getRoleNamesFromIDs(foundUser.roles);
+        const responseUserData = {
+            _id: foundUser._id,
+            name: foundUser.name,
+            lastname: foundUser.lastname,
+            username: foundUser.username,
+            email: foundUser.email,
+            phone: foundUser.phone,
+            roles: userRoles,
+            region: foundUser.region,
+            site: foundUser.site
+        }
+        return res.send(responseUserData);
+    } catch {
+        res.status(500).send({ message: "Error" });
+    }
+};
+
+exports.updateUser = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const user = req.body;
+        user.roles = await roleController.getRoleIDs(user.roles);
+        const updatedUser = await UserModel.findOneAndUpdate({ username }, user, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).send({ message: "User not found" });
+        }
+        res.send(updatedUser);
+    }
+    catch (err){
+        console.log(err);
+        res.status(500).send({ message: "Server error" });
     }
 }
 
@@ -74,4 +131,4 @@ exports.getUserId = async (req, res) => {
     } catch{
         return res.status(500).send({ message: "Server error"});
     }
-}
+};

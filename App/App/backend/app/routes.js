@@ -6,6 +6,7 @@ const userController = require('./controllers/user.controller');
 const categoryController = require('./controllers/category.controller');
 const gameController = require('./controllers/game.controller');
 const siteController = require('./controllers/site.controller');
+const jamController = require('./controllers/jam.controller');
 
 const mainRouter = express.Router();
 
@@ -21,8 +22,13 @@ mainRouter.post("/createRole", roleController.createRole);
 mainRouter.post("/setRole", roleController.asignRole);
 mainRouter.post("/revokeRole", roleController.unasignRole);
 
-// Teams
+// User
 mainRouter.post("/findUser", userController.getUsersFromPrefix);
+mainRouter.get("/users/:username", userController.getUserByUsername);
+mainRouter.get("/users/id/:id", userController.getUser);
+mainRouter.put("/users/:username", userController.updateUser);
+
+// Teams
 mainRouter.post("/createTeam", teamController.createTeam);
 mainRouter.post("/addMember", teamController.addMember);
 mainRouter.post("/kickMember", teamController.kickMember);
@@ -32,7 +38,14 @@ mainRouter.get("/getUserTeam/:username", teamController.getUserTeam);
 // Site
 mainRouter.post("/createSite", siteController.createSite);
 mainRouter.post("/removeSite", siteController.removeSite);
-mainRouter.get("/site/:country", siteController.getSitesFromCountry);
+mainRouter.get("/sites/country/:country", siteController.getSitesFromCountry);
+mainRouter.get("/sites/region/:region", siteController.getSitesFromRegion);
+mainRouter.get("/sites", siteController.getSites);
+
+// Jam
+mainRouter.post("/createJam", jamController.createJam);
+mainRouter.post("/removeJam", jamController.removeJam);
+
 
 // Categories
 mainRouter.post("/createCategory", categoryController.createCategory);
