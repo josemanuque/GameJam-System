@@ -1,0 +1,21 @@
+body{
+    overflow-y: hidden !important;
+}
+.buttonCustom {
+    background-color: #313131 !important;
+    outline: none !important;
+}
+.cBtn:hover {
+    background-color: #FFA500 !important;
+    color: white !important;
+}
+mat-dialog-content{
+    background-color: #212121;
+}
+h2{
+    background-color: #212121;
+    color: white;
+  }
+mat-dialog-actions{
+background-color: #212121;
+}

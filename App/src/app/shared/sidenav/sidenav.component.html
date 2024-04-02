@@ -1,0 +1,40 @@
+<!-- <mat-toolbar *ngIf="toggleMenu">
+    
+  </mat-toolbar> -->
+
+  @if (toggleMenu) {
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openSN()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Settings</span>
+  }
+  
+  <mat-sidenav #sidenav="matSidenav">
+    @if (toggleMenu) {
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="closeSN()"><mat-icon>clear</mat-icon></button>
+    }
+  
+    <img class="avatar mat-elevation-z8" src="assets/avatar.png" alt="Image">
+    <h1>{{currentName}}</h1>
+    <p>{{currentAt}}</p>
+  
+    <mat-divider></mat-divider>
+
+    @for (entry of entries; track entry.value1) {
+        <button class="btn btn-sn" mat-button [routerLink]="[ entry.value2 ]">
+            <mat-icon>{{ entry.value1 }}</mat-icon>
+            <span>{{ entry.key }}</span>
+          </button>
+    }
+
+    <mat-divider></mat-divider>
+  
+  
+    <button class="btn btn-sn" mat-button (click)="logOut()">
+      <mat-icon>keyboard_return</mat-icon>
+      <span>Log Out</span>
+    </button>
+  </mat-sidenav>
+  
+  
+  
