@@ -26,6 +26,7 @@ export class SidenavComponent {
   userDict = new Dictionary<[string, string], string>([
     //icon // ruta //boton
     [['settings', '/dashboard'], 'Settings'],
+    [['event_available', '/dashboard/jam'], 'Jam'],
     [['games', '/dashboard/submit-game'], 'Game'],
     [['info', '/dashboard/notifications'], 'Notifications'],
     [['person', '/dashboard/register-user'], 'Register'],
