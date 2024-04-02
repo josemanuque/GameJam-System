@@ -13,46 +13,56 @@ const mainRouter = express.Router();
 // Auth
 mainRouter.post("/auth/register", authController.register);
 mainRouter.post("/auth/login", authController.login);
-mainRouter.post("/forgotPassword", authController.forgotPassword);
-mainRouter.post("/resetPassword", authController.resetPassword);
-mainRouter.get('/verifyToken', authController.authenticateToken, (req, res) => res.send({valid: true}));
+mainRouter.post("/auth/forgotPassword", authController.forgotPassword);
+mainRouter.post("/auth/resetPassword", authController.resetPassword);
+mainRouter.get('/auth/verifyToken', authController.authenticateToken, (req, res) => res.send({valid: true}));
 
 // Role
-mainRouter.post("/createRole", roleController.createRole);
-mainRouter.post("/setRole", roleController.asignRole);
-mainRouter.post("/revokeRole", roleController.unasignRole);
+mainRouter.post("/role", roleController.createRole);
+mainRouter.get("/role/:role", roleController.getRole);
+mainRouter.get("/role", roleController.getRoles);
+
+// Role assignment
+mainRouter.patch("/role/set", roleController.assignRole);
+mainRouter.patch("/role/revoke", roleController.unasignRole);
 
 // User
-mainRouter.post("/findUser", userController.getUsersFromPrefix);
-mainRouter.get("/users/:username", userController.getUserByUsername);
-mainRouter.get("/users/id/:id", userController.getUser);
-mainRouter.put("/users/:username", userController.updateUser);
+mainRouter.get("/user/query/:query", userController.getUsersFromPrefix);
+mainRouter.get("/user/:username", userController.getUserByUsername);
+mainRouter.get("/user/id/:id", userController.getUser);
+mainRouter.put("/user/:username", userController.updateUser);
 
 // Teams
-mainRouter.post("/createTeam", teamController.createTeam);
-mainRouter.post("/addMember", teamController.addMember);
-mainRouter.post("/kickMember", teamController.kickMember);
-mainRouter.put("/changeTeamName", teamController.changeTeamName);
-mainRouter.get("/getUserTeam/:username", teamController.getUserTeam);
+mainRouter.post("/team", teamController.createTeam);
+mainRouter.patch("/team/add", teamController.addMember);
+mainRouter.patch("/team/kick", teamController.kickMember);
+mainRouter.put("/team/:id", teamController.changeTeamName);
+mainRouter.get("/team/user/:username", teamController.getUserTeam);
+mainRouter.get("/team/:id", teamController.getTeam);
 
 // Site
-mainRouter.post("/createSite", siteController.createSite);
-mainRouter.post("/removeSite", siteController.removeSite);
-mainRouter.get("/sites/country/:country", siteController.getSitesFromCountry);
-mainRouter.get("/sites/region/:region", siteController.getSitesFromRegion);
-mainRouter.get("/sites", siteController.getSites);
-mainRouter.get("/sites/:id", siteController.getSite);
+mainRouter.post("/site", siteController.createSite);
+mainRouter.delete("/site/:id", siteController.removeSite);
+mainRouter.get("/site/country/:country", siteController.getSitesFromCountry);
+mainRouter.get("/site/region/:region", siteController.getSitesFromRegion);
+mainRouter.get("/site", siteController.getSites);
+mainRouter.get("/site/:id", siteController.getSite);
 
 // Jam
-mainRouter.post("/createJam", jamController.createJam);
-mainRouter.post("/removeJam", jamController.removeJam);
-
+mainRouter.post("/jam", jamController.createJam);
+mainRouter.delete("/jam/:id", jamController.removeJam);
+mainRouter.get("/jam", jamController.getJams);
+mainRouter.get("/jam/:id", jamController.getJam);
+mainRouter.patch("/jam/site", jamController.addSiteToJam);
+mainRouter.delete("/jam/site", jamController.removeSiteFromJam);
 
 // Categories
-mainRouter.post("/createCategory", categoryController.createCategory);
-mainRouter.get("/getCategoriesName", categoryController.getCategoriesName);
+mainRouter.post("/category", categoryController.createCategory);
+mainRouter.get("/category", categoryController.getCategoriesName);
+mainRouter.get("/category/:id", categoryController.getCategory);
+mainRouter.put("/category/:id", categoryController.updateCategory);
 
 // Game submission
-mainRouter.post("/submitGame", gameController.submitGame);
+mainRouter.post("/game", gameController.submitGame);
 
 module.exports = mainRouter;

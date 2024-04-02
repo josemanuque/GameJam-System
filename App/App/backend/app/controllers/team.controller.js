@@ -29,7 +29,10 @@ exports.createTeam = async (req, res) => {
         ));
         const team = new TeamModel(teamReq);
         await team.save();
-        res.send({ message: "Team created" });
+
+        const teamPopulated = await TeamModel.findById(team._id).populate('members', '-password');
+        teamPopulated.message = "Team created";
+        res.send(teamPopulated);
 
     } catch (err) {
         if (err.code === 11000) {
@@ -73,11 +76,11 @@ async function validateTeamMembers(team, user) {
  */
 exports.addMember = async (req, res) => {
     try {
-        const name = req.body.name;
+        const id = req.body.teamID;
         const username = req.body.username;
 
-        const team = await TeamModel.findOne({ name }).exec();
-        const user = await UserModel.findOne({ username }).exec();
+        const team = await TeamModel.findById(id);
+        const user = await UserModel.findOne({ username });
 
         if (!team){
             return res.status(409).send( { message: "Team not found"} );
@@ -110,9 +113,9 @@ exports.addMember = async (req, res) => {
  */
 exports.kickMember = async (req, res) => {
     try{
-        const name = req.body.name;
+        const id = req.body.teamID;
         const username = req.body.username;
-        const team = await TeamModel.findOne({ name });
+        const team = await TeamModel.findById(id);
         const user = await UserModel.findOne({ username });
     
         if(!team){
@@ -140,14 +143,14 @@ exports.kickMember = async (req, res) => {
  */
 exports.changeTeamName = async (req, res) => {
     try {
-        const teamID = req.body.teamID;
-        const newName = req.body.newName;
-        const team = await TeamModel.findByIdAndUpdate(teamID, {name: newName}, {new: true});
+        const teamID = req.params.id;
+        const name = req.body.name;
+        const team = await TeamModel.findByIdAndUpdate(teamID, {name}, {new: true});
 
         if(!team){
             return res.status(409).send({ message: "Team not found"} );
         }
-        return res.status(200).send({ message: "Team name updated successfully" });
+        return res.status(200).send({ message: `Team name updated successfully to ${name}` });
 
     }catch (err){
         console.error(err);
@@ -164,7 +167,7 @@ exports.getUserTeam = async (req, res) => {
             return res.status(409).send({ message: "User not found" });
         }
 
-        const team = await TeamModel.findOne({ members: { $in: [user._id]} });
+        const team = await TeamModel.findOne({ members: { $in: [user._id]} }).populate('members', '-password');
 
         if(!team) {
             return res.status(409).send({ message: "User has no team assigned" });
@@ -172,6 +175,22 @@ exports.getUserTeam = async (req, res) => {
 
         return res.send(team);
     } catch{
+        res.status(500).send({ message: "Error" });
+    }
+}
 
+exports.getTeam = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const team = await TeamModel.findById(id).populate('members', '-password');
+        
+        if(!team) {
+            return res.status(409).send({ message: "Team not found" });
+        }
+
+        return res.send(team);
+    } catch{
+        res.status(500).send({ message: "Error" });
     }
 }

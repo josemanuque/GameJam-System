@@ -31,7 +31,7 @@ exports.createSite = async (req, res) => {
  */
 exports.removeSite = async (req, res) => {
     try {
-        const site = req.body.id;
+        const site = req.params.id;
 
         const deletedSite = await SiteModel.findByIdAndDelete(site);
         if(!deletedSite){
@@ -57,7 +57,7 @@ exports.getSitesFromCountry = async (req, res) => {
         if (foundSites.length === 0) {
             return res.status(409).send({ message: "No sites found" });
         }
-        res.send(foundSites);
+        res.send({sites: foundSites});
     }
     catch (err) {
         console.log(err);
@@ -73,7 +73,7 @@ exports.getSitesFromRegion = async (req, res) => {
         if (foundSites.length === 0) {
             return res.status(409).send({ message: "No sites found" });
         }
-        res.send(foundSites);
+        res.send({sites: foundSites});
     }
     catch (err) {
         console.log(err);
@@ -85,7 +85,7 @@ exports.getSitesFromRegion = async (req, res) => {
 exports.getSites = async (req, res) => {
     try {
         const sites = await SiteModel.find();
-        res.send(sites);
+        res.send({sites});
     } catch (err) {
         res.status(500).send({ message: "Error getting sites"});
     }

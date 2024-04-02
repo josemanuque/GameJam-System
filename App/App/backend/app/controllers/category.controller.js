@@ -23,9 +23,46 @@ exports.createCategory = async (req, res) => {
 exports.getCategoriesName = async (req, res) => {
     try {
         const categories = await CategoryModel.find({}, 'name');
-        const categoryNames = categories.map(category => category.name);
-        res.send(categoryNames);
+        const categoryNames = categories.map(category => {
+            return { id: category._id, name: category.name }
+        });
+        res.send({categoryNames});
     } catch (error) {
         return res.status(404).json({ message: 'No categories exist' });
+    }
+};
+
+exports.getCategory = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const foundCategory = await CategoryModel.findById(id);
+
+        if (!foundCategory) {
+            return res.status(404).send({ message: "Category not found" });
+        }
+        res.send(foundCategory);
+    }
+    catch {
+        res.status(500).send({ message: "Error" });
+    }
+};
+
+exports.updateCategory = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const category = req.body;
+
+        const updatedCategory = await CategoryModel.findByIdAndUpdate(id
+            , category
+            , { new: true });
+
+        if (!updatedCategory) {
+            return res.status(404).send({ message: "Category not found" });
+        }
+        res.send(updatedCategory);
+    }
+    catch {
+        res.status(500).send({ message: "Error" });
     }
 };

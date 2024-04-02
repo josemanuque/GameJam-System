@@ -8,7 +8,7 @@ const roleController = require('./role.controller');
  */
 exports.getUsersFromPrefix = async (req, res) => {
     try {
-        const userPrefix = req.body.username;
+        const userPrefix = req.params.query;
         const foundUsers = await UserModel.find({ username: new RegExp('^' + userPrefix + '.*', 'i') }).limit(10);
         const responseUserData = await Promise.all(foundUsers.map(async foundUser => {
             const userRoles = await roleController.getRoleNamesFromIDs(foundUser.roles);

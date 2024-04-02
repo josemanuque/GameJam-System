@@ -13,7 +13,6 @@ exports.createJam = async (req, res) => {
             startingDate: req.body.startingDate,
             endingDate: req.body.endingDate,
             theme: req.body.theme
-            // category array not yet implemented
         };
         const jam = new JamModel(jamReq);
         await jam.save();
@@ -31,7 +30,7 @@ exports.createJam = async (req, res) => {
 
 exports.removeJam = async (req, res) => {
     try {
-        const jamID = req.body.id
+        const jamID = req.params.id
         
         const deletedJam = await JamModel.findByIdAndDelete(jamID);
         if(!deletedJam){
@@ -45,7 +44,7 @@ exports.removeJam = async (req, res) => {
     }
 };
 
-exports.removeSitefromJam = async (req, res) => {
+exports.removeSiteFromJam = async (req, res) => {
     try {
         const jamID = req.body.jamID;
         const siteID = req.body.siteID;
@@ -57,9 +56,57 @@ exports.removeSitefromJam = async (req, res) => {
         }
 
         jam.sites = jam.sites.filter(value => !value.equals(siteID));
-        jam.save();
+        await jam.save();
+
+        res.send({ message: "Site removed from Jam" });
     } catch(err){
         console.log(err);
         res.status(500).send({ message: "Server error" })
+    }
+};
+
+
+exports.addSiteToJam = async (req, res) => {
+    try {
+        const jamID = req.body.jamID;
+        const siteID = req.body.siteID;
+
+        const jam = await JamModel.findById({ jamID });
+
+        if(!jam){
+            return res.status(404).send({ message: "Invalid Jam ID" });
+        }
+
+        jam.sites.push(siteID);
+        await jam.save();
+
+        res.send({ message: "Site added to Jam" });
+    } catch(err){
+        console.log(err);
+        res.status(500).send({ message: "Server error" })
+    }
+};
+
+exports.getJams = async (req, res) => {
+    try {
+        const jams = await JamModel.find();
+        res.send({jams});
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({ message: 'Server error' });
+    }
+};
+
+exports.getJam = async (req, res) => {
+    try {
+        const jamID = req.params.id;
+        const jam = await JamModel.findById(jamID);
+        if(!jam){
+            return res.status(404).send({ message: "Jam not found" });
+        }
+        res.send(jam);
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({ message: 'Server error' });
     }
 };

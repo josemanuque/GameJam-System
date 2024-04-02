@@ -29,14 +29,14 @@ exports.createRole = async (req, res) => {
 /**
  * Assigns role to an existing user
  * @param {*} req -> Must receive username and roleName 
- * (localOrganizer, globalOrganizer, jammer, mentor, judge)
+ * (Local Organizer, Global Organizer, Jammer, Mentor, Judge)
  * @param {*} res 
  * @returns Confirmation message if successful
  */
-exports.asignRole = async (req, res) => {
+exports.assignRole = async (req, res) => {
     try {
-        const username = req.body.username;
-        const roleName = req.body.role;
+        const username = req.params.username;
+        const roleName = req.params.role;
 
         const user = await UserModel.findOne({ username });
         const role = await RoleModel.findOne({ name: roleName });
@@ -164,3 +164,30 @@ exports.getDefaultRoleID = async () => {
     }
     return jammerRole._id;
 };
+
+exports.getRoles = async (req, res) => {
+    try{
+        const roles = await RoleModel.find();
+        if(!roles){
+            return res.status(404).send({ message: "Roles not found" });
+        }
+        return res.send({roles: roles});
+    }
+    catch(err){
+        return res.status(500).send({ message: "Server error" });
+    }
+}
+
+exports.getRole = async (req, res) => {
+    try{
+        const roleName = req.params.role;
+        const role = await RoleModel.findOne({ name: roleName });
+        if(!role){
+            return res.status(404).send({ message: "Role not found" });
+        }
+        return res.send({role: role});
+    }
+    catch(err){
+        return res.status(500).send({ message: "Server error" });
+    }
+}

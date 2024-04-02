@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap, catchError, of } from 'rxjs';
-import { AuthResponseI } from '../../interfaces/auth.response';
+import { AuthResponseI } from '../../interfaces/auth.interface';
 import { API_IP } from '../environments/environment';
-import { UserLoginI } from '../../interfaces/auth.credentials';
+import { UserLoginI } from '../../interfaces/auth.interface';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
