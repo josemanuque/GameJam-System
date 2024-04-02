@@ -5,6 +5,10 @@ const OAuth2 = google.auth.OAuth2;
 const fs = require('fs');
 const path = require('path');
 
+/**
+ * @description Create a transporter for sending emails using Gmail
+ * @deprecated
+ */
 const createTransporterGmail = async () => {
     try {
         const oauth2Client = new OAuth2(
@@ -44,6 +48,16 @@ const createTransporterGmail = async () => {
     }
 };
 
+const createTransporter = async () => {
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.USER_EMAIL,
+            pass: process.env.USER_APP_PASSWORD
+        },
+    });
+    return transporter;
+};
 
 const sendEmail = async(to, subject, text) => {
     try {
@@ -53,7 +67,7 @@ const sendEmail = async(to, subject, text) => {
             subject,
             text,
         }
-        let emailTransporter = await createTransporterGmail();
+        let emailTransporter = await createTransporter();
         await emailTransporter.sendMail(
             mailOptions, 
             (err, info) => {
@@ -80,7 +94,7 @@ const sendEmailTemplate = async(to, subject, template, OTP) => {
             subject,
             html: emailHTML.replace('${OTP}', changePasswordOTP),
         }
-        let emailTransporter = await createTransporterGmail();
+        let emailTransporter = await createTransporter();
         await emailTransporter.sendMail(
             mailOptions, 
             (err, info) => {

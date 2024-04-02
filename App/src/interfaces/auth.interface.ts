@@ -28,3 +28,12 @@ export interface AuthResponseI {
     accessToken: string,
     expiresIn: string
 }
+
+export interface AuthForgotPasswordI {
+    email: string,
+}
+
+export interface AuthResetPasswordI {
+    password: string,
+    token: string,
+}
