@@ -46,7 +46,7 @@ export class RegisterUserComponent {
 
   form!: FormGroup;
   siteData: SiteResponseI[] = [];
-  constructor(private fb: FormBuilder,private authService: AuthService, private router: Router,
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router,
     private siteService:SitesService) { }
 
   ngOnInit(): void {

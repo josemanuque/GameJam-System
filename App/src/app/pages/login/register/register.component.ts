@@ -7,11 +7,12 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import { AuthService } from '../../../services/auth.service';
 import { Router, RouterModule  } from '@angular/router';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import {MatMenuModule} from '@angular/material/menu';
 import { SitesService } from '../../../services/sites.service';
 import { SiteListResponseI, SiteResponseI } from '../../../../interfaces/site.interface';
+import { UserRegisterI } from '../../../../interfaces/auth.interface';
 
 interface Region {
   value: string;
@@ -21,7 +22,7 @@ interface Region {
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [MatCardModule,MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormsModule, RouterModule, MatSelectModule, MatMenuModule],
+  imports: [MatCardModule,MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, FormsModule, RouterModule, MatSelectModule, MatMenuModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -40,10 +41,26 @@ export class RegisterComponent {
 
   hide = true;
   currentUser: any;
-  constructor(private siteService:SitesService, private authService: AuthService, private router: Router){}
+  form!: FormGroup;
+  formStep: number = 1;
 
-  ngOnInit(){
+  constructor(private fb: FormBuilder, private siteService:SitesService, private authService: AuthService, private router: Router){}
+
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      name: ['', Validators.required],
+      lastname: ['', Validators.required],
+      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.required]],
+      password: ['', [Validators.required, Validators.required]],
+      phone: ['', Validators.required],
+      site: ['', Validators.required],
+      region: ['', Validators.required],
+      roles: [[], Validators.required], // Empty array as default
+    });
   }
+
+  
   getSites(region: string) {
     this.siteService.getSitesFromRegion(region).subscribe(
       (response: SiteListResponseI) => {
@@ -57,20 +74,35 @@ export class RegisterComponent {
     );
   }
 
-  register(){
-    const username = this.usernameInput.nativeElement.value;
-    const password = this.passwordInput.nativeElement.value;
-    this.authService.login({ username, password }).subscribe(
-      (auth) => {
-        if(auth){
-          localStorage.setItem('currentType', 'jammer');
-          localStorage.setItem('email', auth.email);
+  onRegister(){
+    const userData: UserRegisterI = this.form.value;
+    this.authService.register(userData).subscribe(
+      auth => {
+        if (auth) {
+          localStorage.setItem('email', auth.username);
           this.router.navigate(['/dashboard']);
         } else {
           alert('Invalid credentials');
         }
       }
     );
+  }
+
+  isStepComplete() {
+    let fields: string[] = [];
+    if (this.formStep == 1) {
+      fields = ['username', 'email', 'password'];
+    } else if (this.formStep == 2) {
+      fields = ['name', 'lastname', 'phone'];
+    } else {
+      fields = ['site', 'region'];
+    }
+    for (let field of fields) {
+      if (this.form.get(field)?.value === '') {
+            return true;
+      }
+    }
+    return false;
   }
 
 }

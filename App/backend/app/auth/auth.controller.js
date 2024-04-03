@@ -10,10 +10,10 @@ KEY_EXPIRES_IN = process.env.KEY_EXPIRES_IN;
 exports.register = async (req, res) => {
     try {
         let roles = req.body.roles;
-        if (Array.isArray(roles)){
+        if (Array.isArray(roles) && roles.length > 0){
             roles = await roleController.getRoleIDs(roles);
         }
-        else if(!roles){
+        else if(!roles || roles.length === 0){
             const defaultRoleID = await roleController.getDefaultRoleID();
             roles = [defaultRoleID];
         }
@@ -38,6 +38,8 @@ exports.register = async (req, res) => {
 
         const resUser = {
             message: "Logged in",
+            name: user.name,
+            lastname: user.lastname,
             email: user.email,
             username: user.username,
             roles: userRoles
@@ -134,7 +136,6 @@ exports.resetPassword = async (req, res) => {
     const newPassword = req.body.password;
 
     try {
-        console.log(newPassword);
         const user = await UserModel.findOne({email});
         if (!user){
             return res.status(400).send({ message: "Invalid email or OTP"});
