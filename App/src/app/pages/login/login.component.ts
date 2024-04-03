@@ -34,8 +34,8 @@ export class LoginComponent {
       (auth) => {
         console.log(auth);
         if (auth) {
-          localStorage.setItem('currentType', 'jammer');
-          localStorage.setItem('email', auth.email);
+          localStorage.setItem('currentType', "jammer");
+          localStorage.setItem('email', auth.username);
           this.router.navigate(['/dashboard']);
         } else {
           alert('Invalid credentials');
