@@ -27,13 +27,29 @@ export interface SideNavToggle {
   styleUrl: './sidenav.component.css'
 })
 export class SidenavComponent {
-  userDict = new Dictionary<[string, string], string>([
+  adminDict = new Dictionary<[string, string], string>([
     //icon // ruta //boton
     [['settings', '/dashboard'], 'Settings'],
     [['games', '/dashboard/submit-game'], 'Game'],
-    [['info', '/dashboard/notifications'], 'Notifications'],
+    //[['info', '/dashboard/notifications'], 'Notifications'],
     [['person', '/dashboard/register-user'], 'Register'],
     [['location_on', '/dashboard/sites'], 'Sites'],
+    [['people', '/dashboard/team'], 'Team'],
+    [['calendar_today', '/dashboard/jam'], 'Jam'],
+  ]);
+
+  localDict = new Dictionary<[string, string], string>([
+    //icon // ruta //boton
+    [['settings', '/dashboard'], 'Settings'],
+    [['games', '/dashboard/submit-game'], 'Game'],
+    [['person', '/dashboard/register-user'], 'Register'],
+    [['people', '/dashboard/team'], 'Team'],
+  ]);
+
+  jammerDict = new Dictionary<[string, string], string>([
+    //icon // ruta //boton
+    [['settings', '/dashboard'], 'Settings'],
+    [['games', '/dashboard/submit-game'], 'Game'],
     [['people', '/dashboard/team'], 'Team'],
   ]);
   
@@ -50,7 +66,7 @@ export class SidenavComponent {
     ) { }
 
   currentName = "";
-  currentAt = "";
+  currentRole = "";
   currentPhoto = "";
 
   entries:any;
@@ -74,11 +90,16 @@ export class SidenavComponent {
         this.validRoles = data.roles.map(role => role.name);
         if (this.user!.roles.some(role => this.validRoles.includes(role))){
           this.currentName = this.user!.name;
-          this.currentAt = this.user!.roles.join(' - ');
+          this.currentRole = this.user!.roles.join(' - ');
+          localStorage.setItem("currentRole",this.currentRole);
           this.entries = this.getEntries();
+          console.log("hi",this.currentRole)
         }},
         error: (error) => {console.log(error);},
       });
+
+      
+
   }
 
   openSN(){
@@ -111,14 +132,38 @@ export class SidenavComponent {
     const entries = [];
     
     //this.currentFile = this.sanitizer.bypassSecurityTrustUrl(`data:image/jpg;base64, ${localStorage.getItem("currentPhoto")}`);
-    for (const [key, value] of this.userDict.toMap()) {
-      entries.push({
-        key: value,
-        value1: key[0],
-        value2: key[1],
-        value,
-      });
+    //alert(this.currentRole);
+    if (this.currentRole.includes("Global")){
+      for (const [key, value] of this.adminDict.toMap()) {
+        entries.push({
+          key: value,
+          value1: key[0],
+          value2: key[1],
+          value,
+        });
+      }
     }
+    if (this.currentRole.includes("Local")){
+      for (const [key, value] of this.localDict.toMap()) {
+        entries.push({
+          key: value,
+          value1: key[0],
+          value2: key[1],
+          value,
+        });
+      }
+    }
+    if (this.currentRole.includes("Jammer")){
+      for (const [key, value] of this.jammerDict.toMap()) {
+        entries.push({
+          key: value,
+          value1: key[0],
+          value2: key[1],
+          value,
+        });
+      }
+    }
+
 
     return entries;
   }
