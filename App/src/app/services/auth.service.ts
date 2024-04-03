@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap, catchError, of } from 'rxjs';
-import { AuthResponseI } from '../../interfaces/auth.interface';
+import { AuthResponseI, UserRegisterI } from '../../interfaces/auth.interface';
 import { API_IP } from '../environments/environment';
 import { UserLoginI } from '../../interfaces/auth.interface';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,49 +13,53 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthService {
   private token: string = '';
 
-  constructor(private http: HttpClient) { 
-    const token = localStorage.getItem('ACCESS_TOKEN');
-    if (token !== '' && token !== null) {
-      const jwtHelper = new JwtHelperService();
-      const decodedToken = jwtHelper.decodeToken(token);
-      const expirationDate = new Date(decodedToken.exp * 1000);
-      if (expirationDate > new Date()) {
-        this.token = token;
-      } else {
-        console.log('Token expired');
-        // Log out logic
-      }
-    }
-  }
+  constructor(private http: HttpClient, private userService: UserService) {}
 
-  login(userCredentials: UserLoginI): Observable<AuthResponseI | null> {
-    const url = `${API_IP}/auth/login`;
-    
-    return this.http.post<AuthResponseI>(url, userCredentials).pipe(tap(
-      (res: AuthResponseI) => {
-        if (res) {
-          this.saveToken(res.accessToken, "");
+  login(userCredentials: UserLoginI): Observable<AuthResponseI> {
+    return this.http.post<AuthResponseI>(`${API_IP}/auth/login`, userCredentials).pipe(
+      tap((res: AuthResponseI) => {
+        if (res){
+          this.setToken(res.accessToken);
+          this.userService.setUser(res);
         }
-      }
-    ));
+      })
+    );
   }
 
-  private saveToken(token: string, expiresIn: string): void {
+  register(userCredentials: UserRegisterI): Observable<AuthResponseI | null> {
+    return this.http.post<AuthResponseI>(`${API_IP}/auth/register`, userCredentials).pipe(
+      tap((res: AuthResponseI) => {
+        if (res){
+          this.setToken(res.accessToken);
+          this.userService.setUser(res);
+        }
+      })
+    );
+  }
+
+  
+  setToken(token: string): void {
     localStorage.setItem("ACCESS_TOKEN", token);
-    this.token = token;
-    //localStorage.setItem("EXPIRES_IN", expiresIn);
   }
 
-  public getToken(): string {
-    if (!this.token) {
-      const storedToken = localStorage.getItem("ACCESS_TOKEN");
-      if (storedToken !== null) {
-        this.token = storedToken;
-      }
-      else {
-        this.token = '';
-      }
+  getToken(): string | null {
+    return localStorage.getItem("ACCESS_TOKEN");
+  }
+
+  isAuthenticated(): Observable<AuthResponseI | null> {
+    const token = this.getToken();
+    if (!token) {
+      return of(null);
     }
-    return this.token;
+    
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<AuthResponseI>(`${API_IP}/auth/verifyToken`, { headers }).pipe(
+      tap((res: AuthResponseI) => {
+        if (res){
+          this.userService.setUser(res);
+        }
+      })
+    );
   }
 }
