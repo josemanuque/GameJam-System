@@ -9,6 +9,7 @@ import { TeamComponent } from './pages/dashboard/team/team.component';
 import { RegisterUserComponent } from './pages/dashboard/register-user/register-user.component';
 import { NotificationsComponent } from './pages/dashboard/notifications/notifications.component';
 import { JamComponent } from './pages/dashboard/jam/jam.component';
+import { ViewJamComponent } from './pages/dashboard/jam/view-jam/view-jam.component';
 
 export const routes: Routes = [
     {
@@ -61,6 +62,11 @@ export const routes: Routes = [
             },
             {
                 path:   'jam',
+                component:  ViewJamComponent
+            }
+            ,
+            {
+                path:   'jam/create',
                 component:  JamComponent
             }
         ]

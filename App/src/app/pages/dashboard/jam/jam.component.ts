@@ -15,6 +15,7 @@ import {FormControl, Validators, FormsModule, ReactiveFormsModule} from '@angula
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { JamService } from '../../../services/jam.service';
 import { JamRequestI } from '../../../../interfaces/jam.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-jam',
@@ -27,7 +28,7 @@ import { JamRequestI } from '../../../../interfaces/jam.interface';
 })
 export class JamComponent {
   form!: FormGroup;
-  constructor(private fb: FormBuilder, private jamService: JamService) { }
+  constructor(private fb: FormBuilder, private jamService: JamService, private router:Router) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -60,4 +61,9 @@ export class JamComponent {
       console.log('Form is invalid!');
     }
   }
+
+  goToViewJam(): void {
+    this.router.navigate(['dashboard/jam']);
+  }
+
 }
