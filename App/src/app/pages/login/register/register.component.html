@@ -46,11 +46,25 @@
                         <mat-form-field>
                             <mat-label>Select Region</mat-label>
                             <mat-select>
-                              @for (food of foods; track food) {
-                                <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
-                              }
+                                @for (region of regions; track region) {
+                                <mat-option [value]="region.viewValue" (click)="getSites(region.viewValue)">{{region.viewValue}}</mat-option>
+                                }
                             </mat-select>
-                          </mat-form-field>
+                        </mat-form-field>
+                        
+                        @if (siteData.length > 0) {
+                            <div class="d-flex justify-content-center">
+                                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="cloud"></mat-icon>
+                            </div>
+                          <mat-form-field>
+                            <mat-label>Select Site</mat-label>
+                            <mat-select>
+                                @for (site of siteData; track site) {
+                                <mat-option [value]="site._id">{{site.name}}, {{site.country}}, {{site.city}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                        }
 
                           <!-- <div class="d-flex justify-content-center">
                             <button class="cmenu" mat-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">Menu <mat-icon>dialpad</mat-icon></button>
