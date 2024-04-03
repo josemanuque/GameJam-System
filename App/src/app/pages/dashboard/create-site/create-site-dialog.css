@@ -1,140 +1,93 @@
-@import 'bootstrap-icons/font/bootstrap-icons.css';
 
-body{
-    overflow-y: hidden !important;
-    background-color: red !important;
+mat-sidenav-container {
+  display: flex;
+  height: 100vh;
+  
 }
 
-.buttonCustom {
-    background-color: #313131 !important;
-    outline: none !important;
+mat-sidenav-content {
+  flex: 1 1 auto;
+  overflow: auto;
+  background-color: #121212;
 }
 
-.cBtn:hover {
-    background-color: #FFA500 !important;
-    color: white !important;
+.content{
+  margin-left: 18rem;
+  margin-top: 0.6rem !important;
+  margin-right: 16px;
+  border-radius: 10px;
+  min-height: calc(100vh - 4rem);
+  margin-bottom: 2rem;
+  background-color: #212121 !important;
 }
 
-.drpBtn {
-    background-color: #FFA500 !important;
-    color: white !important;
-    border-color: #FFA500 !important;
-}
-.drpBtn:hover {
-    background-color: #505050 !important;
-    color: white !important;
-    border-color: #505050 !important;
+.custom-container {
+  margin-left: 100px;
+  margin-right: 100px;
 }
 
-
-mat-card{
-    background-color: #212121;
-    color: white;
-    width: 100%;
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.19), 0px 6px 6px rgba(0, 0, 0, 0.23);
-    border-radius: 5%;
+h1{
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  color: white;
 }
 
-p{
-    color: white;
-    font-size: 13px;
-    margin: 0px;
+.customInput{
+  width: 100%;
 }
 
-a{
-    color: #FFA500;
-    font-size: 13px;
-    text-decoration: none;
+.rounded-table-container {
+  border-radius: 10px;
+  overflow: hidden;
+}
+  
+mat-form-field{
+  max-width: 50%;
 }
 
-.flexx-container {
-    display: flex;
+@media (max-width: 770px) {
+  .d-flex {
     flex-direction: column;
     align-items: center;
-    height: auto!important;
-    padding: 25px;
   }
 
-.cbutton{
-    background-color: #FFA500 !important;
-    border-color: #FFA500;
-    color: white;
+  .btn-menu {
+    margin-bottom: 1rem;
     width: 100%;
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.19), 0px 6px 6px rgba(0, 0, 0, 0.23);
-    margin-bottom: 15px;
-    margin-top: 15px;
-
-}
-.cbutton:hover{
-    background-color: #212121 !important;
-    border-color: #212121;
-    color: white;
-
-}
-
-.cmenu{
-  background-color: #FFA500 !important;
-  border-color: #FFA500;
-  color: white;
-  width: 100%;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.19), 0px 6px 6px rgba(0, 0, 0, 0.23);
-  margin-bottom: 15px;
-  margin-top: 15px; 
-}
-
-.forgot-password{
-  color: #FFA500;
-  font-size: 13px;
-  text-decoration: none;
-}
-
-input{
-    background-color: #505050;
-    border-color: #212121;
-    color: white;
-    /* box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.19), 0px 6px 6px rgba(0, 0, 0, 0.23); */
-    font-size: 15px;
-}
-input::placeholder {
-    color: #9c9c9c;
-    font-weight:600;
-}
-input:focus {
-    background-color: #212121;
-    color: white;
   }
-.flex-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-  }
+}
 
-  .example-container mat-form-field + mat-form-field {
-    margin-left: 8px;
+@media (max-width: 1350px) {
+  .content {
+    margin-left: 1rem;
   }
-  
-  .example-right-align {
-    text-align: right;
-  }
-  mat-icon{
-    margin-top: 20px !important;
-    margin-bottom: 5px;
+  .custom-container {
+    margin-left: 50px;
+    margin-right: 50px;
   }
   mat-form-field{
-    width: 100%;
+      width: 100% !important;
+    }
+
+}
+
+@media (max-height:900px) {
+  .content{
+    height: auto;
+    margin-bottom: 10px;
   }
-  mat-dialog-content{
-    background-color: #212121;
-  }
-  h2{
-    background-color: #212121;
-    color: white;
-  }
-  mat-dialog-actions{
-    background-color: #212121;
-  }
+  mat-form-field{
+      width: 100% !important;
+    }
+
+}
 
 
-
-  
+.submit-button{
+  background-color: #FFA500;
+  color: white !important;
+  font-size: 15px;
+  width: 30%;
+  margin-top: 1rem;
+}

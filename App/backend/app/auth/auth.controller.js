@@ -27,7 +27,7 @@ exports.register = async (req, res) => {
             phone: req.body.phone,
             roles: roles,
             region: req.body.region,
-            site: req.body.site
+            site: req.body.site,
         };
 
 
@@ -134,6 +134,7 @@ exports.resetPassword = async (req, res) => {
     const newPassword = req.body.password;
 
     try {
+        console.log(newPassword);
         const user = await UserModel.findOne({email});
         if (!user){
             return res.status(400).send({ message: "Invalid email or OTP"});

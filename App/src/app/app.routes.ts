@@ -8,6 +8,9 @@ import { SubmitGameComponent } from './pages/dashboard/submit-game/submit-game.c
 import { TeamComponent } from './pages/dashboard/team/team.component';
 import { RegisterUserComponent } from './pages/dashboard/register-user/register-user.component';
 import { NotificationsComponent } from './pages/dashboard/notifications/notifications.component';
+import { JamComponent } from './pages/dashboard/jam/jam.component';
+import { ViewJamComponent } from './pages/dashboard/jam/view-jam/view-jam.component';
+import { SiteComponent } from './pages/dashboard/create-site/site/site.component';
 
 export const routes: Routes = [
     {
@@ -40,6 +43,10 @@ export const routes: Routes = [
             },
             {
                 path:   'sites',
+                component:  SiteComponent
+            },
+            {
+                path:   'sites/create',
                 component:  CreateSiteComponent
             },
             {
@@ -57,6 +64,15 @@ export const routes: Routes = [
             {
                 path:   'notifications',
                 component:  NotificationsComponent
+            },
+            {
+                path:   'jam',
+                component:  ViewJamComponent
+            }
+            ,
+            {
+                path:   'jam/create',
+                component:  JamComponent
             }
         ]
     },

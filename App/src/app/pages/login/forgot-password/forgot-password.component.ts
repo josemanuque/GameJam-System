@@ -27,13 +27,14 @@ export class ForgotPasswordComponent {
   currentUser: any;
   coded = false;
   confirmed = false;
+  private email: string = '';
   constructor(private authService: AuthService, private router: Router){}
 
   ngOnInit(){
   }
 
   sendCode(){
-    const email = this.emailInput.nativeElement.value;
+    this.email = this.emailInput.nativeElement.value;
     this.coded = true;
   }
 
@@ -44,8 +45,24 @@ export class ForgotPasswordComponent {
   }
 
   confirmPass(){
+    const OTP = this.codeInput.nativeElement.value;
     const newPassword = this.newPasswordInput.nativeElement.value;
     const confirmPassword = this.confirmPasswordInput.nativeElement.value;
+    if(newPassword != confirmPassword){
+      alert("Passwords do not match");
+      return;
+    }
+    this.authService.resetPassword({email: this.email, OTP, password : newPassword}).subscribe(
+      res => {
+        if (res){
+          console.log(res);
+          alert("Password reset successful");
+        }else{
+          alert("Password reset failed");
+        }
+        this.router.navigate(['/login']);
+      }
+    );
     this.router.navigate(['/login']);
   }
 

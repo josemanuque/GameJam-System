@@ -29,10 +29,11 @@ export interface AuthResponseI {
 }
 
 export interface AuthForgotPasswordI {
-    email: string,
+    email: string
 }
 
 export interface AuthResetPasswordI {
-    password: string,
-    token: string,
+    email: string,
+    OTP: string,
+    password: string
 }

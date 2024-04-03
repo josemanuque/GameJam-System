@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Dictionary } from './dictionary-structure';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -10,6 +10,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule  } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { UserResponseI } from '../../../interfaces/user.interface';
+import { RoleListResponseI } from '../../../interfaces/role.interface';
+import { AuthService } from '../../services/auth.service';
 
 export interface SideNavToggle {
   screenWidth: number;
@@ -39,10 +41,12 @@ export class SidenavComponent {
   @ViewChild(MatSidenav) sidenav!: MatSidenav;
 
   constructor(
+    private authService: AuthService,
     private userService: UserService, 
     private observer: BreakpointObserver, 
     private readonly elementRef: ElementRef, 
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
     ) { }
 
   currentName = "";
@@ -54,15 +58,27 @@ export class SidenavComponent {
   toggleMenu = false;
 
   user: UserResponseI | null = null;
+  validRoles: string[] = [];
 
   ngOnInit(): void {
+    this.authService.isAuthenticated().subscribe(user => {
+      if (!user) {
+        this.router.navigate(['/']);
+      }
+    });
     this.user = this.userService.getUser()!
     const margin = 32;
-    this.entries = this.getEntries();
-    if (this.user.roles.includes("Jammer")){
-      this.currentName = this.user.name;
-      this.currentAt = this.user.roles.join(' - ');
-    }
+    
+    this.userService.getAllValidRoles().subscribe({
+        next: (data) => {
+        this.validRoles = data.roles.map(role => role.name);
+        if (this.user!.roles.some(role => this.validRoles.includes(role))){
+          this.currentName = this.user!.name;
+          this.currentAt = this.user!.roles.join(' - ');
+          this.entries = this.getEntries();
+        }},
+        error: (error) => {console.log(error);},
+      });
   }
 
   openSN(){
@@ -83,7 +99,7 @@ export class SidenavComponent {
         this.sidenav.open();
         this.toggleMenu = false;
       }
-
+      this.cdr.detectChanges();
     });
     const nameEls = document.querySelectorAll('h1');
     nameEls.forEach((nameEls) => {
@@ -93,22 +109,22 @@ export class SidenavComponent {
 
   getEntries() {
     const entries = [];
-    if (this.user!.roles.includes("Jammer")){
-      //this.currentFile = this.sanitizer.bypassSecurityTrustUrl(`data:image/jpg;base64, ${localStorage.getItem("currentPhoto")}`);
-      for (const [key, value] of this.userDict.toMap()) {
-        entries.push({
-          key: value,
-          value1: key[0],
-          value2: key[1],
-          value,
-        });
-      }
+    
+    //this.currentFile = this.sanitizer.bypassSecurityTrustUrl(`data:image/jpg;base64, ${localStorage.getItem("currentPhoto")}`);
+    for (const [key, value] of this.userDict.toMap()) {
+      entries.push({
+        key: value,
+        value1: key[0],
+        value2: key[1],
+        value,
+      });
     }
 
     return entries;
   }
 
   logOut(){
+    this.authService.logout();
     this.router.navigate(['/login']);
     localStorage.setItem("logged","false");
   }

@@ -13,6 +13,20 @@
           <form [formGroup]="form">
             <div class="row d-flex justify-content-center">
             
+              <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name">
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Last Name</mat-label>
+                <input matInput formControlName="lastname">
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Discord Username</mat-label>
+                <input matInput formControlName="username">
+              </mat-form-field>
+
                 <mat-form-field>
                   <mat-label>Email</mat-label>
                   <input matInput formControlName="email">
@@ -20,12 +34,7 @@
               
                 <mat-form-field>
                   <mat-label>Phone Number</mat-label>
-                  <input matInput formControlName="phoneNumber">
-                </mat-form-field>
-              
-                <mat-form-field>
-                  <mat-label>Discord Username</mat-label>
-                  <input matInput formControlName="discord">
+                  <input matInput formControlName="phone">
                 </mat-form-field>
               
                 <mat-form-field>
@@ -37,20 +46,40 @@
                     <mat-label>Select Region</mat-label>
                     <mat-select formControlName="region">
                         @for (region of regions; track region) {
-                        <mat-option [value]="region.value">{{region.viewValue}}</mat-option>
+                        <mat-option [value]="region.viewValue" (click)="getSites(region.viewValue)">{{region.viewValue}}</mat-option>
                         }
                     </mat-select>
                 </mat-form-field>
+
+                @if (siteData.length > 0) {
+                  <mat-form-field>
+                    <mat-label>Select Site</mat-label>
+                    <mat-select formControlName="site">
+                        @for (site of siteData; track site) {
+                        <mat-option [value]="site._id">{{site.name}}, {{site.country}}, {{site.city}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                }
+
+                <mat-form-field>
+                  <mat-label>Select Roles</mat-label>
+                  <mat-select formControlName="roles" multiple>
+                      @for (role of roles; track role) {
+                      <mat-option [value]="role.viewValue">{{role.viewValue}}</mat-option>
+                      }
+                  </mat-select>
+              </mat-form-field>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class=" d-flex justify-content-center">
                   <mat-checkbox formControlName="coordinatorChecked">Coordinator</mat-checkbox>
                   <mat-checkbox formControlName="judgeChecked">Judge</mat-checkbox>
                   <mat-checkbox formControlName="jammerChecked">Jammer</mat-checkbox>
                 </div>
-            </div>
+            </div> -->
             <div class="row d-flex justify-content-center">
-                <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Submit</button>
+                <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Register User</button>
             </div>
         </form>
 
