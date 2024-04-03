@@ -1,5 +1,4 @@
 export interface SiteCreateRequestI {
-    _id: string,
     name: string,
     region: string,
     country: string,
