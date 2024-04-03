@@ -27,7 +27,7 @@ exports.register = async (req, res) => {
             phone: req.body.phone,
             roles: roles,
             region: req.body.region,
-            site: siteID
+            site: req.body.site,
         };
 
 

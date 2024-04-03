@@ -22,7 +22,7 @@
                   <mat-label>Region</mat-label>
                   <mat-select formControlName="region">
                     @for (region of regions; track region) {
-                      <mat-option [value]="region.value">{{region.viewValue}}</mat-option>
+                      <mat-option [value]="region.viewValue">{{region.viewValue}}</mat-option>
                     }
                   </mat-select>
                 </mat-form-field>
@@ -41,7 +41,7 @@
                   <mat-label>Modality</mat-label>
                   <mat-select formControlName="modality">
                     @for (modality of modalities; track modality) {
-                      <mat-option [value]="modality.value">{{modality.viewValue}}</mat-option>
+                      <mat-option [value]="modality.viewValue">{{modality.viewValue}}</mat-option>
                     }
                   </mat-select>
                 </mat-form-field>
