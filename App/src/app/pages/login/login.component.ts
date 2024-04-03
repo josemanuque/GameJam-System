@@ -61,6 +61,7 @@ export class LoginComponent {
     this.authService.login({ username, password }).subscribe(
       auth => {
         if (auth) {
+          localStorage.setItem('email', auth.username);
           this.router.navigate(['/dashboard']);
         } else {
           alert('Invalid credentials');

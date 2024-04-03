@@ -47,6 +47,7 @@ export class DashboardComponent {
   ];
 
   username = this.userService.getUser()?.username;
+  username2 = localStorage.getItem('email');
 
   userData!: UserResponseI;
 
@@ -68,7 +69,7 @@ export class DashboardComponent {
       roles: [[]], // Empty array as default
     });
 
-    this.userService.getUserByUsername(this.username!).subscribe(
+    this.userService.getUserByUsername(this.username2!).subscribe(
       (response: UserResponseI) => {
         this.userData = response;
         console.log('User fetched successfully:', this.userData);
