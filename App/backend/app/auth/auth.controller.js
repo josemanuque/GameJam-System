@@ -27,7 +27,7 @@ exports.register = async (req, res) => {
             phone: req.body.phone,
             roles: roles,
             region: req.body.region,
-            site: siteID
+            site: req.body.site
         };
 
 
@@ -159,7 +159,7 @@ exports.resetPassword = async (req, res) => {
 
 exports.authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
-    const token = authHeader;
+    const token = authHeader && authHeader.split(' ')[1];
     if(token == null) {
         return res.status(401).send({ message: 'Token is null' });
     }

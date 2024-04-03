@@ -25,8 +25,7 @@ export interface AuthResponseI {
     site: string,
     region: string,
     roles: string[],
-    accessToken: string,
-    expiresIn: string
+    accessToken: string
 }
 
 export interface AuthForgotPasswordI {

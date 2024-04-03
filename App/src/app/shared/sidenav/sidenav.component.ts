@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { Router, RouterModule  } from '@angular/router';
+import { UserService } from '../../services/user.service';
+import { UserResponseI } from '../../../interfaces/user.interface';
 
 export interface SideNavToggle {
   screenWidth: number;
@@ -32,11 +34,16 @@ export class SidenavComponent {
     [['location_on', '/dashboard/sites'], 'Sites'],
     [['people', '/dashboard/team'], 'Team'],
   ]);
-
+  
 
   @ViewChild(MatSidenav) sidenav!: MatSidenav;
 
-  constructor(private observer: BreakpointObserver, private readonly elementRef: ElementRef, private router: Router) { }
+  constructor(
+    private userService: UserService, 
+    private observer: BreakpointObserver, 
+    private readonly elementRef: ElementRef, 
+    private router: Router
+    ) { }
 
   currentName = "";
   currentAt = "";
@@ -46,12 +53,15 @@ export class SidenavComponent {
 
   toggleMenu = false;
 
+  user: UserResponseI | null = null;
+
   ngOnInit(): void {
+    this.user = this.userService.getUser()!
     const margin = 32;
     this.entries = this.getEntries();
-    if (localStorage.getItem("currentType") === "jammer"){
-      this.currentName = localStorage.getItem("email") + "";
-      this.currentAt = localStorage.getItem("currentType") + "";
+    if (this.user.roles.includes("Jammer")){
+      this.currentName = this.user.name;
+      this.currentAt = this.user.roles.join(' - ');
     }
   }
 
@@ -83,7 +93,7 @@ export class SidenavComponent {
 
   getEntries() {
     const entries = [];
-    if (localStorage.getItem("currentType") === "jammer"){
+    if (this.user!.roles.includes("Jammer")){
       //this.currentFile = this.sanitizer.bypassSecurityTrustUrl(`data:image/jpg;base64, ${localStorage.getItem("currentPhoto")}`);
       for (const [key, value] of this.userDict.toMap()) {
         entries.push({

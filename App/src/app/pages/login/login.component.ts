@@ -25,9 +25,16 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router){}
 
   ngOnInit(){
+    this.authService.isAuthenticated().subscribe(user => {
+      if (user) {
+        this.router.navigate(['/dashboard']);
+      }
+    });
   }
-
-  login() {
+  /**
+   * @deprecated
+   */
+  login():void {
     const username = this.usernameInput.nativeElement.value;
     const password = this.passwordInput.nativeElement.value;
     this.authService.login({ username, password }).subscribe(
@@ -48,6 +55,19 @@ export class LoginComponent {
     );
   }
 
+  onLogin(): void {
+    const username = this.usernameInput.nativeElement.value;
+    const password = this.passwordInput.nativeElement.value;
+    this.authService.login({ username, password }).subscribe(
+      auth => {
+        if (auth) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          alert('Invalid credentials');
+        }
+      }
+    );
+  }
   onSubmit(form: NgForm) {
     if (form.valid) {
       const username = form.value.username;

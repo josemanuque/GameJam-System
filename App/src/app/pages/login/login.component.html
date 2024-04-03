@@ -3,14 +3,14 @@
         <mat-card>
             <mat-card-content class="d-flex justify-content-center">
                 <div class="example-container flexx-container">
-                    <form #loginForm="ngForm" (ngSubmit)="login()">
+                    <form #loginForm="ngForm" (ngSubmit)="onLogin()">
                         <div class="d-flex justify-content-center">
                             <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="person_add"></mat-icon>
                         </div>
                         <input
                         type="username"
                         class="form-control email"
-                        placeholder="Username"
+                        placeholder="Discord Username"
                         #usernameInput
                         > 
                         <div class="d-flex justify-content-center">

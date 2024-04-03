@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SidenavComponent } from "../../shared/sidenav/sidenav.component";
+import { UserService } from '../../services/user.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -13,10 +14,12 @@ import { SidenavComponent } from "../../shared/sidenav/sidenav.component";
 })
 export class DashboardComponent {
 
-  email = "";
+  constructor(private userService: UserService) { }
+
+  name = "";
 
   ngOnInit(): void {
-    this.email = localStorage.getItem("email")!;
+    this.name = this.userService.getUser()!.name;
   }
 
 }
