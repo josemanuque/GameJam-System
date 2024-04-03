@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { API_IP } from '../environments/environment';
 import { UserResponseI } from '../../interfaces/user.interface'; // Importing frontend interfaces
 import { RoleListResponseI } from '../../interfaces/role.interface';
@@ -34,7 +34,11 @@ export class UserService {
   }
 
   updateUser(username: string, userData: any): Observable<UserResponseI> {
-    return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, userData);
+    return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, userData).pipe(
+      tap((res: UserResponseI) => {
+        this.setUser(res);
+      })
+    );
   }
 
   getUserId(username: string): Observable<string> {
