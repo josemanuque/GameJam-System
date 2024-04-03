@@ -41,7 +41,6 @@ export class SidenavComponent {
   localDict = new Dictionary<[string, string], string>([
     //icon // ruta //boton
     [['settings', '/dashboard'], 'Settings'],
-    [['games', '/dashboard/submit-game'], 'Game'],
     [['person', '/dashboard/register-user'], 'Register'],
     [['people', '/dashboard/team'], 'Team'],
   ]);

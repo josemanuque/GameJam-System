@@ -26,12 +26,14 @@ export class AuthService {
     );
   }
 
-  register(userCredentials: UserRegisterI): Observable<AuthResponseI | null> {
+  register(userCredentials: UserRegisterI, byAdmin: boolean): Observable<AuthResponseI | null> {
     return this.http.post<AuthResponseI>(`${API_IP}/auth/register`, userCredentials).pipe(
       tap((res: AuthResponseI) => {
         if (res){
-          this.setToken(res.accessToken);
-          this.userService.setUser(res);
+          if (!byAdmin){
+            this.setToken(res.accessToken);
+            this.userService.setUser(res);
+          }
         }
       })
     );

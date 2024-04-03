@@ -76,7 +76,7 @@ export class RegisterComponent {
 
   onRegister(){
     const userData: UserRegisterI = this.form.value;
-    this.authService.register(userData).subscribe(
+    this.authService.register(userData, false).subscribe(
       auth => {
         if (auth) {
           localStorage.setItem('email', auth.username);

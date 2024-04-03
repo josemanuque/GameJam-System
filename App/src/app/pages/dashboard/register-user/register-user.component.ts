@@ -79,7 +79,7 @@ export class RegisterUserComponent {
   submitForm(): void {
     if (this.form.valid) {
       const userData: UserRegisterI = this.form.value;
-      this.authService.register(userData).subscribe(
+      this.authService.register(userData,true).subscribe(
         (response) => {
           console.log('User created successfully:', response);
           // Optionally, you can reset the form after successful submission
