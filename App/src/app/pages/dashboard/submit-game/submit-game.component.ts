@@ -70,7 +70,7 @@ export class SubmitGameComponent {
           console.log('Game created successfully:', response);
           this.form.reset();
           alert('Game Submited successfully!');
-          window.location.reload();
+          //window.location.reload();
         },
         (error) => {
           console.error('Error occurred while creating game:', error);

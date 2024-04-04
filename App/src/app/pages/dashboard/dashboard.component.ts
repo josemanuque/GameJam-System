@@ -115,7 +115,7 @@ export class DashboardComponent {
           // Optionally, you can reset the form after successful submission
           this.form.reset();
           alert('User updated successfully!');
-          window.location.reload();
+          //window.location.reload();
         },
         (error) => {
           console.error('Error occurred while updatading user:', error);
