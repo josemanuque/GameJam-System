@@ -53,20 +53,20 @@ export class TeamComponent {
     this.teamService.kickMember(this.teamData?._id!,localStorage.getItem('email')!).subscribe((team) => {
       this.notInTeam = true;
       alert('You have left the team');
-      //window.location.reload();
+      window.location.reload();
     });
   }
   kickUser(username: string) {
     this.teamService.kickMember(this.teamData?._id!,username).subscribe((team) => {
       alert('You kicked the user from the team');
-      //window.location.reload();
+      window.location.reload();
     });
   }
   addMember(username: string) {
     console.log("data",this.teamData?._id!,username);
     this.teamService.addMember(this.teamData?._id!,username).subscribe((team) => {
       alert('You added the user to the team');
-      //window.location.reload();
+      window.location.reload();
     });
   }
 
