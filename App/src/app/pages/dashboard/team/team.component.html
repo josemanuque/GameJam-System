@@ -6,8 +6,8 @@
       <div class="custom-container">
 
         <div class="row">
-          <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
-            <h1>Team</h1>
+          <div class="d-flex justify-content-center">
+            <h1>Team {{teamData?.name}}</h1>
           </div>
         </div>
 
@@ -19,7 +19,17 @@
         }
         @if (!notInTeam) {
           <div class="row">
-            <mat-card class="example-card" (click)="openKickDialog('300ms', '300ms')">
+            @for (member of teamData?.members; track member) {
+              <mat-card class="example-card">
+                  <mat-card-header>
+                    <mat-card-title class="d-flex justify-content-center">{{member.username}}</mat-card-title>
+                    <mat-card-subtitle class="d-flex justify-content-center">{{member.email}}</mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content>
+                  </mat-card-content>
+              </mat-card>
+          }
+            <!-- <mat-card class="example-card">
               <mat-card-header>
                 
                 <mat-card-title><img class="avatar mat-elevation-z8" src="assets/avatar.png" alt="Image"> Juan Villalobos</mat-card-title>
@@ -29,7 +39,7 @@
                 <p>Discord: 111, Role: Develover, Email: hhhhh</p>
                 
               </mat-card-content>
-            </mat-card>
+            </mat-card> -->
           </div>
           <div class="row d-flex justify-content-center">
             <button class="btn">Edit Team</button>

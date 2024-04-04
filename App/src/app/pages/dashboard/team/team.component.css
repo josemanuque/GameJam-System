@@ -78,16 +78,11 @@
 
   mat-card-title{
     color: #FFA500;
+    font-size: 2rem !important;
   }	
-
-  mat-sidenav-container {
-    display: flex;
-    height: 100vh;
-    
-  }
   .example-card {
-    max-width: 300px;
-    height: 200px;
+    width: auto;
+    height: 120px;
     transition: transform 0.3s;
   }
   
