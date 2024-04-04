@@ -11,6 +11,7 @@ import { NotificationsComponent } from './pages/dashboard/notifications/notifica
 import { JamComponent } from './pages/dashboard/jam/jam.component';
 import { ViewJamComponent } from './pages/dashboard/jam/view-jam/view-jam.component';
 import { SiteComponent } from './pages/dashboard/create-site/site/site.component';
+import { CreateTeamComponent } from './pages/dashboard/team/create-team/create-team.component';
 
 export const routes: Routes = [
     {
@@ -56,6 +57,10 @@ export const routes: Routes = [
             {
                 path:   'team',
                 component:  TeamComponent
+            },
+            {
+                path:   'team/create',
+                component:  CreateTeamComponent
             },
             {
                 path:   'register-user',

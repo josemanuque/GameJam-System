@@ -35,7 +35,16 @@ export class ForgotPasswordComponent {
 
   sendCode(){
     this.email = this.emailInput.nativeElement.value;
-    this.coded = true;
+    this.authService.sendPasswordResetEmail({email: this.email}).subscribe(
+      res => {
+        if (res){
+          this.coded = true;
+          alert("Code sent successfully");
+        }else{
+          alert("Code send failed");
+        }
+      }
+    );
   }
 
   verifyCode(){

@@ -20,6 +20,7 @@ import {
   MatDialogContent,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-team',
@@ -30,7 +31,7 @@ import {
 })
 export class TeamComponent {
   notInTeam = true;
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog, private router: Router) {}
 
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
     const dialogRef = this.dialog.open(DialogTeam, {
@@ -54,6 +55,10 @@ export class TeamComponent {
       exitAnimationDuration,
       data: { notInTeam: this.notInTeam } // Pass the current value of notInTeam to the dialog
     });    
+  }
+
+  goToCreateTeam() {
+    this.router.navigate(['/dashboard/team/create']);
   }
 }
 

@@ -9,3 +9,9 @@ export interface UserResponseI {
     region: string,
     roles: string[]
 }
+
+export interface UserFindResponseI {
+    username: string,
+    email: string,
+    roles: string[]
+}

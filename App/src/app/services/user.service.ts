@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { API_IP } from '../environments/environment';
-import { UserResponseI } from '../../interfaces/user.interface'; // Importing frontend interfaces
+import { UserFindResponseI, UserResponseI } from '../../interfaces/user.interface'; // Importing frontend interfaces
 import { RoleListResponseI } from '../../interfaces/role.interface';
 
 @Injectable({
@@ -21,8 +21,8 @@ export class UserService {
     return JSON.parse(localStorage.getItem("USER")!);
   }
 
-  getUsersFromPrefix(query: string): Observable<UserResponseI[]> {
-    return this.http.get<UserResponseI[]>(`${this.apiUrl}/user/query/${query}`);
+  getUsersFromPrefix(query: string): Observable<UserFindResponseI[]> {
+    return this.http.get<UserFindResponseI[]>(`${this.apiUrl}/user/query/${query}`);
   }
 
   getUserByUsername(username: string): Observable<UserResponseI> {
