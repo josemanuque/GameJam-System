@@ -34,7 +34,7 @@ export class SidenavComponent {
     [['location_on', '/dashboard/sites'], 'Sites'],
     [['person', '/dashboard/register-user'], 'Register'],
     [['label', '/dashboard/category'], 'Category'],
-    [['people', '/dashboard/team'], 'Team'],
+    //[['people', '/dashboard/team'], 'Team'],
     //[['games', '/dashboard/submit-game'], 'Game'],
     //[['info', '/dashboard/notifications'], 'Notifications'],
   ]);
@@ -43,7 +43,7 @@ export class SidenavComponent {
     //icon // ruta //boton
     [['settings', '/dashboard'], 'Settings'],
     [['person', '/dashboard/register-user'], 'Register'],
-    [['people', '/dashboard/team'], 'Team'],
+    //[['people', '/dashboard/team'], 'Team'],
   ]);
 
   jammerDict = new Dictionary<[string, string], string>([

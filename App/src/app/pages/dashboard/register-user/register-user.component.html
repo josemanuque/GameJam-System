@@ -42,25 +42,28 @@
                   <input matInput formControlName="password">
                 </mat-form-field>
 
-                <mat-form-field>
+                @if (isGlobalOrganizer) {
+                  <mat-form-field>
                     <mat-label>Select Region</mat-label>
                     <mat-select formControlName="region">
                         @for (region of regions; track region) {
                         <mat-option [value]="region.viewValue" (click)="getSites(region.viewValue)">{{region.viewValue}}</mat-option>
                         }
                     </mat-select>
-                </mat-form-field>
+                  </mat-form-field>
 
-                @if (siteData.length > 0) {
-                  <mat-form-field>
-                    <mat-label>Select Site</mat-label>
-                    <mat-select formControlName="site">
-                        @for (site of siteData; track site) {
-                        <mat-option [value]="site._id">{{site.name}}, {{site.country}}, {{site.city}}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
+                  @if (siteData.length > 0) {
+                    <mat-form-field>
+                      <mat-label>Select Site</mat-label>
+                      <mat-select formControlName="site">
+                          @for (site of siteData; track site) {
+                          <mat-option [value]="site._id">{{site.name}}, {{site.country}}, {{site.city}}</mat-option>
+                          }
+                      </mat-select>
+                  </mat-form-field>
+                  }
                 }
+
 
                 <mat-form-field>
                   <mat-label>Select Roles</mat-label>

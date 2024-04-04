@@ -89,7 +89,7 @@ export class CreateTeamComponent {
           // Optionally, you can reset the form after successful submission
           this.form.reset();
           alert('Team created successfully!');
-          window.location.reload();
+          this.router.navigate(['dashboard/team']);
         },
         (error) => {
           console.error('Error occurred while creating team:', error);

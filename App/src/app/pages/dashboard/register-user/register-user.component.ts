@@ -45,6 +45,7 @@ export class RegisterUserComponent {
   ];
 
   form!: FormGroup;
+  isGlobalOrganizer = false;
   siteData: SiteResponseI[] = [];
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router,
     private siteService:SitesService) { }
@@ -57,10 +58,13 @@ export class RegisterUserComponent {
       email: ['', [Validators.required, Validators.required]],
       password: ['', [Validators.required, Validators.required]],
       phone: ['', Validators.required],
-      site: ['', Validators.required],
-      region: ['', Validators.required],
+      site: [''],
+      region: [''],
       roles: [[], Validators.required], // Empty array as default
     });
+    if(localStorage.getItem('role')?.includes('Global Organizer')){
+      this.isGlobalOrganizer = true;
+    }
   }
 
   getSites(region: string) {
@@ -78,6 +82,10 @@ export class RegisterUserComponent {
 
   submitForm(): void {
     if (this.form.valid) {
+      if (!this.isGlobalOrganizer) {
+        this.form.patchValue({site: JSON.parse(localStorage.getItem("USER")!).site,
+                             region: JSON.parse(localStorage.getItem("USER")!).region});
+      }
       const userData: UserRegisterI = this.form.value;
       this.authService.register(userData,true).subscribe(
         (response) => {

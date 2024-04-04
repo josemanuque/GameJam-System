@@ -105,14 +105,31 @@
     background-color: #FFA500 !important;
     color: white !important;
     border-color: #FFA500;
+    margin-bottom: 10px;
 }
 button:hover {
     background-color: #313131 !important;
     border-color: #313131;
     color: white !important;
 }
+
+.leave{
+  width: 25%;
+  background-color: red !important;
+  color: white !important;
+  border-color: red !important;
+  margin-bottom: 10px;
+}
+.leave:hover {
+  background-color: white !important;
+  border-color: white !important;
+  color: red !important;
+}
 .avatar {
   width: 70px;
   height: 70px;
   border-radius: 50%;
+  }
+  mat-form-field{
+    max-width: 50%;
   }
