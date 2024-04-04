@@ -6,7 +6,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'dist/app/browser')));
 
 // Get Main Page of Angular App
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/app/browser/index.html'));
 });
 

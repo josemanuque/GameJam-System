@@ -30,7 +30,7 @@ app.get('/db-status', (req, res) => {
 });
 
 // Creates All Roles In Mongo if not stored
-//roleController.createRolesIfNotExist();
+roleController.createRolesIfNotExist();
 
 app.use('/api/v1', router);
 app.listen(properties.PORT, properties.IP, () => {
