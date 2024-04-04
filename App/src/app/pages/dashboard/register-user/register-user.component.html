@@ -62,17 +62,28 @@
                       </mat-select>
                   </mat-form-field>
                   }
+                  <mat-form-field>
+                    <mat-label>Select Roles</mat-label>
+                    <mat-select formControlName="roles" multiple>
+                        @for (role of rolesGlobal; track role) {
+                        <mat-option [value]="role.viewValue">{{role.viewValue}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                }
+                @if (!isGlobalOrganizer) {
+                  <mat-form-field>
+                    <mat-label>Select Roles</mat-label>
+                    <mat-select formControlName="roles" multiple>
+                        @for (role of roleslocal; track role) {
+                        <mat-option [value]="role.viewValue">{{role.viewValue}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
                 }
 
 
-                <mat-form-field>
-                  <mat-label>Select Roles</mat-label>
-                  <mat-select formControlName="roles" multiple>
-                      @for (role of roles; track role) {
-                      <mat-option [value]="role.viewValue">{{role.viewValue}}</mat-option>
-                      }
-                  </mat-select>
-              </mat-form-field>
+
             </div>
             <!-- <div class="row">
                 <div class=" d-flex justify-content-center">

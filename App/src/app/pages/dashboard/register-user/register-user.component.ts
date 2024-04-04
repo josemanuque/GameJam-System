@@ -37,11 +37,15 @@ export class RegisterUserComponent {
     {value: '3', viewValue: 'Asia'},
     {value: '4', viewValue: 'MENA'},
   ];
-  roles: Data[] = [
+  rolesGlobal: Data[] = [
     {value: '0', viewValue: 'Jammer'},
     {value: '1', viewValue: 'Judge'},
     {value: '2', viewValue: 'Local Organizer'},
     {value: '3', viewValue: 'Global Organizer'}
+  ];
+  roleslocal: Data[] = [
+    {value: '0', viewValue: 'Jammer'},
+    {value: '1', viewValue: 'Judge'}
   ];
 
   form!: FormGroup;
@@ -62,7 +66,7 @@ export class RegisterUserComponent {
       region: [''],
       roles: [[], Validators.required], // Empty array as default
     });
-    if(localStorage.getItem('role')?.includes('Global Organizer')){
+    if(localStorage.getItem('currentRole')?.includes('Global')){
       this.isGlobalOrganizer = true;
     }
   }
