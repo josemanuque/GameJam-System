@@ -12,6 +12,7 @@ import { JamComponent } from './pages/dashboard/jam/jam.component';
 import { ViewJamComponent } from './pages/dashboard/jam/view-jam/view-jam.component';
 import { SiteComponent } from './pages/dashboard/create-site/site/site.component';
 import { CreateTeamComponent } from './pages/dashboard/team/create-team/create-team.component';
+import { CategoriesComponent } from './pages/dashboard/categories/categories.component';
 
 export const routes: Routes = [
     {
@@ -78,6 +79,10 @@ export const routes: Routes = [
             {
                 path:   'jam/create',
                 component:  JamComponent
+            },
+            {
+                path:   'category',
+                component:  CategoriesComponent
             }
         ]
     },

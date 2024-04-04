@@ -1,5 +1,5 @@
 
-  mat-sidenav-container {
+mat-sidenav-container {
     display: flex;
     height: 100vh;
     
@@ -33,6 +33,18 @@
     color: white;
   }
   
+  .customInput{
+    width: 100%;
+  }
+  
+  .rounded-table-container {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+    
+  mat-form-field{
+    max-width: 50%;
+  }
   
   @media (max-width: 770px) {
     .d-flex {
@@ -54,6 +66,9 @@
       margin-left: 50px;
       margin-right: 50px;
     }
+    mat-form-field{
+        width: 100% !important;
+      }
   
   }
   
@@ -62,18 +77,10 @@
       height: auto;
       margin-bottom: 10px;
     }
+    mat-form-field{
+        width: 100% !important;
+      }
   
-  }
-
-  .createButton{
-    background-color: #FFA500 !important;
-    border-color: #FFA500;
-    color: white;
-    width: 50%;
-    height: calc(75vh - 4rem);
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.19), 0px 6px 6px rgba(0, 0, 0, 0.23);
-    margin-bottom: 15px;
-    margin-top: 15px;
   }
 
   mat-card-title{
@@ -82,7 +89,7 @@
   }	
   .example-card {
     width: auto;
-    height: 120px;
+    height: auto;
     transition: transform 0.3s;
   }
   
@@ -97,39 +104,13 @@
   mat-card {
     background-color: #313131;
     margin: auto;
-    margin-bottom: 20px;
+    margin-top: 20px;
   }
 
-  button {
-    width: 50%;
-    background-color: #FFA500 !important;
+  .submit-button{
+    background-color: #FFA500;
     color: white !important;
-    border-color: #FFA500;
-    margin-bottom: 10px;
-}
-button:hover {
-    background-color: #313131 !important;
-    border-color: #313131;
-    color: white !important;
-}
-
-.leave{
-  width: 25%;
-  background-color: red !important;
-  color: white !important;
-  border-color: red !important;
-  margin-bottom: 10px;
-}
-.leave:hover {
-  background-color: white !important;
-  border-color: white !important;
-  color: red !important;
-}
-.avatar {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  }
-  mat-form-field{
-    max-width: 50%;
+    font-size: 15px;
+    width: 30%;
+    //margin-top: 0.5rem;
   }
