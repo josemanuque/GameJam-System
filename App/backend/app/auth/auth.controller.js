@@ -86,7 +86,9 @@ exports.login = async (req, res) => {
             lastname: foundPerson.lastname,
             username: foundPerson.username,
             email: foundPerson.email,
-            roles: userRoles
+            roles: userRoles,
+            region: foundPerson.region,
+            site: foundPerson.site
         };
         const accessToken = authUtils.generateAccessToken(user, SECRET_KEY, KEY_EXPIRES_IN);
 
