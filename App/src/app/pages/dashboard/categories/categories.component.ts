@@ -56,7 +56,7 @@ export class CategoriesComponent {
            // Optionally, you can reset the form after successful submission
            this.form.reset();
            alert('Category created successfully!');
-           window.location.reload();
+           //window.location.reload();
          },
          (error) => {
            console.error('Error occurred while creating category:', error);
