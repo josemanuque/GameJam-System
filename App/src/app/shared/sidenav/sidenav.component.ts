@@ -30,12 +30,13 @@ export class SidenavComponent {
   adminDict = new Dictionary<[string, string], string>([
     //icon // ruta //boton
     [['settings', '/dashboard'], 'Settings'],
-    [['games', '/dashboard/submit-game'], 'Game'],
-    //[['info', '/dashboard/notifications'], 'Notifications'],
-    [['person', '/dashboard/register-user'], 'Register'],
-    [['location_on', '/dashboard/sites'], 'Sites'],
-    [['people', '/dashboard/team'], 'Team'],
     [['calendar_today', '/dashboard/jam'], 'Jam'],
+    [['location_on', '/dashboard/sites'], 'Sites'],
+    [['person', '/dashboard/register-user'], 'Register'],
+    [['label', '/dashboard/category'], 'Category'],
+    [['people', '/dashboard/team'], 'Team'],
+    //[['games', '/dashboard/submit-game'], 'Game'],
+    //[['info', '/dashboard/notifications'], 'Notifications'],
   ]);
 
   localDict = new Dictionary<[string, string], string>([
