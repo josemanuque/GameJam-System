@@ -110,3 +110,18 @@ exports.getJam = async (req, res) => {
         res.status(500).send({ message: 'Server error' });
     }
 };
+
+exports.updateJam = async (req, res) => { 
+    try {
+        const jamID = req.params.id;
+        const jamReq = req.body;
+        const jam = await JamModel.findByIdAndUpdate(jamID, jamReq, {new: true});
+        if(!jam){
+            return res.status(404).send({ message: "Jam not found" });
+        }
+        res.send({ message: "Jam updated" });
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({ message: 'Server error' });
+    }
+};
