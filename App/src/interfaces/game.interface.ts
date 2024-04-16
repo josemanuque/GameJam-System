@@ -5,7 +5,7 @@ export interface GameRequestI {
     buildLink: number,
     youtubeLinkGameplay: string,
     youtubeLinkPitch: string,
-    categories: string
+    categories: string[]
 }
 
 export interface GameResponseI {
@@ -16,7 +16,7 @@ export interface GameResponseI {
     buildLink: number,
     youtubeLinkGameplay: string,
     youtubeLinkPitch: string,
-    categories: string
+    categories: string[]
 }
 
 export interface GameMessageResponseI {

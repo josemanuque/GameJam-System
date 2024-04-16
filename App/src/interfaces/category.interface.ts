@@ -6,10 +6,10 @@ export interface CategoryCreateRequestI {
 export interface CategoryResponseI {
     _id: string,
     name: string,
-    description: string
+    //description: string
 }
 
 // Works for getCategoriesName
 export interface CategoryListResponseI {
-    categories: CategoryResponseI[]
+    categoryNames: CategoryResponseI[]
 }
