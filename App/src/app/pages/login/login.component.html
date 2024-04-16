@@ -3,24 +3,30 @@
         <mat-card>
             <mat-card-content class="d-flex justify-content-center">
                 <div class="example-container flexx-container">
-                    <form #loginForm="ngForm" (ngSubmit)="onLogin()">
+                    <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
                         <div class="d-flex justify-content-center">
                             <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="person_add"></mat-icon>
                         </div>
                         <input
                         type="username"
+                        name="username"
                         class="form-control email"
                         placeholder="Discord Username"
-                        #usernameInput
+                        ngModel required autofocus
+                        (focus)="onInputFocus()"
+                        (ngModelChange)="onInputFocus()"
                         > 
                         <div class="d-flex justify-content-center">
                             <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="vpn_key"></mat-icon>
                         </div> 
                         <input
                         type="password"
+                        name="password"
                         class="form-control password"
                         placeholder="Password"
-                        #passwordInput
+                        ngModel required
+                        (focus)="onInputFocus()"
+                        (ngModelChange)="onInputFocus()"
                         >
                         <div class="d-flex justify-content-center">
                             <p>Forgot <a class="forgot-password" [routerLink]="['/login/forgot-password']"> password? </a></p>
@@ -28,6 +34,9 @@
                         <button class="btn btn-primary">
                             Log In
                         </button>
+                        @if(error){
+                            <div class="d-flex justify-content-center alert alert-warning mt-2">Authentication failed!</div>
+                        }
                         <div class="d-flex justify-content-center">
                             <p>Doesn't have an account? <a [routerLink]="['/login/register']">Register here!</a></p>
                         </div>
