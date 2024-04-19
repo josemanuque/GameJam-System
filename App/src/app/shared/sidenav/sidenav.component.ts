@@ -48,7 +48,7 @@ export class SidenavComponent {
 
   jammerDict = new Dictionary<[string, string], string>([
     //icon // ruta //boton
-    [['settings', '/dashboard'], 'Settings'],
+    [['settings', '/settings'], 'Settings'],
     [['games', '/dashboard/submit-game'], 'Game'],
     [['people', '/dashboard/team'], 'Team'],
   ]);
