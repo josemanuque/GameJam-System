@@ -15,11 +15,12 @@ import { CreateTeamComponent } from './pages/dashboard/team/create-team/create-t
 import { CategoriesComponent } from './pages/dashboard/categories/categories.component';
 import { SettingsComponent } from './pages/dashboard/settings/settings.component';
 import { ProfileSettingsComponent } from './pages/dashboard/settings/profile-settings/profile-settings.component';
+import { PasswordSettingsComponent } from './pages/dashboard/settings/password-settings/password-settings.component';
 
 export const routes: Routes = [
     {
         path:       '',
-        component:  LoginComponent
+        component:  SettingsComponent
     },
     {
         path:       'login',
@@ -98,6 +99,10 @@ export const routes: Routes = [
             {
                 path:   'profile',
                 component:  ProfileSettingsComponent
+            },
+            {
+                path:   'password',
+                component:  PasswordSettingsComponent
             }
         ]
     },
