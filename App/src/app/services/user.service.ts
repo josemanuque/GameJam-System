@@ -13,14 +13,10 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  setUser(user: UserResponseI | null): void {
-    console.log('Setting user:', user);
-    localStorage.setItem("USER", JSON.stringify(user));
+  getUser(): Observable<UserResponseI> {
+    return this.http.get<UserResponseI>(`${this.apiUrl}/me`);
   }
 
-  getUser(): UserResponseI | null {
-    return JSON.parse(localStorage.getItem("USER")!);
-  }
 
   getUsersFromPrefix(query: string): Observable<UserFindResponseI[]> {
     return this.http.get<UserFindResponseI[]>(`${this.apiUrl}/user/query/${query}`);
@@ -37,19 +33,11 @@ export class UserService {
    * @deprecated
    */
   updateUserByUsername(username: string, userData: any): Observable<UserResponseI> {
-    return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, userData).pipe(
-      tap((res: UserResponseI) => {
-        this.setUser(res);
-      })
-    );
+    return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, userData);
   }
 
   updateUser(username: string, userData: UserResponseI): Observable<UserResponseI> {
-    return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, userData).pipe(
-      tap((res: UserResponseI) => {
-        this.setUser(res);
-      })
-    );
+    return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, userData);
   }
 
   updatePassword(userData: UserPasswordChangeI): Observable<UserResponseI> {

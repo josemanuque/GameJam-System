@@ -26,7 +26,7 @@ import { SnackBarService } from '../../../../services/snack-bar.service';
 })
 export class ProfileSettingsComponent {
   userForm!: FormGroup;
-  user!: UserResponseI | null;
+  user!: UserResponseI;
   submissionError: any;
 
   constructor(
@@ -36,28 +36,45 @@ export class ProfileSettingsComponent {
   ) { }
 
   ngOnInit(): void {
-    this.user = this.userService.getUser();
-    console.log(this.user);
-
-    this.userForm = this.formBuilder.group({
-      firstname: [this.user?.name, Validators.required],
-      lastname: [this.user?.lastname, Validators.required],
-      username: [this.user?.username, Validators.required],
-      email: [this.user?.email, [Validators.email]],
-      phone: [this.user?.phone, Validators.required]
+    this.initForm();
+    this.userService.getUser().subscribe({
+      next: (res) => {
+        this.user = res;
+        this.initForm();
+      },
+      error: (err) => {
+        console.log(err);
+      }
     });
   }
   
+  initForm(): void {
+    if(this.user){
 
+      this.userForm = this.formBuilder.group({
+        firstname: [this.user.name, Validators.required],
+        lastname: [this.user.lastname, Validators.required],
+        username: [this.user.username, Validators.required],
+        email: [this.user.email, [Validators.email]],
+        phone: [this.user.phone, Validators.required]
+      });
+    } else {
+      this.userForm = this.formBuilder.group({
+        firstname: ['', Validators.required],
+        lastname: ['', Validators.required],
+        username: ['', Validators.required],
+        email: ['', [Validators.email]],
+        phone: ['', Validators.required]
+      });
+    }
+  }
 
   onUpdate(): void {
     console.log(this.userForm.value);
 
     if(this.userForm.valid) {
-      this.userService.updateUser(this.user!.username, this.userForm.value).subscribe({
+      this.userService.updateUser(this.user.username, this.userForm.value).subscribe({
         next: (res) => {
-          console.log(res);
-          this.userService.setUser(res);
           this.snackbarService.openSnackBar('Profile updated successfully', 'Close', 5000);
         },
         error: (err) => {

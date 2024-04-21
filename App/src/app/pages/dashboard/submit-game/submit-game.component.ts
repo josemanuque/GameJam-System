@@ -17,6 +17,8 @@ import { TeamService } from '../../../services/team.service';
 import { TeamResponseI } from '../../../../interfaces/team.interface';
 import { GameService } from '../../../services/game.service';
 import { GameRequestI } from '../../../../interfaces/game.interface';
+import { UserService } from '../../../services/user.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-submit-game',
@@ -32,7 +34,13 @@ export class SubmitGameComponent {
   notInTeam = true;
   teamData: TeamResponseI | undefined;
 
-  constructor(private fb: FormBuilder,private catService: CategoryService,private teamService:TeamService, private gameService:GameService) { }
+  constructor(
+    private fb: FormBuilder,
+    private catService: CategoryService, 
+    private teamService: TeamService, 
+    private gameService: GameService,
+    private userService: UserService
+  ) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -52,10 +60,19 @@ export class SubmitGameComponent {
         console.error('Error occurred while fetching categories:', error);
       }
     );
-    this.teamService.getUserTeam(localStorage.getItem('email')!).subscribe((team) => {
-      if (team) {
-        this.notInTeam = false;
-        this.teamData = team;
+    this.userService.getUser().pipe(
+      switchMap(user => {
+        return this.teamService.getUserTeam(user.username);
+      })
+    ).subscribe({
+      next: team => {
+        if (team) {
+          this.notInTeam = false;
+          this.teamData = team;
+        }
+      },
+      error: err => {
+        console.error('Error occurred while getting user or team:', err);
       }
     });
   }

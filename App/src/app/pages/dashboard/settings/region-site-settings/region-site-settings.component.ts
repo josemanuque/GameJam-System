@@ -40,7 +40,7 @@ interface Data {
 
 export class RegionSiteSettingsComponent {
   form!: FormGroup;
-  user!: UserResponseI | null;
+  user!: UserResponseI;
   siteData: SiteResponseI[] = [];
 
   regions: Data[] = [
@@ -59,25 +59,33 @@ export class RegionSiteSettingsComponent {
   ) { }
 
   ngOnInit(): void {
-    this.user = this.userService.getUser();
-
-    this.userService.getUserByUsername(this.user!.username).subscribe({
-      next: (response: UserResponseI) => {
-        this.user = response;
-        console.log('User fetched successfully:', this.user);
+    this.initializeForm();
+    this.userService.getUser().subscribe({
+      next: (user: UserResponseI) => {
+        this.user = user;
+        this.getSites(this.user.region);
+        this.initializeForm();
+        console.log('User fetched successfully');
       },
       error: (error) => {
         console.error('Error occurred while fetching user:', error);
         alert('Error occurred while fetching User. Please try again.');
       }
     });
+  }
 
-    this.getSites(this.user!.region);
-    console.log("User", this.user);
-    this.form = this.formBuilder.group({
-      region: [this.user?.region, Validators.required],
-      site: [this.user?.site, Validators.required]
-    });
+  initializeForm(): void {
+    if (this.user) {
+      this.form = this.formBuilder.group({
+        region: [this.user.region, Validators.required],
+        site: [this.user.site, Validators.required]
+      });
+    } else {
+      this.form = this.formBuilder.group({
+        region: ['', Validators.required],
+        site: ['', Validators.required]
+      });
+    }
   }
 
   getSites(region: string) {
@@ -98,7 +106,6 @@ export class RegionSiteSettingsComponent {
       this.userService.updateUser(this.user!.username, this.form.value).subscribe({
         next: (res) => {
           console.log(res);
-          this.userService.setUser(res);
           this.snackbarService.openSnackBar('Profile updated successfully', 'Close', 5000);
         },
         error: (err) => {

@@ -21,11 +21,7 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router){}
 
   ngOnInit(){
-    this.authService.isAuthenticated().subscribe(user => {
-      if (user) {
-        this.router.navigate(['/dashboard']);
-      }
-    });
+    
   }
 
   onInputFocus(): void {
@@ -35,7 +31,6 @@ export class LoginComponent {
   onLogin(form: NgForm): void {
     this.authService.login(form.value).subscribe({
       next: auth => {
-        localStorage.setItem('email', auth.username);
         this.router.navigate(['/dashboard']);
       },
       error: err => {

@@ -10,8 +10,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule  } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { UserResponseI } from '../../../interfaces/user.interface';
-import { RoleListResponseI } from '../../../interfaces/role.interface';
+import { RoleListResponseI, RoleResponseI } from '../../../interfaces/role.interface';
 import { AuthService } from '../../services/auth.service';
+import { switchMap } from 'rxjs';
 
 export interface SideNavToggle {
   screenWidth: number;
@@ -29,10 +30,10 @@ export interface SideNavToggle {
 export class SidenavComponent {
   adminDict = new Dictionary<[string, string], string>([
     //icon // ruta //boton
-    [['settings', '/dashboard'], 'Settings'],
+    [['settings', '/settings'], 'Settings'],
     [['calendar_today', '/dashboard/jam'], 'Jam'],
     [['location_on', '/dashboard/sites'], 'Sites'],
-    [['person', '/dashboard/register-user'], 'Register'],
+    [['person', '/dashboard/register-user'], 'Users'],
     [['label', '/dashboard/category'], 'Category'],
     //[['people', '/dashboard/team'], 'Team'],
     //[['games', '/dashboard/submit-game'], 'Game'],
@@ -74,24 +75,31 @@ export class SidenavComponent {
   toggleMenu = false;
 
   user: UserResponseI | null = null;
-  validRoles: string[] = [];
+  validRoles: RoleResponseI[] = [];
+  userRoles: string[] = [];
 
   ngOnInit(): void {
-    this.user = this.userService.getUser()!
-    const margin = 32;
-    
-    this.userService.getAllValidRoles().subscribe({
-        next: (data) => {
-        this.validRoles = data.roles.map(role => role.name);
-        if (this.user!.roles.some(role => this.validRoles.includes(role))){
-          this.currentName = this.user!.name;
-          this.currentRole = this.user!.roles.join(' - ');
-          localStorage.setItem("currentRole",this.currentRole);
-          this.entries = this.getEntries();
-          console.log("hi",this.currentRole)
-        }},
+    this.userService.getUser().pipe(switchMap(
+      user => {
+        this.user = user;
+        return this.userService.getAllValidRoles();
+      })).subscribe({
+          next: (data) => {
+            this.validRoles = data.roles;
+      
+      
+            if (this.user!.roles.some(role => this.validRoles.some(validRole => validRole._id === role))){
+              this.userRoles = this.user!.roles.map(role => this.validRoles.find(validRole => validRole._id === role)!.name);
+              this.currentName = this.user!.name;
+              this.currentRole = this.userRoles.join(' - ');
+              this.entries = this.getEntries();
+            }
+          },
         error: (error) => {console.log(error);},
       });
+
+    const margin = 32;
+  
 
       
 
@@ -166,7 +174,6 @@ export class SidenavComponent {
   logOut(){
     this.authService.logout();
     this.router.navigate(['/login']);
-    localStorage.setItem("logged","false");
   }
 
 }
