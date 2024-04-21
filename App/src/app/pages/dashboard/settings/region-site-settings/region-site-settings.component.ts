@@ -12,6 +12,7 @@ import { UserService } from '../../../../services/user.service';
 import { UserResponseI } from '../../../../../interfaces/user.interface';
 import { SitesService } from '../../../../services/sites.service';
 import { SiteListResponseI, SiteResponseI } from '../../../../../interfaces/site.interface';
+import { SnackBarService } from '../../../../services/snack-bar.service';
 
 interface Data {
   value: string;
@@ -53,7 +54,8 @@ export class RegionSiteSettingsComponent {
   constructor(
     private userService: UserService,
     private siteService: SitesService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private snackbarService: SnackBarService
   ) { }
 
   ngOnInit(): void {
@@ -97,11 +99,11 @@ export class RegionSiteSettingsComponent {
         next: (res) => {
           console.log(res);
           this.userService.setUser(res);
-          alert('Profile updated successfully');
+          this.snackbarService.openSnackBar('Profile updated successfully', 'Close', 5000);
         },
         error: (err) => {
           console.log(err);
-          alert('An error occurred while updating your profile');
+          this.snackbarService.openSnackBar('An error occurred while updating your profile', 'Close', 5000);
         }
       });
     }
