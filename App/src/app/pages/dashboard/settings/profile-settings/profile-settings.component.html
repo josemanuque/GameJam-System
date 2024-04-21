@@ -8,78 +8,38 @@
         <div class="row d-flex justify-content-center ">
             <h1 class="d-flex">Profile</h1>
         </div>
-          <form [formGroup]="form">
-            <div class="row d-flex justify-content-center">
+          <form [formGroup]="userForm" (ngSubmit)="onUpdate()">
+            <div class="formContainer row d-flex justify-content-center">
             
               <mat-form-field>
-                <mat-label>Current Name: {{userData.name}}</mat-label>
-                <input matInput formControlName="name">
+                <mat-label>First name</mat-label>
+                <input matInput formControlName="firstname">
               </mat-form-field>
-          
+              
               <mat-form-field>
-                <mat-label>Current Last Name: {{userData.lastname}}</mat-label>
+                <mat-label>Last name</mat-label>
                 <input matInput formControlName="lastname">
               </mat-form-field>
           
               <mat-form-field>
-                <mat-label>Current Discord Username: {{userData.username}}</mat-label>
+                <mat-label>Discord username</mat-label>
                 <input matInput formControlName="username">
               </mat-form-field>
           
               <mat-form-field>
-                <mat-label>Current Email: {{userData.email}}</mat-label>
+                <mat-label>Email</mat-label>
                 <input matInput formControlName="email">
               </mat-form-field>
             
               <mat-form-field>
-                <mat-label>Current Phone Number: {{userData.phone}}</mat-label>
+                <mat-label>Phone</mat-label>
                 <input matInput formControlName="phone">
               </mat-form-field>
-            
-              <!-- <mat-form-field>
-                <mat-label>Current Password: {{userData.email}}</mat-label>
-                <input matInput formControlName="password">
-              </mat-form-field> -->
-          
-              <!-- <mat-form-field>
-                <mat-label>Current Region: {{userData.region}}</mat-label>
-                <mat-select formControlName="region">
-                  <mat-option *ngFor="let region of regions" [value]="region.viewValue" (click)="getSites(region.viewValue)">{{region.viewValue}}</mat-option>
-                </mat-select>
-              </mat-form-field> -->
-
-                <!-- @if (siteData.length > 0) {
-                  <mat-form-field>
-                    <mat-label>Select Site</mat-label>
-                    <mat-select formControlName="site">
-                        @for (site of siteData; track site) {
-                        <mat-option [value]="site._id">{{site.name}}, {{site.country}}, {{site.city}}</mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
-                }
-
-                <mat-form-field>
-                  <mat-label>Select Roles</mat-label>
-                  <mat-select formControlName="roles" multiple>
-                      @for (role of roles; track role) {
-                      <mat-option [value]="role.viewValue">{{role.viewValue}}</mat-option>
-                      }
-                  </mat-select>
-              </mat-form-field> -->
             </div>
-            <!-- <div class="row">
-                <div class=" d-flex justify-content-center">
-                  <mat-checkbox formControlName="coordinatorChecked">Coordinator</mat-checkbox>
-                  <mat-checkbox formControlName="judgeChecked">Judge</mat-checkbox>
-                  <mat-checkbox formControlName="jammerChecked">Jammer</mat-checkbox>
-                </div>
-            </div> -->
             <div class="row d-flex justify-content-center">
-                <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Update User</button>
+                <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" type="submit">Update Password</button>
             </div>
-        </form>
-
+          </form>
       </div>
     </div>
   </mat-sidenav-content>

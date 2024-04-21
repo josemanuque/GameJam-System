@@ -56,13 +56,7 @@ export class AuthService {
     
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    return this.http.get<AuthResponseI>(`${API_IP}/auth/verifyToken`, { headers }).pipe(
-      tap((res: AuthResponseI) => {
-        if (res){
-          this.userService.setUser(res);
-        }
-      })
-    );
+    return this.http.get<AuthResponseI>(`${API_IP}/auth/verifyToken`, { headers });
   }
 
   logout(): void {

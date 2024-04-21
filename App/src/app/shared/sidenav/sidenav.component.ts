@@ -77,11 +77,6 @@ export class SidenavComponent {
   validRoles: string[] = [];
 
   ngOnInit(): void {
-    this.authService.isAuthenticated().subscribe(user => {
-      if (!user) {
-        this.router.navigate(['/']);
-      }
-    });
     this.user = this.userService.getUser()!
     const margin = 32;
     

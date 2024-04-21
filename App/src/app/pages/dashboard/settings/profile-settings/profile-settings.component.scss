@@ -100,13 +100,6 @@ mat-sidenav-container {
   }
 
 
-  mat-nav-list {
+  .formContainer{
     margin-top: 3rem;
   }
-
-  mat-nav-list a::after {
-    margin-top: 0.5rem;
-    content: " >";
-    color: #999;
-    margin-left: 5px;
-}

@@ -16,11 +16,12 @@ import { CategoriesComponent } from './pages/dashboard/categories/categories.com
 import { SettingsComponent } from './pages/dashboard/settings/settings.component';
 import { ProfileSettingsComponent } from './pages/dashboard/settings/profile-settings/profile-settings.component';
 import { PasswordSettingsComponent } from './pages/dashboard/settings/password-settings/password-settings.component';
+import { RegionSiteSettingsComponent } from './pages/dashboard/settings/region-site-settings/region-site-settings.component';
 
 export const routes: Routes = [
     {
         path:       '',
-        component:  SettingsComponent
+        component:  LoginComponent
     },
     {
         path:       'login',
@@ -44,7 +45,7 @@ export const routes: Routes = [
         children: [
             {
                 path:   '',
-                component:  DashboardComponent,
+                component:  SettingsComponent,
             },
             {
                 path:   'sites',
@@ -103,6 +104,10 @@ export const routes: Routes = [
             {
                 path:   'password',
                 component:  PasswordSettingsComponent
+            },
+            {
+                path:   'region-site',
+                component: RegionSiteSettingsComponent
             }
         ]
     },
