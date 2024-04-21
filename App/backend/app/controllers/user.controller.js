@@ -163,3 +163,18 @@ exports.getUserId = async (req, res) => {
         return res.status(500).send({ message: "Server error"});
     }
 };
+
+exports.getUsers = async (req, res) => {
+    try {
+        const foundUsers = await UserModel.find();
+        const responseUserData = await Promise.all(foundUsers.map(async foundUser => {
+            const { password, ...userData } = foundUser._doc;
+            return userData;
+        }));
+        
+        res.send(responseUserData);
+    } catch (err){
+        console.log(err)
+        res.status(500).send({ message: "Error getting users"})
+    }
+}
