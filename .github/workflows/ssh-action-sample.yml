@@ -1,0 +1,23 @@
+name: SSH Hello Test
+
+on:
+  workflow_dispatch:
+    inputs:
+        manual_trigger:
+            description: 'Trigger the workflow manually'
+            required: true
+            default: 'true'
+
+jobs:
+    say_hello:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Connect to Oracle VM and safe file saying hello
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ secrets.SSH_HOST_IP }}
+                username: ${{ secrets.SSH_USER }}
+                key: ${{ secrets.SSH_KEY }}
+                script: |
+                  echo "Hello, world!" > hello.txt
+                  cat hello.txt
