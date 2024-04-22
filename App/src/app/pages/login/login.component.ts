@@ -17,11 +17,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  @ViewChild('usernameInput') usernameInput!: ElementRef;
-  @ViewChild('passwordInput') passwordInput!: ElementRef;
-
-  hide = true;
-  currentUser: any;
+  error: Boolean = false;
   constructor(private authService: AuthService, private router: Router){}
 
   ngOnInit(){
@@ -31,52 +27,20 @@ export class LoginComponent {
       }
     });
   }
-  /**
-   * @deprecated
-   */
-  login():void {
-    const username = this.usernameInput.nativeElement.value;
-    const password = this.passwordInput.nativeElement.value;
-    this.authService.login({ username, password }).subscribe(
-      (auth) => {
-        console.log(auth);
-        if (auth) {
-          localStorage.setItem('currentType', 'jammer');
-          localStorage.setItem('email', auth.email);
-          this.router.navigate(['/dashboard']);
-        } else {
-          alert('Invalid credentials');
-        }
-      },
-      (error) => {
-        console.error('Error during login:', error);
-        // Handle error, maybe show a user-friendly message
-      }
-    );
-  }
 
-  onLogin(): void {
-    const username = this.usernameInput.nativeElement.value;
-    const password = this.passwordInput.nativeElement.value;
-    this.authService.login({ username, password }).subscribe(
-      auth => {
-        if (auth) {
-          localStorage.setItem('email', auth.username);
-          this.router.navigate(['/dashboard']);
-        } else {
-          alert('Invalid credentials');
-        }
-      }
-    );
+  onInputFocus(): void {
+    this.error = false;
   }
-  onSubmit(form: NgForm) {
-    if (form.valid) {
-      const username = form.value.username;
-      const password = form.value.password;
-      
-      // Now you can perform your login logic here
-      console.log('Username:', username);
-      console.log('Password:', password);
-    }
+  
+  onLogin(form: NgForm): void {
+    this.authService.login(form.value).subscribe({
+      next: auth => {
+        localStorage.setItem('email', auth.username);
+        this.router.navigate(['/dashboard']);
+      },
+      error: err => {
+        this.error = true;
+      }
+    });
   }
 }

@@ -13,6 +13,10 @@ import { ViewJamComponent } from './pages/dashboard/jam/view-jam/view-jam.compon
 import { SiteComponent } from './pages/dashboard/create-site/site/site.component';
 import { CreateTeamComponent } from './pages/dashboard/team/create-team/create-team.component';
 import { CategoriesComponent } from './pages/dashboard/categories/categories.component';
+import { SettingsComponent } from './pages/dashboard/settings/settings.component';
+import { ProfileSettingsComponent } from './pages/dashboard/settings/profile-settings/profile-settings.component';
+import { PasswordSettingsComponent } from './pages/dashboard/settings/password-settings/password-settings.component';
+import { RegionSiteSettingsComponent } from './pages/dashboard/settings/region-site-settings/region-site-settings.component';
 
 export const routes: Routes = [
     {
@@ -41,7 +45,7 @@ export const routes: Routes = [
         children: [
             {
                 path:   '',
-                component:  DashboardComponent,
+                component:  SettingsComponent,
             },
             {
                 path:   'sites',
@@ -83,6 +87,27 @@ export const routes: Routes = [
             {
                 path:   'category',
                 component:  CategoriesComponent
+            },
+        ]
+    },
+    {
+        path:       'settings',
+        children:  [
+            {
+                path:   '',
+                component:  SettingsComponent
+            },
+            {
+                path:   'profile',
+                component:  ProfileSettingsComponent
+            },
+            {
+                path:   'password',
+                component:  PasswordSettingsComponent
+            },
+            {
+                path:   'region-site',
+                component: RegionSiteSettingsComponent
             }
         ]
     },

@@ -48,7 +48,7 @@ export class SidenavComponent {
 
   jammerDict = new Dictionary<[string, string], string>([
     //icon // ruta //boton
-    [['settings', '/dashboard'], 'Settings'],
+    [['settings', '/settings'], 'Settings'],
     [['games', '/dashboard/submit-game'], 'Game'],
     [['people', '/dashboard/team'], 'Team'],
   ]);
@@ -77,11 +77,6 @@ export class SidenavComponent {
   validRoles: string[] = [];
 
   ngOnInit(): void {
-    this.authService.isAuthenticated().subscribe(user => {
-      if (!user) {
-        this.router.navigate(['/']);
-      }
-    });
     this.user = this.userService.getUser()!
     const margin = 32;
     

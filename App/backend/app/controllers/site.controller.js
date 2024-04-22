@@ -15,7 +15,7 @@ exports.createSite = async (req, res) => {
         res.send(siteData);
     }
     catch(err) {
-        if (err.code === 11000) {
+        if(err.code === 11000) {
             res.status(409).send({ message: 'Site already exists' });
         } else {
             console.log(err)
@@ -54,12 +54,12 @@ exports.getSitesFromCountry = async (req, res) => {
         const country = req.params.country;
 
         const foundSites = await SiteModel.find({ country });
-        if (foundSites.length === 0) {
+        if(foundSites.length === 0) {
             return res.status(409).send({ message: "No sites found" });
         }
         res.send({sites: foundSites});
     }
-    catch (err) {
+    catch(err) {
         console.log(err);
         res.status(500).send({ message: "Error getting sites"});
     }
@@ -70,12 +70,12 @@ exports.getSitesFromRegion = async (req, res) => {
         const region = req.params.region;
 
         const foundSites = await SiteModel.find({ region });
-        if (foundSites.length === 0) {
+        if(foundSites.length === 0) {
             return res.status(409).send({ message: "No sites found" });
         }
         res.send({sites: foundSites});
     }
-    catch (err) {
+    catch(err) {
         console.log(err);
         res.status(500).send({ message: "Error getting sites"});
     }
@@ -86,7 +86,7 @@ exports.getSites = async (req, res) => {
     try {
         const sites = await SiteModel.find();
         res.send({sites});
-    } catch (err) {
+    } catch(err) {
         res.status(500).send({ message: "Error getting sites"});
     }
 };
@@ -99,14 +99,31 @@ exports.getSite = async (req, res) => {
             .findById(id)
             .populate('teams')
             .exec();
-        if (!foundSite){
+        if(!foundSite){
             return res.status(409).send({ message: "Site not found"});
         }
         console.log(foundSite);
         res.send(foundSite);
     }
-    catch {
+    catch(err) {
         res.status(500).send({ message: "Error getting site"});
     }
     
 };
+
+exports.updateSite = async (req, res) => {
+    try {
+        const siteID = req.params.id;
+        const siteData = req.body;
+            
+        const site = await SiteModel.findByIdAndUpdate(siteID, siteData, {new: true});
+        if(!site){
+            return res.status(409).send({ message: "Site not found"});
+        }
+        res.send({ message: "Site updated" });
+    }
+    catch(err) {
+        console.log(err);
+        res.status(500).send({ message: "Error updating site"});
+    }
+}

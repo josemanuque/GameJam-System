@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { API_IP } from '../environments/environment';
-import { UserFindResponseI, UserResponseI } from '../../interfaces/user.interface'; // Importing frontend interfaces
+import { UserFindResponseI, UserPasswordChangeI, UserResponseI } from '../../interfaces/user.interface'; // Importing frontend interfaces
 import { RoleListResponseI } from '../../interfaces/role.interface';
 
 @Injectable({
@@ -14,6 +14,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   setUser(user: UserResponseI | null): void {
+    console.log('Setting user:', user);
     localStorage.setItem("USER", JSON.stringify(user));
   }
 
@@ -32,13 +33,27 @@ export class UserService {
   getUserById(id: string): Observable<UserResponseI> {
     return this.http.get<UserResponseI>(`${this.apiUrl}/user/id/${id}`);
   }
-
-  updateUser(username: string, userData: any): Observable<UserResponseI> {
+  /**
+   * @deprecated
+   */
+  updateUserByUsername(username: string, userData: any): Observable<UserResponseI> {
     return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, userData).pipe(
       tap((res: UserResponseI) => {
         this.setUser(res);
       })
     );
+  }
+
+  updateUser(username: string, userData: UserResponseI): Observable<UserResponseI> {
+    return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, userData).pipe(
+      tap((res: UserResponseI) => {
+        this.setUser(res);
+      })
+    );
+  }
+
+  updatePassword(userData: UserPasswordChangeI): Observable<UserResponseI> {
+    return this.http.put<UserResponseI>(`${this.apiUrl}/user/${userData.username}/password`, { userData });
   }
 
   getUserId(username: string): Observable<string> {

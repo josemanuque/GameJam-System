@@ -98,9 +98,12 @@ exports.updateUser = async (req, res) => {
         const username = req.params.username;
         const user = req.body;
         const roleNames = user.roles;
-        user.roles = await roleController.getRoleIDs(user.roles);
-        const updatedUser = await UserModel.findOneAndUpdate({ username }, user, { new: true });
+        if(roleNames){
+            user.roles = await roleController.getRoleIDs(user.roles);
+        }
+        const updatedUser = await UserModel.findOneAndUpdate({ username }, {$set: user}, { new: true });
 
+        const updatedUserRoles = await roleController.getRoleNamesFromIDs(updatedUser.roles);
         if (!updatedUser) {
             return res.status(404).send({ message: "User not found" });
         }
@@ -111,7 +114,7 @@ exports.updateUser = async (req, res) => {
             username: updatedUser.username,
             email: updatedUser.email,
             phone: updatedUser.phone,
-            roles: roleNames,
+            roles: updatedUserRoles,
             region: updatedUser.region,
             site: updatedUser.site
         }

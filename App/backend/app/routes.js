@@ -43,6 +43,7 @@ mainRouter.get("/team/:id", teamController.getTeam);
 // Site
 mainRouter.post("/site", siteController.createSite);
 mainRouter.delete("/site/:id", siteController.removeSite);
+mainRouter.put("/site/:id", siteController.updateSite);
 mainRouter.get("/site/country/:country", siteController.getSitesFromCountry);
 mainRouter.get("/site/region/:region", siteController.getSitesFromRegion);
 mainRouter.get("/site", siteController.getSites);
@@ -50,6 +51,7 @@ mainRouter.get("/site/:id", siteController.getSite);
 
 // Jam
 mainRouter.post("/jam", jamController.createJam);
+mainRouter.put("/jam/:id", jamController.updateJam);
 mainRouter.delete("/jam/:id", jamController.removeJam);
 mainRouter.get("/jam", jamController.getJams);
 mainRouter.get("/jam/:id", jamController.getJam);

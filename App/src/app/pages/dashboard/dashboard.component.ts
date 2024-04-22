@@ -109,7 +109,7 @@ export class DashboardComponent {
       };
       localStorage.setItem('email', form.username);
       console.log('User data:', form);
-      this.userService.updateUser(this.username!,form).subscribe(
+      this.userService.updateUserByUsername(this.username!,form).subscribe(
         (response) => {
           console.log('User updated successfully:', form);
           // Optionally, you can reset the form after successful submission

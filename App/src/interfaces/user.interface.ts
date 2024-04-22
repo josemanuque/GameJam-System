@@ -15,3 +15,9 @@ export interface UserFindResponseI {
     email: string,
     roles: string[]
 }
+
+export interface UserPasswordChangeI {
+    username: string,
+    oldPassword: string,
+    newPassword: string
+}
