@@ -12,7 +12,7 @@ jobs:
     say_hello:
         runs-on: ubuntu-latest
         steps:
-            - name: Connect to Oracle VM and safe file saying hello
+            - name: Connect to Oracle VM and save file saying hello
               uses: appleboy/ssh-action@master
               with:
                 host: ${{ secrets.SSH_HOST_IP }}

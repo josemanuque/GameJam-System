@@ -1,0 +1,52 @@
+name: Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Merge Develop into Main
+        run: |
+          git checkout main
+          git merge develop
+          git push origin main
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20.12.2'
+        
+      - name: Install Dependencies
+        run: |
+          cd App
+          npm i
+          npm run build:production
+        
+      - name: Commit and Push Angular Build
+        run: |
+          DEVELOP_COMMIT=$(git rev-parse develop)
+          git add .
+          git commit -m "Build Angular App (from develop commit: $DEVELOP_COMMIT)"
+          git push origin main
+
+      - name: Connect to Oracle VM and safe file saying hello
+        uses: appleboy/ssh-action@master
+        with:
+            host: ${{ secrets.SSH_HOST_IP }}
+            username: ${{ secrets.SSH_USER }}
+            key: ${{ secrets.SSH_KEY }}
+            script: |
+                cd ${{ secrets.SSH_WORK_DIR }}
+                git pull
+                cd backend
+                npm i
+                sudo systemctl restart game-jam-api
+                sudo systemctl restart game-jam-frontend
