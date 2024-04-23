@@ -1,6 +1,9 @@
 name: Deployment Pipeline
 
 on:
+  push:
+    branches:
+      - develop
   workflow_dispatch:
     inputs:
         manual_trigger:
@@ -49,7 +52,7 @@ jobs:
           git commit -m "Build Angular App (from develop commit: $DEVELOP_COMMIT)"
           git push origin main
 
-      - name: Connect to Oracle VM and safe file saying hello
+      - name: Connect to Oracle VM and pull the new changes
         uses: appleboy/ssh-action@master
         with:
             host: ${{ secrets.SSH_HOST_IP }}
