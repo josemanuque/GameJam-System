@@ -1,9 +1,12 @@
-name: Deployment Pipeline
+name: Directory Test
 
 on:
-  push:
-    branches:
-      - develop
+  workflow_dispatch:
+    inputs:
+        manual_trigger:
+            description: 'Trigger the workflow manually'
+            required: true
+            default: 'true'
 
 jobs:
   build:
