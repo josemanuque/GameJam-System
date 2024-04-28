@@ -17,6 +17,9 @@ export class UserService {
     return this.http.get<UserResponseI>(`${this.apiUrl}/me`);
   }
 
+  getAllUsers(): Observable<UserResponseI[]> {
+    return this.http.get<UserResponseI[]>(`${this.apiUrl}/user`);
+  }
 
   getUsersFromPrefix(query: string): Observable<UserFindResponseI[]> {
     return this.http.get<UserFindResponseI[]>(`${this.apiUrl}/user/query/${query}`);
