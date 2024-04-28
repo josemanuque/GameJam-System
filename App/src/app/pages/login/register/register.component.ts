@@ -79,7 +79,6 @@ export class RegisterComponent {
     this.authService.register(userData, false).subscribe(
       auth => {
         if (auth) {
-          localStorage.setItem('email', auth.username);
           this.router.navigate(['/dashboard']);
         } else {
           alert('Invalid credentials');

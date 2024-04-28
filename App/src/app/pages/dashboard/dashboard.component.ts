@@ -46,7 +46,7 @@ export class DashboardComponent {
     {value: '3', viewValue: 'Global Organizer'}
   ];
 
-  username = this.userService.getUser()?.username;
+  
   username2 = localStorage.getItem('email');
 
   userData!: UserResponseI;
@@ -67,6 +67,16 @@ export class DashboardComponent {
       site: [''],
       region: [''],
       roles: [[]], // Empty array as default
+    });
+
+    this.userService.getUser().subscribe({
+      next: user => {
+        console.log('User:', user);
+        this.userData = user;
+      },
+      error: err => {
+        console.error('Error occurred while fetching user:', err);
+      }
     });
 
     this.userService.getUserByUsername(this.username2!).subscribe(
@@ -107,9 +117,8 @@ export class DashboardComponent {
         region: this.userData.region,
         roles: this.userData.roles
       };
-      localStorage.setItem('email', form.username);
       console.log('User data:', form);
-      this.userService.updateUserByUsername(this.username!,form).subscribe(
+      this.userService.updateUserByUsername(this.userData.username,form).subscribe(
         (response) => {
           console.log('User updated successfully:', form);
           // Optionally, you can reset the form after successful submission

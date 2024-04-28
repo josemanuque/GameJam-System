@@ -28,8 +28,10 @@ mainRouter.patch("/role/revoke", roleController.unasignRole);
 
 // User
 mainRouter.get("/user/query/:query", userController.getUsersFromPrefix);
+mainRouter.get("/me", authController.authenticateToken, userController.getMe);
 mainRouter.get("/user/:username", userController.getUserByUsername);
 mainRouter.get("/user/id/:id", userController.getUser);
+mainRouter.get("/user", userController.getUsers);
 mainRouter.put("/user/:username", userController.updateUser);
 
 // Teams

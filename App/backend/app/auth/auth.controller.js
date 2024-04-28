@@ -171,7 +171,11 @@ exports.authenticateToken = (req, res, next) => {
     }
     try{
         const decodedToken = authUtils.verifyToken(token, SECRET_KEY);
-        res.send(decodedToken);
+        if(!decodedToken){
+            return res.status(403).send({ message: 'Invalid token' });
+        }
+        req.username = decodedToken.username;
+        next();
     }catch {
         return res.status(403).send({ message: 'Invalid token' });
     } 

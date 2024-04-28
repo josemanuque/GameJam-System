@@ -28,6 +28,22 @@ exports.getUsersFromPrefix = async (req, res) => {
     }
 };
 
+exports.getMe = async (req, res) => {
+    try {
+        const username = req.username;
+        const foundUser = await UserModel.findOne({ username });
+        if (!foundUser){
+            return res.status(409).send({ message: "User not found"});
+        }
+
+        const { password, ...userResponse } = foundUser._doc;
+        return res.send(userResponse);
+    }
+    catch {
+        res.status(500).send({ message: "Error" });
+    }
+}
+
 /**
  * Gets user data of a unique user being provided by the exact username. 
  * @param {*} req 
@@ -150,3 +166,18 @@ exports.getUserId = async (req, res) => {
         return res.status(500).send({ message: "Server error"});
     }
 };
+
+exports.getUsers = async (req, res) => {
+    try {
+        const foundUsers = await UserModel.find();
+        const responseUserData = await Promise.all(foundUsers.map(async foundUser => {
+            const { password, ...userData } = foundUser._doc;
+            return userData;
+        }));
+        
+        res.send(responseUserData);
+    } catch (err){
+        console.log(err)
+        res.status(500).send({ message: "Error getting users"})
+    }
+}

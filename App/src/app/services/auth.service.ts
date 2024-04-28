@@ -11,7 +11,6 @@ import { UserService } from './user.service';
   providedIn: 'root'
 })
 export class AuthService {
-  private token: string = '';
 
   constructor(private http: HttpClient, private userService: UserService) {}
 
@@ -20,7 +19,6 @@ export class AuthService {
       tap((res: AuthResponseI) => {
         if (res){
           this.setToken(res.accessToken);
-          this.userService.setUser(res);
         }
       })
     );
@@ -32,7 +30,6 @@ export class AuthService {
         if (res){
           if (!byAdmin){
             this.setToken(res.accessToken);
-            this.userService.setUser(res);
           }
         }
       })
