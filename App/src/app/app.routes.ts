@@ -17,6 +17,7 @@ import { SettingsComponent } from './pages/dashboard/settings/settings.component
 import { ProfileSettingsComponent } from './pages/dashboard/settings/profile-settings/profile-settings.component';
 import { PasswordSettingsComponent } from './pages/dashboard/settings/password-settings/password-settings.component';
 import { RegionSiteSettingsComponent } from './pages/dashboard/settings/region-site-settings/region-site-settings.component';
+import { ViewUserComponent } from './pages/dashboard/view-user/view-user.component';
 
 export const routes: Routes = [
     {
@@ -70,6 +71,10 @@ export const routes: Routes = [
             {
                 path:   'register-user',
                 component:  RegisterUserComponent
+            },
+            {
+                path:   'view-user',
+                component:  ViewUserComponent
             },
             {
                 path:   'notifications',
