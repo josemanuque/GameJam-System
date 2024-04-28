@@ -1,3 +1,4 @@
+const authUtils = require('../auth/auth.fachade');
 const UserModel = require('../models/user.model');
 const roleController = require('./role.controller');
 /**
@@ -101,6 +102,7 @@ exports.updateUser = async (req, res) => {
         if(roleNames){
             user.roles = await roleController.getRoleIDs(user.roles);
         }
+        user.password = authUtils.hashPassword(user.password);
         const updatedUser = await UserModel.findOneAndUpdate({ username }, {$set: user}, { new: true });
 
         const updatedUserRoles = await roleController.getRoleNamesFromIDs(updatedUser.roles);
@@ -113,6 +115,7 @@ exports.updateUser = async (req, res) => {
             lastname: updatedUser.lastname,
             username: updatedUser.username,
             email: updatedUser.email,
+            password: updatedUser.password,
             phone: updatedUser.phone,
             roles: updatedUserRoles,
             region: updatedUser.region,
