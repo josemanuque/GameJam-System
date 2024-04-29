@@ -1,0 +1,15 @@
+<mat-card>
+    <mat-card-header>
+      <h1>Update User Roles</h1>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="formContainer row d-flex justify-content-center">
+            @for(role of validRoles; track role){
+                <mat-checkbox [matTooltip]="role.description" (change)="toggleSelection(role._id)">{{role.name}}</mat-checkbox>
+            }
+        </div>
+        <div class="row d-flex justify-content-center">
+            <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="onUpdate()">Update</button>
+        </div>
+    </mat-card-content>
+</mat-card>

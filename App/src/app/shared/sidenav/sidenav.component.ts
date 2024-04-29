@@ -33,7 +33,7 @@ export class SidenavComponent {
     [['settings', '/settings'], 'Settings'],
     [['calendar_today', '/dashboard/jam'], 'Jam'],
     [['location_on', '/dashboard/sites'], 'Sites'],
-    [['person', '/dashboard/register-user'], 'Users'],
+    [['person', '/dashboard/view-user'], 'Users'],
     [['label', '/dashboard/category'], 'Category'],
     //[['people', '/dashboard/team'], 'Team'],
     //[['games', '/dashboard/submit-game'], 'Game'],
@@ -43,7 +43,7 @@ export class SidenavComponent {
   localDict = new Dictionary<[string, string], string>([
     //icon // ruta //boton
     [['settings', '/dashboard'], 'Settings'],
-    [['person', '/dashboard/register-user'], 'Register'],
+    [['person', '/dashboard/view-user'], 'Register'],
     //[['people', '/dashboard/team'], 'Team'],
   ]);
 

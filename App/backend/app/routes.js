@@ -23,8 +23,7 @@ mainRouter.get("/role/:role", roleController.getRole);
 mainRouter.get("/role", roleController.getRoles);
 
 // Role assignment
-mainRouter.patch("/role/set", roleController.assignRole);
-mainRouter.patch("/role/revoke", roleController.unasignRole);
+mainRouter.patch("/role/set", roleController.setRoles);
 
 // User
 mainRouter.get("/user/query/:query", userController.getUsersFromPrefix);

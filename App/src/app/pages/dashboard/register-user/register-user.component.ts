@@ -15,6 +15,9 @@ import { Router } from '@angular/router';
 import { SitesService } from '../../../services/sites.service';
 import { SiteListResponseI, SiteResponseI } from '../../../../interfaces/site.interface';
 import { UserRegisterI } from '../../../../interfaces/auth.interface';
+import { SnackBarService } from '../../../services/snack-bar.service';
+import { UserService } from '../../../services/user.service';
+import { switchMap } from 'rxjs';
 
 
 interface Data {
@@ -49,10 +52,17 @@ export class RegisterUserComponent {
   ];
 
   form!: FormGroup;
-  isGlobalOrganizer = false;
+  globalOrganizerID: string = '';
+  isGlobalOrganizer = true;
   siteData: SiteResponseI[] = [];
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router,
-    private siteService:SitesService) { }
+  constructor(
+    private fb: FormBuilder, 
+    private authService: AuthService, 
+    private userService: UserService,
+    private router: Router,
+    private siteService:SitesService,
+    private snackbarService: SnackBarService
+  ) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -66,9 +76,24 @@ export class RegisterUserComponent {
       region: [''],
       roles: [[], Validators.required], // Empty array as default
     });
-    if(localStorage.getItem('currentRole')?.includes('Global')){
-      this.isGlobalOrganizer = true;
-    }
+
+    this.userService.getAllValidRoles().pipe(switchMap(
+      (res) => {
+        this.globalOrganizerID = res.roles.find(role => role.name === 'Global Organizer')!._id;
+        return this.userService.getUser();
+      })).subscribe({
+        next: (res) => {
+          if (!res.roles.includes(this.globalOrganizerID)) {
+            console.log('User is not a Global Organizer');
+            this.isGlobalOrganizer = false;
+            this.form.patchValue({region: res.region, site: res.site})
+          }
+          console.log('User is a Global Organizer');
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      });
   }
 
   getSites(region: string) {
@@ -79,29 +104,23 @@ export class RegisterUserComponent {
       },
       (error) => {
         console.error('Error occurred while fetching sites:', error);
-        alert('No Sites are created for this region. Please try again.');
+        this.snackbarService.openSnackBar('No Sites are created for this region. Please try again.', 'Close', 5000);
       }
     );
   }
 
   submitForm(): void {
     if (this.form.valid) {
-      if (!this.isGlobalOrganizer) {
-        this.form.patchValue({site: JSON.parse(localStorage.getItem("USER")!).site,
-                             region: JSON.parse(localStorage.getItem("USER")!).region});
-      }
       const userData: UserRegisterI = this.form.value;
       this.authService.register(userData,true).subscribe(
         (response) => {
           console.log('User created successfully:', response);
-          // Optionally, you can reset the form after successful submission
-          this.form.reset();
-          alert('User created successfully!');
-          window.location.reload();
+          this.snackbarService.openSnackBar('User created successfully!', 'Close', 5000);
+          this.router.navigate(['/dashboard/view-user']);
         },
         (error) => {
           console.error('Error occurred while creating user:', error);
-          alert('Error occurred while creating User. Please try again.');
+          this.snackbarService.openSnackBar('Error occurred while creating User. Please try again.', 'Close', 5000);
         }
       );
     } else {

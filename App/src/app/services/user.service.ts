@@ -54,4 +54,8 @@ export class UserService {
   getAllValidRoles(): Observable<RoleListResponseI> {
     return this.http.get<RoleListResponseI>(`${this.apiUrl}/role`);
   }
+
+  setRoles(username: string, roles: string[]): Observable<UserResponseI> {
+    return this.http.patch<UserResponseI>(`${this.apiUrl}/role/set`, { username, roles });
+  }
 }
