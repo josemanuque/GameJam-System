@@ -15,10 +15,13 @@ const jamSchema = new mongoose.Schema(
             type: String, required: true, trim: true
         },
         theme : {
-            type: String, required: true, trim: true
+            type: mongoose.Schema.Types.ObjectId, ref: 'Theme'
         },
         sites: [{
             type: mongoose.Schema.Types.ObjectId, ref: 'Site'
+        }],
+        stages: [{
+            type: mongoose.Schema.Types.ObjectId, ref: 'Stage'
         }]
     },
     {

@@ -1,12 +1,24 @@
 const CategoryModel = require('../models/category.model');
+const fs = require('fs');
 
 exports.createCategory = async (req, res) => {
     try {
-        const categoryReq = {
-            name: req.body.name,
-            description: req.body.description
-        };
-        const category = new CategoryModel(categoryReq);
+        const EngPdf = fs.readFileSync(req.body.manualEng);
+        const SpaPdf = fs.readFileSync(req.body.manualSpa);
+        const PortPdf = fs.readFileSync(req.body.manualPort);
+
+        const category = new CategoryModel({
+            nameEng: req.body.nameEng,
+            descriptionEng: req.body.descriptionEng,
+            manualEng: EngPdf,
+            nameSpa: req.body.nameSpa,
+            descriptionSpa: req.body.descriptionSpa,
+            manualSpa: SpaPdf,
+            namePort: req.body.namePort,
+            descriptionPort: req.body.descriptionPort,
+            manualPort: PortPdf
+        });
+
         await category.save();
         res.send({ message: "Category created" });
 
@@ -22,9 +34,9 @@ exports.createCategory = async (req, res) => {
 
 exports.getCategoriesName = async (req, res) => {
     try {
-        const categories = await CategoryModel.find({}, 'name');
+        const categories = await CategoryModel.find({}, 'nameEng');
         const categoryNames = categories.map(category => {
-            return { id: category._id, name: category.name }
+            return { id: category._id, name: category.nameEng }
         });
         res.send({categoryNames});
     } catch (error) {
@@ -53,6 +65,16 @@ exports.updateCategory = async (req, res) => {
         const id = req.params.id;
         const category = req.body;
 
+        if (category.manualEng) {
+            category.manualEng = fs.readFileSync(category.manualEng);
+        }
+        if (category.manualSpa) {
+            category.manualSpa = fs.readFileSync(category.manualSpa);
+        }
+        if (category.manualPort) {
+            category.manualPort = fs.readFileSync(category.manualPort);
+        }
+
         const updatedCategory = await CategoryModel.findByIdAndUpdate(id
             , category
             , { new: true });
@@ -64,5 +86,21 @@ exports.updateCategory = async (req, res) => {
     }
     catch {
         res.status(500).send({ message: "Error" });
+    }
+};
+
+exports.removeCategory = async (req, res) => {
+    try {
+        const categoryID = req.params.id
+        
+        const deletedCategory = await CategoryModel.findByIdAndDelete(categoryID);
+        if(!deletedCategory){
+            return res.status(404).send({ message: "Category doesn't exist" });
+        }
+        res.send({ message: "Category deleted"});
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({ message: 'Server error' });
     }
 };

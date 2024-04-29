@@ -100,7 +100,9 @@ exports.getJams = async (req, res) => {
 exports.getJam = async (req, res) => {
     try {
         const jamID = req.params.id;
-        const jam = await JamModel.findById(jamID);
+        const jam = await JamModel
+            .findById(jamID)
+            .populate('stages');
         if(!jam){
             return res.status(404).send({ message: "Jam not found" });
         }
@@ -123,5 +125,26 @@ exports.updateJam = async (req, res) => {
     } catch (err) {
         console.log(err)
         res.status(500).send({ message: 'Server error' });
+    }
+};
+
+exports.addStageToJam = async (req, res) => {
+    try {
+        const jamID = req.body.jamID;
+        const stageID = req.body.stageID;
+
+        const jam = await JamModel.findById({ jamID });
+
+        if(!jam){
+            return res.status(404).send({ message: "Invalid Jam ID" });
+        }
+
+        jam.stages.push(stageID);
+        await jam.save();
+        res.send({ message: "Stage added to Jam" });
+        
+    } catch(err){
+        console.log(err);
+        res.status(500).send({ message: "Server error" })
     }
 };

@@ -180,3 +180,29 @@ exports.getUsers = async (req, res) => {
         res.status(500).send({ message: "Error getting users"})
     }
 }
+
+exports.updatePassword = async (req, res) => {
+    try {
+        const username = req.body.username;
+        const currentPassword = req.body.currentPassword;
+        const newPassword = req.body.newPassword;
+
+        const user = await UserModel.findOne({username});
+        const isPasswordCorrect = authUtils.comparePasswords(currentPassword, user.password);
+        
+        if (!isPasswordCorrect) {
+            return res.status(410).send({ message: 'Incorrect current password.' });
+        }
+
+        if(currentPassword == newPassword){
+            return res.status(409).send({ message: "Current password and new password can't be the same." });
+        }
+
+        user.password = authUtils.hashPassword(newPassword);
+        user.save();
+        res.send({ message: "Password reset successful"});
+
+    } catch (err){
+        res.status(500).send({message: "Server error"});
+    }
+};

@@ -7,6 +7,8 @@ const categoryController = require('./controllers/category.controller');
 const gameController = require('./controllers/game.controller');
 const siteController = require('./controllers/site.controller');
 const jamController = require('./controllers/jam.controller');
+const themeController = require('./controllers/theme.controller');
+const stageController = require('./controllers/stage.controller');
 
 const mainRouter = express.Router();
 
@@ -33,6 +35,7 @@ mainRouter.get("/user/:username", userController.getUserByUsername);
 mainRouter.get("/user/id/:id", userController.getUser);
 mainRouter.get("/user", userController.getUsers);
 mainRouter.put("/user/:username", userController.updateUser);
+mainRouter.post("/user/updatePassword", userController.updatePassword);
 
 // Teams
 mainRouter.post("/team", teamController.createTeam);
@@ -59,14 +62,28 @@ mainRouter.get("/jam", jamController.getJams);
 mainRouter.get("/jam/:id", jamController.getJam);
 mainRouter.patch("/jam/site", jamController.addSiteToJam);
 mainRouter.delete("/jam/site", jamController.removeSiteFromJam);
+mainRouter.patch("/jam/stage", jamController.addStageToJam);
 
 // Categories
 mainRouter.post("/category", categoryController.createCategory);
 mainRouter.get("/category", categoryController.getCategoriesName);
 mainRouter.get("/category/:id", categoryController.getCategory);
 mainRouter.put("/category/:id", categoryController.updateCategory);
+mainRouter.delete("/category/:id", categoryController.removeCategory);
 
 // Game submission
 mainRouter.post("/game", gameController.submitGame);
+
+// Theme
+mainRouter.post("/theme", themeController.createTheme);
+mainRouter.put("/theme/:id", themeController.updateTheme);
+mainRouter.delete("/theme/:id", themeController.removeTheme);
+
+// Stage
+mainRouter.post("/stage", stageController.createStage);
+mainRouter.put("/stage/:id", stageController.updateStage);
+mainRouter.delete("/stage/:id", stageController.removeStage);
+mainRouter.get("/stage", stageController.getStages);
+mainRouter.get("/stage/:id", stageController.getStage);
 
 module.exports = mainRouter;
