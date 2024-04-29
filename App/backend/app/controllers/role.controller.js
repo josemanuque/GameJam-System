@@ -33,33 +33,38 @@ exports.createRole = async (req, res) => {
  * @param {*} res 
  * @returns Confirmation message if successful
  */
-exports.assignRole = async (req, res) => {
+exports.setRoles = async (req, res) => {
     try {
-        const username = req.params.username;
-        const roleName = req.params.role;
+        const username = req.body.username;
+        const roleIDs = req.body.roles;
 
         const user = await UserModel.findOne({ username });
-        const role = await RoleModel.findOne({ name: roleName });
-        
+
         if (!user){
             return res.status(409).send( { message: "User not found"} );
         }
-        if (!role){
-            return res.status(409).send( { message: "Role not found"} );
-        }
-        if(user.roles.includes(role._id)){
-            return res.status(409).send({ message: `User already has the role ${roleName} assigned`});
-        }
-        user.roles.push(role._id);
+        
+        const rolePromises = roleIDs.map(async (roleID) => {
+            const foundRole = await RoleModel.findById(roleID);
+            if (!foundRole){
+                return res.status(409).send( { message: "Role not found"} );
+            }
+            return foundRole;
+        });
+        
+        const roles = await Promise.all(rolePromises);
+
+        user.roles = roleIDs;
         await user.save();
 
-        res.send({ message: `Role ${roleName} successfully assigned to ${username}`});
+        res.send({ message: `Roles ${roleIDs} successfully assigned to ${username}`});
     } catch (err){
         console.log(err);
         return res.status(500).send({ message: "Server error"} );
     }
     
 };
+
 
 
 /**
