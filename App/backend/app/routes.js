@@ -9,6 +9,7 @@ const siteController = require('./controllers/site.controller');
 const jamController = require('./controllers/jam.controller');
 const themeController = require('./controllers/theme.controller');
 const stageController = require('./controllers/stage.controller');
+const notificationController = require('./controllers/notification.controller');
 
 const mainRouter = express.Router();
 
@@ -43,6 +44,12 @@ mainRouter.patch("/team/kick", teamController.kickMember);
 mainRouter.put("/team/:id", teamController.changeTeamName);
 mainRouter.get("/team/user/:username", teamController.getUserTeam);
 mainRouter.get("/team/:id", teamController.getTeam);
+
+// Notifications
+mainRouter.post("/notification/joinTeam", notificationController.createJoinTeamNotification);
+mainRouter.get("/notification/:username", notificationController.getNotifications);
+mainRouter.delete("/notification", notificationController.clearNotifications);
+mainRouter.delete("/notification/:id", notificationController.deleteNotification);
 
 // Site
 mainRouter.post("/site", siteController.createSite);
