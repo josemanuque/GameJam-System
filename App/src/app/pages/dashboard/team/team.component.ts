@@ -11,18 +11,32 @@ import {MatSelectModule} from '@angular/material/select';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl,FormsModule  } from '@angular/forms';
 
 
-import { provideNativeDateAdapter } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { TeamService } from '../../../services/team.service';
 import { TeamResponseI } from '../../../../interfaces/team.interface';
 import { UserFindResponseI, UserResponseI } from '../../../../interfaces/user.interface';
 import { UserService } from '../../../services/user.service';
-import { switchMap } from 'rxjs';
+import { Observable, of, startWith, switchMap } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { NotificationService } from '../../../services/notification.service';
+import { SnackBarService } from '../../../services/snack-bar.service';
 
 @Component({
   selector: 'app-team',
   standalone: true,
-  imports: [ReactiveFormsModule,MatInputModule,FormsModule,MatSelectModule,MatSidenavModule, MatFormFieldModule, SidenavComponent, MatCardModule],
+  imports: [
+    ReactiveFormsModule,
+    MatInputModule,
+    FormsModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatFormFieldModule,
+    SidenavComponent, 
+    MatCardModule,
+    AsyncPipe,
+    MatAutocompleteModule,
+  ],
   templateUrl: './team.component.html',
   styleUrl: './team.component.css'
 })
@@ -34,8 +48,22 @@ export class TeamComponent {
   teamData: TeamResponseI | undefined;
   user: UserResponseI | undefined;
   usernames: UserFindResponseI[] = [];
-  selectedMembers: any[] = [];
-  constructor(private userService: UserService,private fb: FormBuilder, private router: Router, private teamService:TeamService) {}
+
+  username: string = "";
+  userSearchControl = new FormControl('');
+  filteredOptions!: Observable<UserFindResponseI[]>;
+  selectedMembers: UserFindResponseI[] = [];
+  selectedUsername: string = '';
+
+
+  constructor(
+    private userService: UserService,
+    private fb: FormBuilder, 
+    private router: Router, 
+    private teamService: TeamService,
+    private notificationService: NotificationService,
+    private snackbarService: SnackBarService,
+  ) {}
 
   ngOnInit(): void {
     this.userService.getUser().pipe(
@@ -54,9 +82,21 @@ export class TeamComponent {
         console.error('Error occurred while getting user or team:', err);
       }
     });
-    this.searchControl.valueChanges.subscribe((searchTerm: string) => {
-      this.findUser(searchTerm);
-    });
+    this.filteredOptions = this.userSearchControl.valueChanges.pipe(
+      startWith(''),
+      switchMap(value => {
+        if (value!.trim() === '') {
+          return of([]);
+        } else {
+          return this.userService.getUsersFromPrefix(value!);
+        }
+      }),
+    );
+  }
+
+  addUserToTeam(user: UserFindResponseI) {
+    this.selectedMembers.push(user);
+    this.userSearchControl.setValue('');
   }
 
   leaveTeam() {
@@ -66,43 +106,36 @@ export class TeamComponent {
       window.location.reload();
     });
   }
+
   kickUser(username: string) {
+    console.log(this.selectedMembers)
     this.teamService.kickMember(this.teamData?._id!,username).subscribe((team) => {
       alert('You kicked the user from the team');
       window.location.reload();
     });
   }
+
   addMember(username: string) {
     console.log("data",this.teamData?._id!,username);
-    this.teamService.addMember(this.teamData?._id!,username).subscribe((team) => {
-      alert('You added the user to the team');
-      window.location.reload();
+    this.notificationService.sendNotification({
+      username: username,
+      team: this.teamData?._id!,
+      message: "You have been added to a team",
+      type: 'joinTeam'
+    }).subscribe({
+      next: (notification) => {
+        this.snackbarService.openSnackBar('User invited to team', 'Close', 5000);
+      },
+      error: err => {
+        this.snackbarService.openSnackBar('Error inviting user to team', 'Close', 5000);
+      }
     });
   }
 
-  selectMember(username: any): void {
-    if(!this.selectedMembers.includes(username)){
-      this.selectedMembers.push(username);
-      //this.form.get('members')!.setValue(this.selectedMembers.map(member => member.username));
-    }
+  selectUsername(username: any): void {
+    this.selectedUsername = username;
   }
 
-
-  findUser(username: string){
-    
-    //const selectedMembers = this.form.get('members')!.value;
-    this.userService.getUsersFromPrefix(username).subscribe(
-      (response) => {
-        this.usernames = response;
-        console.log('User found:', response);
-        // Restore selected members after updating usernames
-        //this.form.get('members')!.setValue(selectedMembers);
-      },
-      (error) => {
-        console.error('Error occurred while finding user:', error);
-      }
-    );
-  }
 
   goToCreateTeam() {
     this.router.navigate(['/dashboard/team/create']);

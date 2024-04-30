@@ -39,26 +39,25 @@
           @if (searchUser) {
             <div class="row d-flex justify-content-center">
               <mat-form-field>
-                  <mat-label>Search Users</mat-label>
-                  <input matInput [formControl]="searchControl">
-                </mat-form-field>
-          </div>
-          <div class="row d-flex justify-content-center">
-              <mat-form-field>
-                  <mat-label>Select User</mat-label>
-                  <!-- <mat-select formControlName="members"> -->
-                  <mat-select >
-                    @for (username of usernames; track username) {
-                      <mat-option [value]="username.username" (click)="selectMember(username)">{{username.username}}</mat-option>
-                      }
-                  </mat-select>
-                </mat-form-field>
-          </div>
-          @if (selectedMembers.length > 0) {
-            <div class="row d-flex justify-content-center">
-              <button class="btn" (click)="addMember(selectedMembers[0].username)" style="width: 25%;">Add</button>
+                <mat-label>Find User</mat-label>
+                <input type="text"
+                      placeholder="username"
+                      aria-label="Find User"
+                      matInput
+                      [formControl]="userSearchControl"
+                      [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  @for (foundUser of filteredOptions | async; track foundUser) {
+                    <mat-option (click)="addUserToTeam(foundUser)" [value]="foundUser.username">{{foundUser.username}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
             </div>
-          }
+            @if (selectedMembers.length > 0) {
+              <div class="row d-flex justify-content-center">
+                <button class="btn" (click)="addMember(selectedMembers[0].username)" style="width: 25%;">Add</button>
+              </div>
+            }
 
           }
           <div class="row d-flex justify-content-center">
@@ -87,14 +86,14 @@
                 <mat-label>Select User</mat-label>
                 <mat-select >
                   @for (member of teamData?.members; track member) {
-                    <mat-option [value]="member.username" (click)="selectMember(member.username)">{{member.username}}</mat-option>
+                    <mat-option [value]="member.username" (click)="selectUsername(member.username)">{{member.username}}</mat-option>
                     }
                 </mat-select>
               </mat-form-field>
         </div>
-          @if (selectedMembers.length > 0) {
+          @if (selectedUsername !== '') {
             <div class="row d-flex justify-content-center">
-              <button class="btn" (click)="kickUser(selectedMembers[0])" style="width: 25%;">Kick</button>
+              <button class="btn" (click)="kickUser(selectedUsername)" style="width: 25%;">Kick</button>
             </div>
           }
 

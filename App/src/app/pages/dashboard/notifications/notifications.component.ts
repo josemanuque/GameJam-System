@@ -9,7 +9,7 @@ import {MatIconModule} from '@angular/material/icon';
 import { NotificationService } from '../../../services/notification.service';
 import { UserService } from '../../../services/user.service';
 import { switchMap } from 'rxjs';
-import { NotificationIResponse } from '../../../../interfaces/notification.interface';
+import { NotificationResponseI } from '../../../../interfaces/notification.interface';
 import { TeamService } from '../../../services/team.service';
 import { SnackBarService } from '../../../services/snack-bar.service';
 
@@ -23,7 +23,7 @@ import { SnackBarService } from '../../../services/snack-bar.service';
   styleUrl: './notifications.component.css'
 })
 export class NotificationsComponent {
-  notifications: NotificationIResponse[] = [];
+  notifications: NotificationResponseI[] = [];
   username: string = '';
   
   constructor(
@@ -43,7 +43,7 @@ export class NotificationsComponent {
     });
   }
 
-  onAcceptJoinTeam(notification: NotificationIResponse){
+  onAcceptJoinTeam(notification: NotificationResponseI){
     this.teamService.addMember(notification.team._id, notification.username).subscribe({
       next: () => {
         this.snackbarService.openSnackBar('Team invite accepted', 'Close', 5000);
@@ -56,7 +56,7 @@ export class NotificationsComponent {
     });
   }
 
-  onDeclineJoinTeam(notification: NotificationIResponse){
+  onDeclineJoinTeam(notification: NotificationResponseI){
     this.notificationService.deleteNotification(notification._id).subscribe({
       next: () => {
         this.snackbarService.openSnackBar('Team invite declined', 'Close', 5000);

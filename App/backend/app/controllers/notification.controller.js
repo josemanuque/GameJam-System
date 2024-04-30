@@ -4,13 +4,13 @@ const NotificationModel = require ('../models/notification.model');
  * Creates a new notification of type "joinTeam" for a user
  */
 
-exports.createJoinTeamNotification = async (req, res) => {
+exports.createNotification = async (req, res) => {
     try {
         const notificationReq = {
             username: req.body.username,
             message: req.body.message,
             team: req.body.team,
-            type: 'joinTeam'
+            type: req.body.type
         };
         const notification = new NotificationModel(notificationReq);
         await notification.save();

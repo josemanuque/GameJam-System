@@ -46,7 +46,7 @@ mainRouter.get("/team/user/:username", teamController.getUserTeam);
 mainRouter.get("/team/:id", teamController.getTeam);
 
 // Notifications
-mainRouter.post("/notification/joinTeam", notificationController.createJoinTeamNotification);
+mainRouter.post("/notification", notificationController.createNotification);
 mainRouter.get("/notification/:username", notificationController.getNotifications);
 mainRouter.delete("/notification", notificationController.clearNotifications);
 mainRouter.delete("/notification/:id", notificationController.deleteNotification);

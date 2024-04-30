@@ -4,71 +4,67 @@
   <mat-sidenav-content>
     <div class="content mat-elevation-z4" #contentContainer>
       <div class="custom-container">
-
         <div class="row">
           <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
             <h1>Create Team</h1>
           </div>
         </div>
-          <form [formGroup]="form">
+        <form [formGroup]="form">
+          <div class="row d-flex justify-content-center">
             <div class="row d-flex justify-content-center">
-                <div class="row d-flex justify-content-center">
-                    <mat-form-field>
-                        <mat-label>Name</mat-label>
-                        <input matInput formControlName="name">
-                      </mat-form-field>
-                </div>
-                <div class="row d-flex justify-content-center">
-                    <mat-form-field>
-                        <mat-label>Description</mat-label>
-                        <input matInput formControlName="description">
-                      </mat-form-field>
-                </div>
-                
-
-                <div class="row d-flex justify-content-center">
-                    <mat-form-field>
-                        <mat-label>Search Users</mat-label>
-                        <input matInput [formControl]="searchControl">
-                      </mat-form-field>
-                </div>
-                <div class="row d-flex justify-content-center">
-                    <mat-form-field>
-                        <mat-label>Select Team Members</mat-label>
-                        <mat-select formControlName="members">
-                          @for (username of usernames; track username) {
-                            <mat-option [value]="username.username" (click)="selectMember(username)">{{username.username}}</mat-option>
-                            }
-                        </mat-select>
-                      </mat-form-field>
-                </div>
-
-                
-                  
-                 
-
+              <mat-form-field>
+                  <mat-label>Name</mat-label>
+                  <input matInput formControlName="name">
+                </mat-form-field>
             </div>
             <div class="row d-flex justify-content-center">
-                @for (user of selectedMembers; track user) {
-                    <mat-card class="example-card">
-                        <mat-card-header>
-                          <mat-card-title class="d-flex justify-content-center">{{user.username}}</mat-card-title>
-                          <mat-card-subtitle class="d-flex justify-content-center">{{user.email}}</mat-card-subtitle>
-                        </mat-card-header>
-                        <mat-card-content>
-                        </mat-card-content>
-                    </mat-card>
-                }
-    
-              </div>
-            <div class="row d-flex justify-content-center">
-                <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Create Team</button>
+                <mat-form-field>
+                    <mat-label>Description</mat-label>
+                    <input matInput formControlName="description">
+                  </mat-form-field>
             </div>
             <div class="row d-flex justify-content-center">
-              <button style="width: 15%;" mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="goToViewTeam()">Go Back</button>
+              <mat-form-field>
+                <mat-label>Find User</mat-label>
+                <input type="text"
+                      placeholder="username"
+                      aria-label="Find User"
+                      matInput
+                      [formControl]="userSearchControl"
+                      [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  @for (foundUser of filteredOptions | async; track foundUser) {
+                    <mat-option (click)="addUserToTeam(foundUser)" [value]="foundUser.username">{{foundUser.username}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div class="row d-flex justify-content-center">
+              @for (user of selectedMembers; track user) {
+                  <mat-card class="example-card">
+                      <mat-card-header>
+                        <mat-card-title class="d-flex justify-content-center">{{user.username}}</mat-card-title>
+                        <mat-card-subtitle class="d-flex justify-content-center">{{user.email}}</mat-card-subtitle>
+                      </mat-card-header>
+                      <mat-card-content>
+                        @if (user.username !== username) {
+                          <p>User will be invited</p>
+                        }
+                      </mat-card-content>
+                      <mat-card-actions>
+                      </mat-card-actions>
+                  </mat-card>
+              }
+  
+            </div>
+          <div class="row d-flex justify-content-center">
+              <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="onSubmit()">Create Team</button>
+          </div>
+          <div class="row d-flex justify-content-center">
+            <button style="width: 15%;" mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="onCancel()">Go Back</button>
+        </div>
           </div>
         </form>
-
       </div>
     </div>
   </mat-sidenav-content>

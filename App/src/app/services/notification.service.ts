@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NotificationIResponse } from '../../interfaces/notification.interface';
+import { NotificationResponseI, NotificationRequestI } from '../../interfaces/notification.interface';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_IP } from '../environments/environment';
@@ -12,11 +12,15 @@ export class NotificationService {
 
   constructor(private http: HttpClient) { }
 
-  getNotifications(username: string): Observable<NotificationIResponse[]> {
-    return this.http.get<NotificationIResponse[]>(`${API_IP}/notification/${username}`);
+  getNotifications(username: string): Observable<NotificationResponseI[]> {
+    return this.http.get<NotificationResponseI[]>(`${API_IP}/notification/${username}`);
   }
 
-  deleteNotification(id: string): Observable<NotificationIResponse> {
-    return this.http.delete<NotificationIResponse>(`${API_IP}/notification/${id}`);
+  deleteNotification(id: string): Observable<NotificationResponseI> {
+    return this.http.delete<NotificationResponseI>(`${API_IP}/notification/${id}`);
+  }
+
+  sendNotification(notification: NotificationRequestI): Observable<NotificationResponseI> {
+    return this.http.post<NotificationResponseI>(`${API_IP}/notification`, notification);
   }
 }
