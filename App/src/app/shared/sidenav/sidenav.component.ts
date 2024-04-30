@@ -37,7 +37,7 @@ export class SidenavComponent {
     [['label', '/dashboard/category'], 'Category'],
     //[['people', '/dashboard/team'], 'Team'],
     //[['games', '/dashboard/submit-game'], 'Game'],
-    //[['info', '/dashboard/notifications'], 'Notifications'],
+    [['info', '/dashboard/notifications'], 'Notifications'],
   ]);
 
   localDict = new Dictionary<[string, string], string>([
@@ -52,6 +52,7 @@ export class SidenavComponent {
     [['settings', '/settings'], 'Settings'],
     [['games', '/dashboard/submit-game'], 'Game'],
     [['people', '/dashboard/team'], 'Team'],
+    [['info', '/dashboard/notifications'], 'Notifications'],
   ]);
   
 

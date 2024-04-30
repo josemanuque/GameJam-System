@@ -28,7 +28,13 @@ exports.createJoinTeamNotification = async (req, res) => {
 exports.getNotifications = async (req, res) => {
     try {
         const username = req.params.username;
-        const notifications = await NotificationModel.find({ username });
+        const notifications = await NotificationModel.find({ username }).populate({
+            path: 'team',
+            populate: {
+                path: 'members',
+                select: 'username'
+            }
+        });
         if(!notifications) {
             return res.status(404).send({ message: 'Notifications not found' });
         }
