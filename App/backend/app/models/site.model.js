@@ -19,7 +19,10 @@ const siteSchema = new mongoose.Schema({
         },
         teams: [{
             type: mongoose.Schema.Types.ObjectId, ref: 'Team'
-        }]
+        }],
+        photo: {
+            type: String, trim: true
+        }
 });
 
 const SiteModel = mongoose.model('Site', siteSchema);

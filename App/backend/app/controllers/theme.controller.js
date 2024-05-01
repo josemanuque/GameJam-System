@@ -1,22 +1,17 @@
 const ThemeModel = require('../models/theme.model');
-const fs = require('fs');
 
 exports.createTheme = async (req, res) => {
     try {
-        const EngPdf = fs.readFileSync(req.body.manualEng);
-        const SpaPdf = fs.readFileSync(req.body.manualSpa);
-        const PortPdf = fs.readFileSync(req.body.manualPort);
-
         const theme = new ThemeModel({
             nameEng: req.body.nameEng,
             descriptionEng: req.body.descriptionEng,
-            manualEng: EngPdf,
+            manualEng: req.body.manualEng,
             nameSpa: req.body.nameSpa,
             descriptionSpa: req.body.descriptionSpa,
-            manualSpa: SpaPdf,
+            manualSpa: req.body.manualSpa,
             namePort: req.body.namePort,
             descriptionPort: req.body.descriptionPort,
-            manualPort: PortPdf
+            manualPort: req.body.manualPort
         });
 
         await theme.save();
@@ -36,16 +31,6 @@ exports.updateTheme = async (req, res) => {
     try {
         const id = req.params.id;
         const theme = req.body;
-
-        if (theme.manualEng) {
-            theme.manualEng = fs.readFileSync(theme.manualEng);
-        }
-        if (theme.manualSpa) {
-            theme.manualSpa = fs.readFileSync(theme.manualSpa);
-        }
-        if (theme.manualPort) {
-            theme.manualPort = fs.readFileSync(theme.manualPort);
-        }
 
         const updatedTheme = await ThemeModel.findByIdAndUpdate(id
             , theme
@@ -74,5 +59,34 @@ exports.removeTheme = async (req, res) => {
     } catch (err) {
         console.log(err)
         res.status(500).send({ message: 'Server error' });
+    }
+};
+
+exports.getThemesName = async (req, res) => {
+    try {
+        const themes = await ThemeModel.find({}, 'nameEng');
+        const themesNames = themes.map(theme => {
+            return { id: theme._id, name: theme.nameEng }
+        });
+        res.send({themesNames});
+    } catch (error) {
+        return res.status(404).json({ message: 'No themes exist' });
+    }
+};
+
+exports.getTheme = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const foundTheme = await ThemeModel.findById(id);
+
+        if (!foundTheme) {
+            return res.status(404).send({ message: "Theme not found" });
+        }
+        res.send(foundTheme);
+    }
+    catch (error){
+        console.log(error);
+        res.status(500).send({ message: "Error" });
     }
 };

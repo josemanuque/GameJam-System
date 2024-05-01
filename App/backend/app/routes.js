@@ -1,4 +1,5 @@
 const express = require('express');
+const { v4: uuidv4 } = require('uuid');
 const authController = require('./auth/auth.controller');
 const roleController = require('./controllers/role.controller');
 const teamController = require('./controllers/team.controller');
@@ -12,6 +13,30 @@ const stageController = require('./controllers/stage.controller');
 const notificationController = require('./controllers/notification.controller');
 
 const mainRouter = express.Router();
+const multer = require('multer');
+
+//File and image management
+const storage = multer.diskStorage({
+    destination: './uploads',
+    filename: (req, file, cb) => {
+        const uniqueID = uuidv4();
+        const originalExtension = file.originalname.split('.').pop();
+        const newFilename = `${uniqueID}.${originalExtension}`;
+        cb(null, newFilename);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    const allowedMimeTypes = [
+        'image/png',
+    ];
+    if (!allowedMimeTypes.includes(file.mimetype) || !file.originalname.endsWith('.png')){
+        cb(new Error('Invalid file format. Only .png files are allowed.'), false);
+    } else {
+        cb(null, true)
+    }
+}
+const upload = multer({storage, fileFilter});
 
 // Auth
 mainRouter.post("/auth/register", authController.register);
@@ -52,9 +77,9 @@ mainRouter.delete("/notification", notificationController.clearNotifications);
 mainRouter.delete("/notification/:id", notificationController.deleteNotification);
 
 // Site
-mainRouter.post("/site", siteController.createSite);
+mainRouter.post("/site", upload.single('file'), siteController.createSite);
 mainRouter.delete("/site/:id", siteController.removeSite);
-mainRouter.put("/site/:id", siteController.updateSite);
+mainRouter.put("/site/:id", upload.single('file'), siteController.updateSite);
 mainRouter.get("/site/country/:country", siteController.getSitesFromCountry);
 mainRouter.get("/site/region/:region", siteController.getSitesFromRegion);
 mainRouter.get("/site", siteController.getSites);
@@ -84,6 +109,8 @@ mainRouter.post("/game", gameController.submitGame);
 mainRouter.post("/theme", themeController.createTheme);
 mainRouter.put("/theme/:id", themeController.updateTheme);
 mainRouter.delete("/theme/:id", themeController.removeTheme);
+mainRouter.get("/theme", themeController.getThemesName);
+mainRouter.get("/theme/:id", themeController.getTheme);
 
 // Stage
 mainRouter.post("/stage", stageController.createStage);
