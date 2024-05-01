@@ -28,6 +28,9 @@ const userSchema = new mongoose.Schema(
         },
         site: {
             type: mongoose.Schema.Types.ObjectId, ref: 'Site'
+        },
+        photo: {
+            type: String, trim: true
         }
     }
 );

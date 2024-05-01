@@ -39,7 +39,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({storage, fileFilter});
 
 // Auth
-mainRouter.post("/auth/register", authController.register);
+mainRouter.post("/auth/register", upload.single('file'), authController.register);
 mainRouter.post("/auth/login", authController.login);
 mainRouter.post("/auth/forgotPassword", authController.forgotPassword);
 mainRouter.post("/auth/resetPassword", authController.resetPassword);
