@@ -6,7 +6,7 @@ export interface RoleCreateRequestI {
 export interface RoleResponseI {
     _id: string,
     name: string,
-    description: string
+    description?: string
 }
 
 export interface RoleAssignRequestI {

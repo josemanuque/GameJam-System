@@ -5,7 +5,7 @@
     <mat-card-content>
         <div class="formContainer row d-flex justify-content-center">
             @for(role of validRoles; track role){
-                <mat-checkbox [matTooltip]="role.description" (change)="toggleSelection(role._id)">{{role.name}}</mat-checkbox>
+                <mat-checkbox [matTooltip]="role.description!" (change)="toggleSelection(role._id)">{{role.name}}</mat-checkbox>
             }
         </div>
         <div class="row d-flex justify-content-center">

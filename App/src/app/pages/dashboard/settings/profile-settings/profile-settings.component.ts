@@ -37,8 +37,9 @@ export class ProfileSettingsComponent {
 
   ngOnInit(): void {
     this.initForm();
-    this.userService.getUser().subscribe({
+    this.userService.userData$.subscribe({
       next: (res) => {
+        if(!res) return;
         this.user = res;
         this.initForm();
       },
@@ -52,7 +53,7 @@ export class ProfileSettingsComponent {
     if(this.user){
 
       this.userForm = this.formBuilder.group({
-        firstname: [this.user.name, Validators.required],
+        name: [this.user.name, Validators.required],
         lastname: [this.user.lastname, Validators.required],
         username: [this.user.username, Validators.required],
         email: [this.user.email, [Validators.email]],
@@ -60,7 +61,7 @@ export class ProfileSettingsComponent {
       });
     } else {
       this.userForm = this.formBuilder.group({
-        firstname: ['', Validators.required],
+        name: ['', Validators.required],
         lastname: ['', Validators.required],
         username: ['', Validators.required],
         email: ['', [Validators.email]],
@@ -73,7 +74,7 @@ export class ProfileSettingsComponent {
     console.log(this.userForm.value);
 
     if(this.userForm.valid) {
-      this.userService.updateUser(this.user.username, this.userForm.value).subscribe({
+      this.userService.updateUserData(this.user.username, this.userForm.value).subscribe({
         next: (res) => {
           this.snackbarService.openSnackBar('Profile updated successfully', 'Close', 5000);
         },

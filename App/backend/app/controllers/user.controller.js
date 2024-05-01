@@ -30,8 +30,8 @@ exports.getUsersFromPrefix = async (req, res) => {
 
 exports.getMe = async (req, res) => {
     try {
-        const username = req.username;
-        const foundUser = await UserModel.findOne({ username });
+        const id = req.id;
+        const foundUser = await UserModel.findById(id).populate('roles', '-__v -description');
         if (!foundUser){
             return res.status(409).send({ message: "User not found"});
         }
@@ -54,24 +54,15 @@ exports.getUserByUsername = async (req, res) => {
     try {
         const username = req.params.username;
 
-        const foundUser = await UserModel.findOne({ username });
+        const foundUser = await UserModel.findOne({ username }).populate('roles', '-__v -description');
 
         if (!foundUser){
             return res.status(409).send({ message: "User not found"});
         }
-        const userRoles = await roleController.getRoleNamesFromIDs(foundUser.roles);
-        const responseUserData = {
-            _id: foundUser._id,
-            name: foundUser.name,
-            lastname: foundUser.lastname,
-            username: foundUser.username,
-            email: foundUser.email,
-            phone: foundUser.phone,
-            roles: userRoles,
-            region: foundUser.region,
-            site: foundUser.site
-        }
-        return res.send(responseUserData);
+
+        const { password, ...userResponse } = foundUser._doc;
+
+        return res.send(userResponse);
     } catch {
         res.status(500).send({ message: "Error" });
     }
@@ -87,24 +78,14 @@ exports.getUser = async (req, res) => {
     try {
         const id = req.params.id;
 
-        const foundUser = await UserModel.findById(id);
+        const foundUser = await UserModel.findById(id).populate('roles', '-__v -description');
 
         if (!foundUser){
             return res.status(409).send({ message: "User not found"});
         }
-        const userRoles = await roleController.getRoleNamesFromIDs(foundUser.roles);
-        const responseUserData = {
-            _id: foundUser._id,
-            name: foundUser.name,
-            lastname: foundUser.lastname,
-            username: foundUser.username,
-            email: foundUser.email,
-            phone: foundUser.phone,
-            roles: userRoles,
-            region: foundUser.region,
-            site: foundUser.site
-        }
-        return res.send(responseUserData);
+        
+        const { password, ...userResponse } = foundUser._doc;
+        return res.send(userResponse);
     } catch {
         res.status(500).send({ message: "Error" });
     }
@@ -114,28 +95,16 @@ exports.updateUser = async (req, res) => {
     try {
         const username = req.params.username;
         const user = req.body;
-        const roleNames = user.roles;
-        if(roleNames){
-            user.roles = await roleController.getRoleIDs(user.roles);
-        }
-        const updatedUser = await UserModel.findOneAndUpdate({ username }, {$set: user}, { new: true });
+        console.log(user);
 
-        const updatedUserRoles = await roleController.getRoleNamesFromIDs(updatedUser.roles);
+        const updatedUser = await UserModel.findOneAndUpdate({ username }, {$set: user}, { new: true }).populate('roles', '-__v -description');
+        console.log(updatedUser._doc);
         if (!updatedUser) {
             return res.status(404).send({ message: "User not found" });
         }
-        const responseUserData = {
-            _id: updatedUser._id,
-            name: updatedUser.name,
-            lastname: updatedUser.lastname,
-            username: updatedUser.username,
-            email: updatedUser.email,
-            phone: updatedUser.phone,
-            roles: updatedUserRoles,
-            region: updatedUser.region,
-            site: updatedUser.site
-        }
-        res.send(responseUserData);
+        const { password, ...userResponse } = updatedUser._doc;
+
+        res.send(userResponse);
     }
     catch (err){
         console.log(err);
@@ -168,7 +137,7 @@ exports.getUserId = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
     try {
-        const foundUsers = await UserModel.find();
+        const foundUsers = await UserModel.find().populate('roles', '-__v -description');
         const responseUserData = await Promise.all(foundUsers.map(async foundUser => {
             const { password, ...userData } = foundUser._doc;
             return userData;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { API_IP } from '../environments/environment';
 import { UserFindResponseI, UserPasswordChangeI, UserResponseI } from '../../interfaces/user.interface'; // Importing frontend interfaces
 import { RoleListResponseI } from '../../interfaces/role.interface';
@@ -10,9 +10,37 @@ import { RoleListResponseI } from '../../interfaces/role.interface';
 })
 export class UserService {
   private apiUrl = API_IP;
+  private userDataSubject: BehaviorSubject<UserResponseI> = new BehaviorSubject<UserResponseI>(null!);
+  userData$: Observable<UserResponseI> = this.userDataSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.fetchUserData();
+  }
 
+  fetchUserData(): void {
+    console.log('Fetching user data');
+    this.http.get<UserResponseI>(`${this.apiUrl}/me`).pipe(
+      tap(data => this.userDataSubject.next(data))
+    ).subscribe();
+  }
+
+  updateUserData(username: string, userData: any): Observable<UserResponseI> {
+    return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, userData).pipe(
+      tap(updatedUserData => {
+        console.log('Updating user data');
+        this.userDataSubject.next(updatedUserData);
+      })
+    );
+  }
+
+  logout(): void {
+    this.userDataSubject.next(null!);
+  }
+
+  /**
+   * 
+   * @deprecated Use observable userData$ instead
+   */
   getUser(): Observable<UserResponseI> {
     return this.http.get<UserResponseI>(`${this.apiUrl}/me`);
   }
@@ -33,12 +61,15 @@ export class UserService {
     return this.http.get<UserResponseI>(`${this.apiUrl}/user/id/${id}`);
   }
   /**
-   * @deprecated
+   * @deprecated use updateUserData instead
    */
   updateUserByUsername(username: string, userData: any): Observable<UserResponseI> {
     return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, userData);
   }
 
+  /**
+   * @deprecated use updateUserData instead
+   */
   updateUser(username: string, userData: UserResponseI): Observable<UserResponseI> {
     return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, userData);
   }

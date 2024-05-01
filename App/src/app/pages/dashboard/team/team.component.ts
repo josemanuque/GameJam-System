@@ -66,8 +66,9 @@ export class TeamComponent {
   ) {}
 
   ngOnInit(): void {
-    this.userService.getUser().pipe(
+    this.userService.userData$.pipe(
       switchMap(user => {
+        if (!user) return of(null);
         this.user = user;
         return this.teamService.getUserTeam(user.username);
       })
@@ -82,6 +83,7 @@ export class TeamComponent {
         console.error('Error occurred while getting user or team:', err);
       }
     });
+
     this.filteredOptions = this.userSearchControl.valueChanges.pipe(
       startWith(''),
       switchMap(value => {

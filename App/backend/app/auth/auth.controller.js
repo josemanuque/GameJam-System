@@ -92,7 +92,7 @@ exports.login = async (req, res) => {
             region: foundPerson.region,
             site: foundPerson.site
         };
-        const accessToken = authUtils.generateAccessToken(user, SECRET_KEY, KEY_EXPIRES_IN);
+        const accessToken = authUtils.generateAccessToken({_id: foundPerson._id}, SECRET_KEY, KEY_EXPIRES_IN);
 
         user.accessToken = accessToken;
         res.send(user);
@@ -174,7 +174,7 @@ exports.authenticateToken = (req, res, next) => {
         if(!decodedToken){
             return res.status(403).send({ message: 'Invalid token' });
         }
-        req.username = decodedToken.username;
+        req.id = decodedToken._id;
         next();
     }catch {
         return res.status(403).send({ message: 'Invalid token' });

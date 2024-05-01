@@ -18,7 +18,7 @@ import { TeamResponseI } from '../../../../interfaces/team.interface';
 import { GameService } from '../../../services/game.service';
 import { GameRequestI } from '../../../../interfaces/game.interface';
 import { UserService } from '../../../services/user.service';
-import { switchMap } from 'rxjs';
+import { of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-submit-game',
@@ -60,8 +60,9 @@ export class SubmitGameComponent {
         console.error('Error occurred while fetching categories:', error);
       }
     );
-    this.userService.getUser().pipe(
+    this.userService.userData$.pipe(
       switchMap(user => {
+        if(!user) return of(null);
         return this.teamService.getUserTeam(user.username);
       })
     ).subscribe({

@@ -77,23 +77,18 @@ export class RegisterUserComponent {
       roles: [[], Validators.required], // Empty array as default
     });
 
-    this.userService.getAllValidRoles().pipe(switchMap(
-      (res) => {
-        this.globalOrganizerID = res.roles.find(role => role.name === 'Global Organizer')!._id;
-        return this.userService.getUser();
-      })).subscribe({
-        next: (res) => {
-          if (!res.roles.includes(this.globalOrganizerID)) {
-            console.log('User is not a Global Organizer');
-            this.isGlobalOrganizer = false;
-            this.form.patchValue({region: res.region, site: res.site})
-          }
-          console.log('User is a Global Organizer');
-        },
-        error: (err) => {
-          console.log(err);
+    this.userService.userData$.subscribe({
+      next: (user) => {
+        if (!user) return;
+        if(!user.roles.map(role => role.name).includes('Global Organizer')){
+          this.isGlobalOrganizer = false;
+          this.form.patchValue({region: user.region, site: user.site})
         }
-      });
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
   getSites(region: string) {

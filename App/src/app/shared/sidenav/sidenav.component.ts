@@ -13,6 +13,7 @@ import { UserResponseI } from '../../../interfaces/user.interface';
 import { RoleListResponseI, RoleResponseI } from '../../../interfaces/role.interface';
 import { AuthService } from '../../services/auth.service';
 import { switchMap } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 export interface SideNavToggle {
   screenWidth: number;
@@ -23,7 +24,14 @@ export interface SideNavToggle {
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [MatSidenav, MatDividerModule, MatIconModule, MatToolbarModule, RouterModule],
+  imports: [
+    MatSidenav, 
+    MatDividerModule, 
+    MatIconModule, 
+    MatToolbarModule, 
+    RouterModule,
+    AsyncPipe,
+  ],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.css'
 })
@@ -75,35 +83,23 @@ export class SidenavComponent {
 
   toggleMenu = false;
 
-  user: UserResponseI | null = null;
+  user!: UserResponseI;
   validRoles: RoleResponseI[] = [];
   userRoles: string[] = [];
 
   ngOnInit(): void {
-    this.userService.getUser().pipe(switchMap(
-      user => {
+    this.userService.userData$.subscribe({
+      next: (user) => {
+        if (!user) return;
         this.user = user;
-        return this.userService.getAllValidRoles();
-      })).subscribe({
-          next: (data) => {
-            this.validRoles = data.roles;
-      
-      
-            if (this.user!.roles.some(role => this.validRoles.some(validRole => validRole._id === role))){
-              this.userRoles = this.user!.roles.map(role => this.validRoles.find(validRole => validRole._id === role)!.name);
-              this.currentName = this.user!.name;
-              this.currentRole = this.userRoles.join(' - ');
-              this.entries = this.getEntries();
-            }
-          },
-        error: (error) => {console.log(error);},
-      });
-
-    const margin = 32;
-  
-
-      
-
+        this.currentName = user.name;
+        this.currentRole = user.roles.map(role => role.name).join(' - ');
+        this.entries = this.getEntries();
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
   }
 
   openSN(){
@@ -173,6 +169,7 @@ export class SidenavComponent {
   }
 
   logOut(){
+    this.userService.logout();
     this.authService.logout();
     this.router.navigate(['/login']);
   }

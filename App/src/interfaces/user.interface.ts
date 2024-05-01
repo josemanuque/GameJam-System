@@ -1,3 +1,5 @@
+import { RoleResponseI } from "./role.interface"
+
 export interface UserResponseI {
     _id: string,
     name: string,
@@ -7,13 +9,13 @@ export interface UserResponseI {
     phone: string,
     site: string,
     region: string,
-    roles: string[]
+    roles: RoleResponseI[]
 }
 
 export interface UserFindResponseI {
     username: string,
     email: string,
-    roles: string[]
+    roles: RoleResponseI[]
 }
 
 export interface UserPasswordChangeI {

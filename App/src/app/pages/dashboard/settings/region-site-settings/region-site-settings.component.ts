@@ -60,8 +60,9 @@ export class RegionSiteSettingsComponent {
 
   ngOnInit(): void {
     this.initializeForm();
-    this.userService.getUser().subscribe({
+    this.userService.userData$.subscribe({
       next: (user: UserResponseI) => {
+        if (!user) return;
         this.user = user;
         this.getSites(this.user.region);
         this.initializeForm();
@@ -103,7 +104,7 @@ export class RegionSiteSettingsComponent {
 
   onUpdate(): void {
     if(this.form.valid) {
-      this.userService.updateUser(this.user!.username, this.form.value).subscribe({
+      this.userService.updateUserData(this.user!.username, this.form.value).subscribe({
         next: (res) => {
           console.log(res);
           this.snackbarService.openSnackBar('Profile updated successfully', 'Close', 5000);

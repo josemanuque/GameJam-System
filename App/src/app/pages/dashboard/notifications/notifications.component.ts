@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { NotificationService } from '../../../services/notification.service';
 import { UserService } from '../../../services/user.service';
-import { switchMap } from 'rxjs';
+import { of, switchMap } from 'rxjs';
 import { NotificationResponseI } from '../../../../interfaces/notification.interface';
 import { TeamService } from '../../../services/team.service';
 import { SnackBarService } from '../../../services/snack-bar.service';
@@ -23,7 +23,7 @@ import { SnackBarService } from '../../../services/snack-bar.service';
   styleUrl: './notifications.component.css'
 })
 export class NotificationsComponent {
-  notifications: NotificationResponseI[] = [];
+  notifications: NotificationResponseI[] | null = [];
   username: string = '';
   
   constructor(
@@ -34,20 +34,24 @@ export class NotificationsComponent {
   ) { }
 
   ngOnInit(): void {
-    this.userService.getUser().pipe(switchMap((user) => {
+    this.userService.userData$.pipe(switchMap((user) => {
+      if (!user) return of(null);
       this.username = user.username;
       return this.notificationService.getNotifications(this.username);
-    })).subscribe((notifications) => {
-        //console.log(notifications);
+    })).subscribe({
+      next: (notifications) => {
         this.notifications = notifications;
-    });
+      },
+      error: (error) => {
+        console.error('Error occurred while fetching notifications:', error);
+      }});
   }
 
   onAcceptJoinTeam(notification: NotificationResponseI){
     this.teamService.addMember(notification.team._id, notification.username).subscribe({
       next: () => {
         this.snackbarService.openSnackBar('Team invite accepted', 'Close', 5000);
-        this.notifications = this.notifications.filter((n) => n._id !== notification._id);
+        this.notifications = this.notifications!.filter((n) => n._id !== notification._id);
         this.notificationService.deleteNotification(notification._id).subscribe();
       },
       error: () => {
@@ -60,7 +64,7 @@ export class NotificationsComponent {
     this.notificationService.deleteNotification(notification._id).subscribe({
       next: () => {
         this.snackbarService.openSnackBar('Team invite declined', 'Close', 5000);
-        this.notifications = this.notifications.filter((n) => n._id !== notification._id);
+        this.notifications = this.notifications!.filter((n) => n._id !== notification._id);
       },
       error: () => {
         this.snackbarService.openSnackBar('Error declining team invite', 'Close', 5000);

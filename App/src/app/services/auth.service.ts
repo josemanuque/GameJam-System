@@ -12,13 +12,14 @@ import { UserService } from './user.service';
 })
 export class AuthService {
 
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private userService: UserService, private http: HttpClient) {}
 
   login(userCredentials: UserLoginI): Observable<AuthResponseI> {
     return this.http.post<AuthResponseI>(`${API_IP}/auth/login`, userCredentials).pipe(
       tap((res: AuthResponseI) => {
         if (res){
           this.setToken(res.accessToken);
+          this.userService.fetchUserData();
         }
       })
     );

@@ -56,7 +56,8 @@ export class CreateTeamComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.userService.getUser().subscribe(user => {
+    this.userService.userData$.subscribe(user => {
+      if(!user) return;
       this.username = user.username
       this.selectedMembers.push(user);
       this.initForm();

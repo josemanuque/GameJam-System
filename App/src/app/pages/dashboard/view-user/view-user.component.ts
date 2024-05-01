@@ -11,19 +11,6 @@ import { RoleResponseI } from '../../../../interfaces/role.interface';
 import { UpdateRolePopupComponent } from './update-role-popup/update-role-popup.component';
 import { RouterLink } from '@angular/router';
 
-interface User {
-  _id: string,
-  name: string,
-  lastname: string,
-  username: string,
-  email: string,
-  phone: string,
-  site: string,
-  roles: string[],
-  region: string,
-}
-
-
 
 @Component({
   selector: 'app-view-user',
@@ -41,7 +28,7 @@ interface User {
 })
 export class ViewUserComponent {
   displayedColumns: string[] = ['username', 'name', 'lastname', 'email', 'region', 'roles', 'action'];
-  dataSource!: MatTableDataSource<User>;
+  dataSource!: MatTableDataSource<UserResponseI>;
   validRoles: RoleResponseI[] = [];
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -57,12 +44,9 @@ export class ViewUserComponent {
       })).subscribe(this.handleUsers.bind(this));
   }
 
-  private handleUsers(users: User[]) {
-      users.forEach(user => {
-        user.roles = user.roles.map(role => this.validRoles.find(r => r._id === role)!.name);
-      this.dataSource = new MatTableDataSource(users);
-      this.dataSource.paginator = this.paginator;
-    })
+  private handleUsers(users: UserResponseI[]) {
+    this.dataSource = new MatTableDataSource(users);
+    this.dataSource.paginator = this.paginator;
   }
 
   onUserUpdate(username: string) {
@@ -77,7 +61,7 @@ export class ViewUserComponent {
 
   }
 
-  openUserDetail(username: string) {
-
+  loadRoles(user: UserResponseI): string {
+    return user.roles.map(role => role.name).join(', ');
   }
 }
