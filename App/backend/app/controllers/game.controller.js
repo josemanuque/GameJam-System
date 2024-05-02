@@ -14,7 +14,8 @@ exports.submitGame = async (req, res) => {
             buildLink: req.body.buildLink,
             youtubeLinkGameplay: req.body.youtubeLinkGameplay,
             youtubeLinkPitch: req.body.youtubeLinkPitch,
-            categories: req.body.categories
+            categories: req.body.categories,
+            image: req.file.path
         };
 
         const game = new GameModel(gameReq);

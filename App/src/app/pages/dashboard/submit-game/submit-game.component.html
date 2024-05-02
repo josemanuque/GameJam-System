@@ -23,6 +23,10 @@
             <h2 class="org">Team:</h2><h2>{{teamData?.name}}</h2>
           </div>
         </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text"> <i class="bi bi-cloud-upload"></i> </span>
+          <input type="file" (change)="onFileSelected($event)" class="form-control file-upload" required formControlName="filename">
+        </div>
         <form [formGroup]="form">
           <div class="row d-flex justify-content-center">
           
