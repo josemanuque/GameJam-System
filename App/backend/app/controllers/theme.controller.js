@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const ThemeModel = require('../models/theme.model');
 
 exports.createTheme = async (req, res) => {
@@ -5,13 +7,13 @@ exports.createTheme = async (req, res) => {
         const theme = new ThemeModel({
             nameEng: req.body.nameEng,
             descriptionEng: req.body.descriptionEng,
-            manualEng: req.body.manualEng,
+            manualEng: req.files['manualEng'][0].path,
             nameSpa: req.body.nameSpa,
             descriptionSpa: req.body.descriptionSpa,
-            manualSpa: req.body.manualSpa,
+            manualSpa: req.files['manualSpa'][0].path,
             namePort: req.body.namePort,
             descriptionPort: req.body.descriptionPort,
-            manualPort: req.body.manualPort
+            manualPort: req.files['manualPort'][0].path
         });
 
         await theme.save();
@@ -27,7 +29,7 @@ exports.createTheme = async (req, res) => {
     }
 };
 
-exports.updateTheme = async (req, res) => {
+/* exports.updateTheme = async (req, res) => {
     try {
         const id = req.params.id;
         const theme = req.body;
@@ -44,7 +46,7 @@ exports.updateTheme = async (req, res) => {
     catch {
         res.status(500).send({ message: "Error" });
     }
-};
+}; */
 
 exports.removeTheme = async (req, res) => {
     try {
@@ -54,6 +56,15 @@ exports.removeTheme = async (req, res) => {
         if(!deletedTheme){
             return res.status(404).send({ message: "Theme doesn't exist" });
         }
+
+        const filenames = [deletedTheme.manualEng, deletedTheme.manualSpa, deletedTheme.manualPort];
+        
+        filenames.forEach(filename => {
+            if(filename){
+                fs.unlinkSync(filename);
+            }
+        });
+
         res.send({ message: "Theme deleted"});
 
     } catch (err) {

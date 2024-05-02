@@ -138,7 +138,7 @@ exports.updateSite = async (req, res) => {
 
             const updatedSite = await SiteModel.findByIdAndUpdate(siteID, { ...siteData, photo: req.file.path }, { new: true });
             if(!updatedSite){
-                return res.status(404).send({ message: "Jam not found" });
+                return res.status(404).send({ message: "Site not found" });
             }
 
             if(fs.existsSync(originalFilePath)){
@@ -148,7 +148,7 @@ exports.updateSite = async (req, res) => {
         } else {
             const updatedSite = await SiteModel.findByIdAndUpdate(siteID, siteData, { new: true });
             if(!updatedSite){
-                return res.status(404).send({ message: "Jam not found" });
+                return res.status(404).send({ message: "Site not found" });
             }
         }
         

@@ -7,7 +7,7 @@
 /bazel-out
 
 # Uploads
-/uploads
+/app/uploads
 
 # Node
 /node_modules

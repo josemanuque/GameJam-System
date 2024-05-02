@@ -3,20 +3,16 @@ const fs = require('fs');
 
 exports.createCategory = async (req, res) => {
     try {
-        const EngPdf = fs.readFileSync(req.body.manualEng);
-        const SpaPdf = fs.readFileSync(req.body.manualSpa);
-        const PortPdf = fs.readFileSync(req.body.manualPort);
-
         const category = new CategoryModel({
             nameEng: req.body.nameEng,
             descriptionEng: req.body.descriptionEng,
-            manualEng: EngPdf,
+            manualEng: req.files['manualEng'][0].path,
             nameSpa: req.body.nameSpa,
             descriptionSpa: req.body.descriptionSpa,
-            manualSpa: SpaPdf,
+            manualSpa: req.files['manualSpa'][0].path,
             namePort: req.body.namePort,
             descriptionPort: req.body.descriptionPort,
-            manualPort: PortPdf
+            manualPort: req.files['manualPort'][0].path
         });
 
         await category.save();
@@ -60,20 +56,10 @@ exports.getCategory = async (req, res) => {
     }
 };
 
-exports.updateCategory = async (req, res) => {
+/* exports.updateCategory = async (req, res) => {
     try {
         const id = req.params.id;
         const category = req.body;
-
-        if (category.manualEng) {
-            category.manualEng = fs.readFileSync(category.manualEng);
-        }
-        if (category.manualSpa) {
-            category.manualSpa = fs.readFileSync(category.manualSpa);
-        }
-        if (category.manualPort) {
-            category.manualPort = fs.readFileSync(category.manualPort);
-        }
 
         const updatedCategory = await CategoryModel.findByIdAndUpdate(id
             , category
@@ -87,7 +73,7 @@ exports.updateCategory = async (req, res) => {
     catch {
         res.status(500).send({ message: "Error" });
     }
-};
+}; */
 
 exports.removeCategory = async (req, res) => {
     try {
@@ -97,6 +83,15 @@ exports.removeCategory = async (req, res) => {
         if(!deletedCategory){
             return res.status(404).send({ message: "Category doesn't exist" });
         }
+
+        const filenames = [deletedCategory.manualEng, deletedCategory.manualSpa, deletedCategory.manualPort];
+        
+        filenames.forEach(filename => {
+            if(filename){
+                fs.unlinkSync(filename);
+            }
+        });
+
         res.send({ message: "Category deleted"});
 
     } catch (err) {

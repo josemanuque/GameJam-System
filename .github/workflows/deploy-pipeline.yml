@@ -41,16 +41,24 @@ jobs:
           npm i
           mkdir -p src/app/environments/
           echo "export const API_IP = '${{ secrets.API_IP }}';" > src/app/environments/environment.ts
-          npm run build:production
+          
         
-      - name: Commit and Push Angular Build
+      - name: If Frontend has changes build and Push to Main
         run: |
-          DEVELOP_COMMIT=$(git rev-parse develop)
-          git add .
-          cd App
-          git add -f dist
-          git commit -m "Build Angular App (from develop commit: $DEVELOP_COMMIT)"
-          git push origin main
+          git diff --exit-code --quiet App/src
+          status=$?
+          if [ $status -eq 1 ]; then
+              echo "Changes detected"
+              cd App
+              npm run build:production
+              DEVELOP_COMMIT=$(git rev-parse develop)
+              git add -A
+              git add -f dist
+              git commit -m "Build Angular App (from develop commit: $DEVELOP_COMMIT)"
+              git push origin main
+          else
+              echo "No changes detected no build generated"
+          fi
 
       - name: Connect to Oracle VM and pull the new changes
         uses: appleboy/ssh-action@master
@@ -59,6 +67,8 @@ jobs:
             username: ${{ secrets.SSH_USER }}
             key: ${{ secrets.SSH_KEY }}
             script: |
+                export NVM_DIR=~/.nvm
+                source ~/.nvm/nvm.sh
                 cd ${{ secrets.SSH_WORK_DIR }}
                 git pull
                 cd backend

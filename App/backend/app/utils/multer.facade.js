@@ -45,14 +45,24 @@ const uploadPDF = multer({
     fileFilter: pdfFileFilter
 });
 
+const uploadMultiplePDF = multer({
+    storage,
+    fileFilter: pdfFileFilter
+}).fields([
+    { name: 'manualEng', maxCount: 1 },
+    { name: 'manualSpa', maxCount: 1 },
+    { name: 'manualPort', maxCount: 1 }
+]);
+
+
 function handleImageUpload(req, res, next) {
     uploadImage.single('file')(req, res, (err) => {
-        if (err instanceof multer.MulterError) {
+        /* if (err instanceof multer.MulterError) {
             console.log(err);
             return res.status(400).send({ message: err.message });
         } else if (err) {
             return res.status(400).send({ message: err.message });
-        }
+        } */
         next();
     });
 }
@@ -68,4 +78,16 @@ function handlePDFUpload(req, res, next) {
     });
 }
 
-module.exports = { handleImageUpload, handlePDFUpload };
+function handleMultiplePDFUploads(req, res, next) {
+    uploadMultiplePDF(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+            return res.status(400).send({ message: err.message });
+        } else if (err) {
+            return res.status(400).send({ message: err.message });
+        }
+        next();
+    });
+}
+
+
+module.exports = { handleImageUpload, handlePDFUpload, handleMultiplePDFUploads };

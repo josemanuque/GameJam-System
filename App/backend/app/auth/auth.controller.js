@@ -28,6 +28,7 @@ exports.register = async (req, res) => {
             roles: roles,
             region: req.body.region,
             site: req.body.site,
+            photo: req.file.path
         };
 
 
@@ -43,7 +44,8 @@ exports.register = async (req, res) => {
             email: user.email,
             phone: user.phone,
             username: user.username,
-            roles: userRoles
+            roles: userRoles,
+            photo: user.photo
         };
 
         const accessToken = authUtils.generateAccessToken(resUser, SECRET_KEY, KEY_EXPIRES_IN);
@@ -90,7 +92,8 @@ exports.login = async (req, res) => {
             phone: foundPerson.phone,
             roles: userRoles,
             region: foundPerson.region,
-            site: foundPerson.site
+            site: foundPerson.site,
+            photo: foundPerson.photo
         };
         const accessToken = authUtils.generateAccessToken({_id: foundPerson._id}, SECRET_KEY, KEY_EXPIRES_IN);
 

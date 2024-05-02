@@ -11,14 +11,12 @@ const jamController = require('./controllers/jam.controller');
 const themeController = require('./controllers/theme.controller');
 const stageController = require('./controllers/stage.controller');
 const notificationController = require('./controllers/notification.controller');
-const photoController = require('./controllers/photo.controller');
-const fileController = require('./controllers/file.controller');
 const multerFacade = require('./utils/multer.facade');
 
 const mainRouter = express.Router();
 
 // Auth
-mainRouter.post("/auth/register", authController.register);
+mainRouter.post("/auth/register", multerFacade.handleImageUpload, authController.register);
 mainRouter.post("/auth/login", authController.login);
 mainRouter.post("/auth/forgotPassword", authController.forgotPassword);
 mainRouter.post("/auth/resetPassword", authController.resetPassword);
@@ -75,18 +73,18 @@ mainRouter.delete("/jam/site", jamController.removeSiteFromJam);
 mainRouter.patch("/jam/stage", jamController.addStageToJam);
 
 // Categories
-mainRouter.post("/category", categoryController.createCategory);
+mainRouter.post("/category", multerFacade.handleMultiplePDFUploads, categoryController.createCategory);
 mainRouter.get("/category", categoryController.getCategoriesName);
 mainRouter.get("/category/:id", categoryController.getCategory);
-mainRouter.put("/category/:id", categoryController.updateCategory);
+//mainRouter.put("/category/:id", categoryController.updateCategory);
 mainRouter.delete("/category/:id", categoryController.removeCategory);
 
 // Game submission
 mainRouter.post("/game", gameController.submitGame);
 
 // Theme
-mainRouter.post("/theme", themeController.createTheme);
-mainRouter.put("/theme/:id", themeController.updateTheme);
+mainRouter.post("/theme", multerFacade.handleMultiplePDFUploads, themeController.createTheme);
+//mainRouter.put("/theme/:id", themeController.updateTheme);
 mainRouter.delete("/theme/:id", themeController.removeTheme);
 mainRouter.get("/theme", themeController.getThemesName);
 mainRouter.get("/theme/:id", themeController.getTheme);
@@ -99,15 +97,12 @@ mainRouter.get("/stage", stageController.getStages);
 mainRouter.get("/stage/:id", stageController.getStage);
 
 // Photo
-mainRouter.post("/photo", multerFacade.handleImageUpload, photoController.uploadPhoto);
-mainRouter.get("/photo/:id", photoController.getPhoto);
-mainRouter.delete("/photo/:id", photoController.deletePhoto);
-mainRouter.put("/photo/:id", multerFacade.handleImageUpload, photoController.updatePhoto);
+mainRouter.post("/photo", multerFacade.handleImageUpload);
+mainRouter.put("/photo/:id", multerFacade.handleImageUpload);
 
 // File
-mainRouter.post("/file", multerFacade.handlePDFUpload, fileController.uploadFile);
-mainRouter.get("/file/:id", fileController.getFile);
-mainRouter.delete("/file/:id", fileController.deleteFile);
-mainRouter.put("/file/:id", multerFacade.handlePDFUpload, fileController.updateFile);
+mainRouter.post("/file", multerFacade.handlePDFUpload);
+
+mainRouter.post("/files", multerFacade.handleMultiplePDFUploads);
 
 module.exports = mainRouter;
