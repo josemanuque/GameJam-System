@@ -20,6 +20,6 @@ export interface UserFindResponseI {
 
 export interface UserPasswordChangeI {
     username: string,
-    oldPassword: string,
+    currentPassword: string,
     newPassword: string
 }

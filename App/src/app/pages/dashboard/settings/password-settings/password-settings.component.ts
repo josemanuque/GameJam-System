@@ -24,12 +24,26 @@ import { SnackBarService } from '../../../../services/snack-bar.service';
   styleUrl: './password-settings.component.scss'
 })
 export class PasswordSettingsComponent {
+  username: string = ''; 
   constructor(
     private userService: UserService, 
     private snackbarService: SnackBarService
   ) { }
 
+  ngOnInit(): void {
+    this.userService.userData$.subscribe({
+      next: (userData) => {
+        if(!userData) return;
+        this.username = userData.username;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
   onPasswordChange(form: NgForm): void {
+    
     if(!form.value.currentPassword || !form.value.newPassword || !form.value.newPasswordConfirmation) {
       this.snackbarService.openSnackBar("Please fill out all fields", "Close", 5000);
       return;
@@ -42,6 +56,8 @@ export class PasswordSettingsComponent {
       this.snackbarService.openSnackBar("New password must be different from old password", "Close", 5000);
       return;
     }
+    
+    form.value.username = this.username;
     this.userService.updatePassword(form.value).subscribe({
       next: () => {
         this.snackbarService.openSnackBar("Password updated", "Close", 5000);

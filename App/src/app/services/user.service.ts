@@ -75,7 +75,7 @@ export class UserService {
   }
 
   updatePassword(userData: UserPasswordChangeI): Observable<UserResponseI> {
-    return this.http.put<UserResponseI>(`${this.apiUrl}/user/${userData.username}/password`, { userData });
+    return this.http.post<UserResponseI>(`${this.apiUrl}/user/password/update`, userData);
   }
 
   getUserId(username: string): Observable<string> {
