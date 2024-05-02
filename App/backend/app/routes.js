@@ -29,9 +29,10 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, cb) => {
     const allowedMimeTypes = [
         'image/png',
+        'application/pdf'
     ];
-    if (!allowedMimeTypes.includes(file.mimetype) || !file.originalname.endsWith('.png')){
-        cb(new Error('Invalid file format. Only .png files are allowed.'), false);
+    if (!allowedMimeTypes.includes(file.mimetype) || !file.originalname.endsWith('.png') && !file.originalname.endsWith('.pdf')){
+        cb(new Error('Invalid file format. Only .png and .pdf files are allowed.'), false);
     } else {
         cb(null, true)
     }
@@ -39,7 +40,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({storage, fileFilter});
 
 // Auth
-mainRouter.post("/auth/register", upload.single('file'), authController.register);
+mainRouter.post("/auth/register", upload.single('photo'), authController.register);
 mainRouter.post("/auth/login", authController.login);
 mainRouter.post("/auth/forgotPassword", authController.forgotPassword);
 mainRouter.post("/auth/resetPassword", authController.resetPassword);
@@ -99,15 +100,15 @@ mainRouter.patch("/jam/stage", jamController.addStageToJam);
 mainRouter.post("/category", categoryController.createCategory);
 mainRouter.get("/category", categoryController.getCategoriesName);
 mainRouter.get("/category/:id", categoryController.getCategory);
-mainRouter.put("/category/:id", categoryController.updateCategory);
+//mainRouter.put("/category/:id", categoryController.updateCategory);
 mainRouter.delete("/category/:id", categoryController.removeCategory);
 
 // Game submission
 mainRouter.post("/game", gameController.submitGame);
 
 // Theme
-mainRouter.post("/theme", themeController.createTheme);
-mainRouter.put("/theme/:id", themeController.updateTheme);
+mainRouter.post("/theme", upload.fields([{name: 'manualEng'}, {name:'manualSpa'}, {name:'manualPort'}]), themeController.createTheme);
+//mainRouter.put("/theme/:id", themeController.updateTheme);
 mainRouter.delete("/theme/:id", themeController.removeTheme);
 mainRouter.get("/theme", themeController.getThemesName);
 mainRouter.get("/theme/:id", themeController.getTheme);
