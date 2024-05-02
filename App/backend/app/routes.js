@@ -80,7 +80,7 @@ mainRouter.get("/category/:id", categoryController.getCategory);
 mainRouter.delete("/category/:id", categoryController.removeCategory);
 
 // Game submission
-mainRouter.post("/game", gameController.submitGame);
+mainRouter.post("/game", multerFacade.handleImageUpload, gameController.submitGame);
 
 // Theme
 mainRouter.post("/theme", multerFacade.handleMultiplePDFUploads, themeController.createTheme);

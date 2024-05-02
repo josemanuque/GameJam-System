@@ -25,7 +25,10 @@ const gameSchema = new mongoose.Schema(
         },
         categories: [
             { type: mongoose.Schema.Types.ObjectId, ref: 'Category'}
-        ]
+        ],
+        image: {
+            type: String, required: true, trim: true
+        }
     },
     {
         versionKey: false,
