@@ -155,7 +155,7 @@ exports.updatePassword = async (req, res) => {
         const username = req.body.username;
         const currentPassword = req.body.currentPassword;
         const newPassword = req.body.newPassword;
-
+        
         const user = await UserModel.findOne({username});
         const isPasswordCorrect = authUtils.comparePasswords(currentPassword, user.password);
         

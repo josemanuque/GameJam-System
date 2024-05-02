@@ -37,7 +37,7 @@ mainRouter.get("/user/:username", userController.getUserByUsername);
 mainRouter.get("/user/id/:id", userController.getUser);
 mainRouter.get("/user", userController.getUsers);
 mainRouter.put("/user/:username", userController.updateUser);
-mainRouter.post("/user/updatePassword", userController.updatePassword);
+mainRouter.post("/user/password/update", userController.updatePassword);
 
 // Teams
 mainRouter.post("/team", teamController.createTeam);
