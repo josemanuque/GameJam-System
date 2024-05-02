@@ -97,7 +97,7 @@ mainRouter.delete("/jam/site", jamController.removeSiteFromJam);
 mainRouter.patch("/jam/stage", jamController.addStageToJam);
 
 // Categories
-mainRouter.post("/category", categoryController.createCategory);
+mainRouter.post("/category", upload.fields([{name: 'manualEng'}, {name:'manualSpa'}, {name:'manualPort'}]), categoryController.createCategory);
 mainRouter.get("/category", categoryController.getCategoriesName);
 mainRouter.get("/category/:id", categoryController.getCategory);
 //mainRouter.put("/category/:id", categoryController.updateCategory);
