@@ -1,5 +1,5 @@
 const express = require('express');
-const { v4: uuidv4 } = require('uuid');
+
 const authController = require('./auth/auth.controller');
 const roleController = require('./controllers/role.controller');
 const teamController = require('./controllers/team.controller');
@@ -11,32 +11,11 @@ const jamController = require('./controllers/jam.controller');
 const themeController = require('./controllers/theme.controller');
 const stageController = require('./controllers/stage.controller');
 const notificationController = require('./controllers/notification.controller');
+const photoController = require('./controllers/photo.controller');
+const fileController = require('./controllers/file.controller');
+const multerFacade = require('./utils/multer.facade');
 
 const mainRouter = express.Router();
-const multer = require('multer');
-
-//File and image management
-const storage = multer.diskStorage({
-    destination: './uploads',
-    filename: (req, file, cb) => {
-        const uniqueID = uuidv4();
-        const originalExtension = file.originalname.split('.').pop();
-        const newFilename = `${uniqueID}.${originalExtension}`;
-        cb(null, newFilename);
-    }
-});
-
-const fileFilter = (req, file, cb) => {
-    const allowedMimeTypes = [
-        'image/png',
-    ];
-    if (!allowedMimeTypes.includes(file.mimetype) || !file.originalname.endsWith('.png')){
-        cb(new Error('Invalid file format. Only .png files are allowed.'), false);
-    } else {
-        cb(null, true)
-    }
-}
-const upload = multer({storage, fileFilter});
 
 // Auth
 mainRouter.post("/auth/register", authController.register);
@@ -77,9 +56,9 @@ mainRouter.delete("/notification", notificationController.clearNotifications);
 mainRouter.delete("/notification/:id", notificationController.deleteNotification);
 
 // Site
-mainRouter.post("/site", upload.single('file'), siteController.createSite);
+mainRouter.post("/site", multerFacade.handleImageUpload, siteController.createSite);
 mainRouter.delete("/site/:id", siteController.removeSite);
-mainRouter.put("/site/:id", upload.single('file'), siteController.updateSite);
+mainRouter.put("/site/:id", multerFacade.handleImageUpload, siteController.updateSite);
 mainRouter.get("/site/country/:country", siteController.getSitesFromCountry);
 mainRouter.get("/site/region/:region", siteController.getSitesFromRegion);
 mainRouter.get("/site", siteController.getSites);
@@ -118,5 +97,17 @@ mainRouter.put("/stage/:id", stageController.updateStage);
 mainRouter.delete("/stage/:id", stageController.removeStage);
 mainRouter.get("/stage", stageController.getStages);
 mainRouter.get("/stage/:id", stageController.getStage);
+
+// Photo
+mainRouter.post("/photo", multerFacade.handleImageUpload, photoController.uploadPhoto);
+mainRouter.get("/photo/:id", photoController.getPhoto);
+mainRouter.delete("/photo/:id", photoController.deletePhoto);
+mainRouter.put("/photo/:id", multerFacade.handleImageUpload, photoController.updatePhoto);
+
+// File
+mainRouter.post("/file", multerFacade.handlePDFUpload, fileController.uploadFile);
+mainRouter.get("/file/:id", fileController.getFile);
+mainRouter.delete("/file/:id", fileController.deleteFile);
+mainRouter.put("/file/:id", multerFacade.handlePDFUpload, fileController.updateFile);
 
 module.exports = mainRouter;

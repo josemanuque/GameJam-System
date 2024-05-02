@@ -19,6 +19,7 @@ import { GameService } from '../../../services/game.service';
 import { GameRequestI } from '../../../../interfaces/game.interface';
 import { UserService } from '../../../services/user.service';
 import { of, switchMap } from 'rxjs';
+import { FileService } from '../../../services/file.service';
 
 @Component({
   selector: 'app-submit-game',
@@ -39,7 +40,8 @@ export class SubmitGameComponent {
     private catService: CategoryService, 
     private teamService: TeamService, 
     private gameService: GameService,
-    private userService: UserService
+    private userService: UserService,
+    private fileService: FileService,
   ) { }
 
   ngOnInit(): void {
@@ -76,6 +78,18 @@ export class SubmitGameComponent {
         console.error('Error occurred while getting user or team:', err);
       }
     });
+  }
+
+  onFileSelected(event: any) {
+    const selectedFile = event.target.files[0];
+    this.fileService.uploadPhoto(selectedFile).subscribe(
+      (response) => {
+        console.log('File uploaded successfully:', response);
+      },
+      (error) => {
+        console.error('Error occurred while uploading file:', error);
+      }
+    );
   }
 
   submitForm(): void {

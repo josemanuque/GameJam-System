@@ -1,4 +1,4 @@
-const authUtils = require('./auth.fachade');
+const authUtils = require('./auth.facade');
 const UserModel = require('../models/user.model');
 const OTPModel = require('../models/otp.model');
 const emailUtils = require('../utils/emailUtils');

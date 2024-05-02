@@ -1,4 +1,4 @@
-const authUtils = require('../auth/auth.fachade');
+const authUtils = require('../auth/auth.facade');
 const UserModel = require('../models/user.model');
 const roleController = require('./role.controller');
 /**
