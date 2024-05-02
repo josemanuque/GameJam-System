@@ -70,7 +70,7 @@ export class RegionSiteSettingsComponent {
       },
       error: (error) => {
         console.error('Error occurred while fetching user:', error);
-        alert('Error occurred while fetching User. Please try again.');
+        this.snackbarService.openSnackBar('An error occurred while fetching the user', 'Close', 5000);
       }
     });
   }

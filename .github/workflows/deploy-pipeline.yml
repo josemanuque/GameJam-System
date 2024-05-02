@@ -45,20 +45,14 @@ jobs:
         
       - name: If Frontend has changes build and Push to Main
         run: |
-          git diff --exit-code --quiet App/src
-          status=$?
-          if [ $status -eq 1 ]; then
-              echo "Changes detected"
-              cd App
-              npm run build:production
-              DEVELOP_COMMIT=$(git rev-parse develop)
-              git add -A
-              git add -f dist
-              git commit -m "Build Angular App (from develop commit: $DEVELOP_COMMIT)"
-              git push origin main
-          else
-              echo "No changes detected no build generated"
-          fi
+          cd App
+          npm run build:production
+          DEVELOP_COMMIT=$(git rev-parse develop)
+          git add -A
+          git add -f dist
+          git commit -m "Build Angular App (from develop commit: $DEVELOP_COMMIT)"
+          git push origin main
+
 
       - name: Connect to Oracle VM and pull the new changes
         uses: appleboy/ssh-action@master
