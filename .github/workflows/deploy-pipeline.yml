@@ -17,10 +17,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'App/src/**'
+            frontend:
+              - 'App/backend/**'
+            pipeline:
+              - '.github/workflows/**'
 
       - name: Merge Develop into Main
         run: |
@@ -30,22 +39,19 @@ jobs:
           git merge develop
           git push origin main
       
-      - name: Set up Node.js
+      - name: Setup Node.js
+        if: steps.filter.outputs.frontend == 'true'
         uses: actions/setup-node@v2
         with:
           node-version: '20.12.2'
         
-      - name: Install Dependencies
+      - name: Build Angular if frontend has changes
+        if: steps.filter.outputs.frontend == 'true'
         run: |
           cd App
           npm i
           mkdir -p src/app/environments/
           echo "export const API_IP = '${{ secrets.API_IP }}';" > src/app/environments/environment.ts
-          
-        
-      - name: If Frontend has changes build and Push to Main
-        run: |
-          cd App
           npm run build:production
           DEVELOP_COMMIT=$(git rev-parse develop)
           git add -A

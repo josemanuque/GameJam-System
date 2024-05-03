@@ -76,15 +76,15 @@ export class RegisterComponent {
 
   onRegister(){
     const userData: UserRegisterI = this.form.value;
-    this.authService.register(userData, false).subscribe(
-      auth => {
-        if (auth) {
-          this.router.navigate(['/dashboard']);
-        } else {
-          alert('Invalid credentials');
-        }
+    this.authService.register(userData, false).subscribe({
+      next: () => {
+        this.router.navigate(['/dashboard']);
+      },
+      error: (error) => {
+        console.error('Error occurred while registering user:', error);
+        alert('Error occurred while registering user. Please try again.');
       }
-    );
+    });
   }
 
   isStepComplete() {
