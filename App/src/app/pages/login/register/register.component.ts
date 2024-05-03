@@ -69,7 +69,6 @@ export class RegisterComponent {
       },
       (error) => {
         console.error('Error occurred while fetching sites:', error);
-        alert('No Sites are created for this region. Please try again.');
       }
     );
   }
