@@ -7,11 +7,18 @@
 
         <div class="row">
           <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
-            <h1>Jam</h1>
+            @if (jamData.length != 0) {
+              <h1>{{jamData[0].title}}</h1>
+            }
+            @if (jamData.length == 0) {
+              <h1>Create a Jam</h1>
+            }
+            
+            
           </div>
         </div>
 
-          <div class="row">
+          <!-- <div class="row">
             @for (jam of jamData; track jam) {
                 <mat-card class="example-card">
                     <mat-card-header>
@@ -24,10 +31,87 @@
                 </mat-card>
             }
 
-          </div>
-          <div class="row d-flex justify-content-center">
-            <button class="btn" (click)="goToCreateJam()">Create Jam</button>
-          </div>
+          </div> -->
+          @if (jamData.length != 0) {
+            <div class="row">
+              <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+                <h4>Description: {{jamData[0].description}}</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+                <h6>From {{jamData[0].startingDate}} to {{jamData[0].endingDate}}</h6>
+              </div>
+            </div>
+            <div class="row">
+              <mat-divider style="margin-bottom: 10px; margin-top: 10px;"></mat-divider>
+            </div>
+
+            @for (stage of stages.stages; track stage) {
+
+              <div class="row">
+                <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+                  <h3>Stage {{stage.name}}</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+                  <h6>From {{stage.startingDate}} to {{stage.endingDate}}</h6>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+                  <h6>Demo date: {{stage.demoDayDate}}</h6>
+                </div>
+              </div>
+              @if (stage.buildDeliveryDate != "") {
+                <div class="row">
+                  <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+                    <h6>Build delivery date: {{stage.buildDeliveryDate}}</h6>
+                  </div>
+                </div>
+              }
+              @if (stage.pitchDeliveryDate != "") {
+                <div class="row">
+                  <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+                    <h6>Pitch delivery date: {{stage.pitchDeliveryDate}}</h6>
+                  </div>
+                </div>
+              }
+              @if (stage.pitchPreviewDeliveryDate != "") {
+                <div class="row">
+                  <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+                    <h6>Pitch preview delivery date: {{stage.pitchPreviewDeliveryDate}}</h6>
+                  </div>
+                </div>
+              }
+              @if (stage.pitchTestDate != "") {
+                <div class="row">
+                  <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+                    <h6>Pitch test date: {{stage.pitchTestDate}}</h6>
+                  </div>
+                </div>
+              }
+              <div class="row">
+                <mat-divider style="margin-bottom: 10px; margin-top: 10px;"></mat-divider>
+              </div>
+            }
+          }
+
+
+          
+
+          @if (jamData.length == 0) {
+            <div class="row d-flex justify-content-center">
+              <button class="btn" style="margin-top: 1rem;"  (click)="goToCreateJam()">Create Jam</button>
+            </div>
+          }
+          @if (jamData.length != 0) {
+            <div class="row d-flex justify-content-center">
+              <button class="btn" style="margin-top: 1rem;" (click)="deleteJam()">Delete Jam</button>
+            </div>
+          }
+          
 
         
 

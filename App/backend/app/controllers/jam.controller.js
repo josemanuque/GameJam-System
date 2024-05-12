@@ -12,7 +12,8 @@ exports.createJam = async (req, res) => {
             description: req.body.description,
             startingDate: req.body.startingDate,
             endingDate: req.body.endingDate,
-            theme: req.body.theme
+            theme: req.body.theme,
+            stages: req.body.stages,
         };
         const jam = new JamModel(jamReq);
         await jam.save();

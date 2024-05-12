@@ -16,6 +16,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { JamService } from '../../../services/jam.service';
 import { JamRequestI } from '../../../../interfaces/jam.interface';
 import { Router } from '@angular/router';
+import { StageService } from '../../../services/stage.service';
 
 @Component({
   selector: 'app-jam',
@@ -28,16 +29,29 @@ import { Router } from '@angular/router';
 })
 export class JamComponent {
   form!: FormGroup;
-  constructor(private fb: FormBuilder, private jamService: JamService, private router:Router) { }
+  stagesData: any;
+  constructor(private fb: FormBuilder, private jamService: JamService, private router:Router, private stageService: StageService) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
-      theme: ['', Validators.required],
+      //theme: ['', Validators.required],
       startingDate: ['', Validators.required],
       endingDate: ['', Validators.required],
+      stages: [[''], Validators.required]
     });
+
+    this.stageService.getStages().subscribe(
+      (response) => {
+        this.stagesData = response;
+        console.log('Stages fetched successfully:', this.stagesData);
+      },
+      (error) => {
+        console.error('Error occurred while fetching stages:', error);
+      }
+    );
+
   }
 
   submitForm(): void {
@@ -49,7 +63,7 @@ export class JamComponent {
           // Optionally, you can reset the form after successful submission
           this.form.reset();
           alert('Jam created successfully!');
-          window.location.reload();
+          this.router.navigate(['dashboard/jam']);
         },
         (error) => {
           console.error('Error occurred while creating jam:', error);

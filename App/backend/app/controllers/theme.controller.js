@@ -7,13 +7,13 @@ exports.createTheme = async (req, res) => {
         const theme = new ThemeModel({
             nameEng: req.body.nameEng,
             descriptionEng: req.body.descriptionEng,
-            manualEng: req.files['manualEng'][0].path,
+            //manualEng: req.files['manualEng'][0].path,
             nameSpa: req.body.nameSpa,
             descriptionSpa: req.body.descriptionSpa,
-            manualSpa: req.files['manualSpa'][0].path,
+            //manualSpa: req.files['manualSpa'][0].path,
             namePort: req.body.namePort,
             descriptionPort: req.body.descriptionPort,
-            manualPort: req.files['manualPort'][0].path
+           // manualPort: req.files['manualPort'][0].path
         });
 
         await theme.save();
