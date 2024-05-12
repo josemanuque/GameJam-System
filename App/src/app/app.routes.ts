@@ -18,6 +18,8 @@ import { ProfileSettingsComponent } from './pages/dashboard/settings/profile-set
 import { PasswordSettingsComponent } from './pages/dashboard/settings/password-settings/password-settings.component';
 import { RegionSiteSettingsComponent } from './pages/dashboard/settings/region-site-settings/region-site-settings.component';
 import { ViewUserComponent } from './pages/dashboard/view-user/view-user.component';
+import { ThemeComponent } from './pages/dashboard/theme/theme.component';
+import { StageComponent } from './pages/dashboard/stage/stage.component';
 
 export const routes: Routes = [
     {
@@ -92,6 +94,14 @@ export const routes: Routes = [
             {
                 path:   'category',
                 component:  CategoriesComponent
+            },
+            {
+                path:   'theme',
+                component:  ThemeComponent
+            },
+            {
+                path:   'stages',
+                component:  StageComponent
             },
         ]
     },

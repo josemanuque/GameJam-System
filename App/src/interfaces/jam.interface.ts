@@ -3,7 +3,8 @@ export interface JamRequestI {
     description: string,
     startingDate: string,
     endingDate: string,
-    theme: string
+    theme: string,
+    stages: string[]
 }
 
 export interface JamResponseI {
@@ -12,7 +13,8 @@ export interface JamResponseI {
     description: string,
     startingDate: string,
     endingDate: string,
-    theme: string
+    theme: string,
+    stages: string[]
 }
 
 export interface JamListResponseI {

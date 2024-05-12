@@ -1,0 +1,99 @@
+<app-sidenav></app-sidenav>
+
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <div class="content mat-elevation-z4" #contentContainer>
+      <div class="custom-container">
+
+        <div class="row">
+          <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+            <h1>Theme</h1>
+          </div>
+        </div>
+          <form [formGroup]="form">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-3 mx-auto">
+                    <div class="d-flex justify-content-center">
+                        <h2>English</h2>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <mat-form-field>
+                            <mat-label>Name</mat-label>
+                            <input matInput formControlName="nameEng">
+                          </mat-form-field>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <mat-form-field>
+                            <mat-label>Description</mat-label>
+                            <input matInput formControlName="descriptionEng">
+                          </mat-form-field>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+                        <input formControlName="manualEng" hidden (change)="onFileSelectedEng($event)" #fileInput type="file" accept=".pdf">
+                      </div>
+                      <div class="d-flex justify-content-center">
+                        <span class="file-name">{{selectedFileEng?.name}}</span>
+                    </div>
+                </div>
+                <div class="col-md-3 mx-auto">
+                    <div class="d-flex justify-content-center">
+                        <h2>Spanish</h2>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <mat-form-field>
+                            <mat-label>Name</mat-label>
+                            <input matInput formControlName="nameSpa">
+                          </mat-form-field>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <mat-form-field>
+                            <mat-label>Description</mat-label>
+                            <input matInput formControlName="descriptionSpa">
+                          </mat-form-field>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" mat-raised-button (click)="fileInput2.click()">Choose File</button>
+                        <input formControlName="manualSpa" hidden (change)="onFileSelectedSpa($event)" #fileInput2 type="file" accept=".pdf">
+                      </div>
+                      <div class="d-flex justify-content-center">
+                        <span class="file-name">{{selectedFileSpa?.name}}</span>
+                    </div>
+                </div>
+                <div class="col-md-3 mx-auto">
+                    <div class="d-flex justify-content-center">
+                        <h2>Portuguese</h2>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <mat-form-field>
+                            <mat-label>Name</mat-label>
+                            <input matInput formControlName="namePort">
+                          </mat-form-field>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <mat-form-field>
+                            <mat-label>Description</mat-label>
+                            <input matInput formControlName="descriptionPort">
+                          </mat-form-field>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" mat-raised-button (click)="fileInput3.click()">Choose File</button>
+                        <input formControlName="manualPort" hidden (change)="onFileSelectedPort($event)" #fileInput3 type="file" accept=".pdf">
+                      </div>
+                      <div class="d-flex justify-content-center">
+                        <span class="file-name">{{selectedFilePort?.name}}</span>
+                    </div>
+                </div>
+            
+                
+
+            </div>
+            <div class="row d-flex justify-content-center">
+                <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Create Category</button>
+            </div>
+        </form>
+
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
