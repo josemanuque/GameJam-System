@@ -12,8 +12,12 @@ export class SitesService {
 
   constructor(private http: HttpClient) { }
 
-  createSite(siteData: any): Observable<SiteCreateRequestI> {
+  createSite(siteData: FormData): Observable<SiteCreateRequestI> {
     return this.http.post<any>(`${this.apiUrl}/site`, siteData);
+  }
+
+  updateSite(siteId: string, siteData: FormData): Observable<SiteResponseI> {
+    return this.http.put<any>(`${this.apiUrl}/site/${siteId}`, siteData);
   }
 
   removeSite(siteId: string): Observable<SiteMessageResponseI> {

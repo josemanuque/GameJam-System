@@ -20,6 +20,7 @@ import { RegionSiteSettingsComponent } from './pages/dashboard/settings/region-s
 import { ViewUserComponent } from './pages/dashboard/view-user/view-user.component';
 import { ThemeComponent } from './pages/dashboard/theme/theme.component';
 import { StageComponent } from './pages/dashboard/stage/stage.component';
+import { EditSiteComponent } from './pages/dashboard/create-site/edit-site/edit-site.component';
 
 export const routes: Routes = [
     {
@@ -57,6 +58,10 @@ export const routes: Routes = [
             {
                 path:   'sites/create',
                 component:  CreateSiteComponent
+            },
+            {
+                path:   'sites/edit',
+                component:  EditSiteComponent
             },
             {
                 path:   'submit-game',

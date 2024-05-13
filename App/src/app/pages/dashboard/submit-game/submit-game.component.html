@@ -23,10 +23,6 @@
             <h2 class="org">Team:</h2><h2>{{teamData?.name}}</h2>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text"> <i class="bi bi-cloud-upload"></i> </span>
-          <input type="file" (change)="onFileSelected($event)" class="form-control file-upload" required formControlName="filename">
-        </div>
         <form [formGroup]="form">
           <div class="row d-flex justify-content-center">
           
@@ -62,7 +58,18 @@
                     <mat-option [value]="cat.id">{{cat.name}}</mat-option>
                     }
                 </mat-select>
+
             </mat-form-field>
+            <div class="row d-flex justify-content-center">
+              <mat-form-field>
+                <input matInput formControlName="file" type="text" [value]="fileName" readonly>
+                <input type="file" id="file" hidden (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg">
+                <label for="file" mat-stroked-button aria-label="File input">
+                  <mat-icon>folder</mat-icon>
+                  Game photo
+                </label>
+              </mat-form-field>
+            </div>
 
             <div class="row d-flex justify-content-center">
               <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Submit Game</button>

@@ -138,16 +138,21 @@ exports.updateSite = async (req, res) => {
             if (!site) {
                 return res.status(404).send({ message: "Site not found" });
             }
-            const originalFilePath = site.photo;
+            //const originalFilePath = site.photo;
+            if (req.photo) {
+                siteData.photo = {
+                     data: req.photo.data
+                };
+            }
 
-            const updatedSite = await SiteModel.findByIdAndUpdate(siteID, { ...siteData, photo: req.file.path }, { new: true });
+            const updatedSite = await SiteModel.findByIdAndUpdate(siteID, { ...siteData}, { new: true });
             if(!updatedSite){
                 return res.status(404).send({ message: "Site not found" });
             }
 
-            if(fs.existsSync(originalFilePath)){
-                fs.unlinkSync(originalFilePath);
-            }
+            // if(fs.existsSync(originalFilePath)){
+            //     fs.unlinkSync(originalFilePath);
+            // }
 
         } else {
             const updatedSite = await SiteModel.findByIdAndUpdate(siteID, siteData, { new: true });
