@@ -12,8 +12,8 @@ export class SitesService {
 
   constructor(private http: HttpClient) { }
 
-  createSite(siteData: SiteCreateRequestI): Observable<SiteCreateRequestI> {
-    return this.http.post<SiteCreateRequestI>(`${this.apiUrl}/site`, siteData);
+  createSite(siteData: any): Observable<SiteCreateRequestI> {
+    return this.http.post<any>(`${this.apiUrl}/site`, siteData);
   }
 
   removeSite(siteId: string): Observable<SiteMessageResponseI> {
@@ -28,8 +28,8 @@ export class SitesService {
     return this.http.get<SiteListResponseI>(`${this.apiUrl}/site/region/${region}`);
   }
 
-  getSites(): Observable<SiteListResponseI> {
-    return this.http.get<SiteListResponseI>(`${this.apiUrl}/site`);
+  getSites(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/site`);
   }
 
   getSite(siteId: string): Observable<SiteResponseI> {

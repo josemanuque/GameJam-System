@@ -27,9 +27,13 @@ exports.register = async (req, res) => {
             phone: req.body.phone,
             roles: roles,
             region: req.body.region,
-            site: req.body.site,
-            photo: req.file.path
+            site: req.body.site
         };
+        if (req.photo) {
+            userReq.photo = {
+                 data: req.photo.data
+            };
+        }
 
 
         const user = new UserModel(userReq);

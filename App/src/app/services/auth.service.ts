@@ -25,9 +25,9 @@ export class AuthService {
     );
   }
 
-  register(userCredentials: UserRegisterI, byAdmin: boolean): Observable<AuthResponseI | null> {
-    return this.http.post<AuthResponseI>(`${API_IP}/auth/register`, userCredentials).pipe(
-      tap((res: AuthResponseI) => {
+  register(userCredentials: any, byAdmin: boolean): Observable<any | null> {
+    return this.http.post<any>(`${API_IP}/auth/register`, userCredentials).pipe(
+      tap((res: any) => {
         if (res){
           if (!byAdmin){
             this.setToken(res.accessToken);

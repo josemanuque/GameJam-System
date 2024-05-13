@@ -2,6 +2,7 @@ const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const uploadDirectory = path.resolve(__dirname, 'uploads');
+const fs = require('fs');
 
 const storage = multer.diskStorage({
     destination: uploadDirectory,
@@ -65,6 +66,17 @@ function handleImageUpload(req, res, next) {
         } else if (err) {
             return res.status(400).send({ message: err.message });
         } */
+
+        if (req.file) {
+            const imageBuffer = fs.readFileSync(req.file.path);
+            const base64Image = imageBuffer.toString('base64');
+            req.photo = {
+                data: base64Image,
+                contentType: req.file.mimetype
+            };
+            // Eliminar el archivo temporal después de convertirlo a Base64
+            fs.unlinkSync(req.file.path);
+        }
         next();
     });
 }

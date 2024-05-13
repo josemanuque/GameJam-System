@@ -12,8 +12,15 @@
     @if (toggleMenu) {
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="closeSN()"><mat-icon>clear</mat-icon></button>
     }
+
+    @if(currentPhoto == '' || currentPhoto == undefined){
+      <img *ngIf="currentPhoto == undefined" class="avatar mat-elevation-z8" src="assets/avatar.png" alt="Image">
+    } @else {
+      <img class="avatar mat-elevation-z8" [src]="'data:image/jpeg;base64,' + currentPhoto" alt="Image">
+    }
   
-    <img class="avatar mat-elevation-z8" src="assets/avatar.png" alt="Image">
+    
+    
     @if(user){
       <h1> {{user.name}}</h1>
     }

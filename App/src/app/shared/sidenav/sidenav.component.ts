@@ -14,6 +14,7 @@ import { RoleListResponseI, RoleResponseI } from '../../../interfaces/role.inter
 import { AuthService } from '../../services/auth.service';
 import { switchMap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 export interface SideNavToggle {
   screenWidth: number;
@@ -31,6 +32,7 @@ export interface SideNavToggle {
     MatToolbarModule, 
     RouterModule,
     AsyncPipe,
+    CommonModule
   ],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.css'
@@ -85,7 +87,7 @@ export class SidenavComponent {
 
   toggleMenu = false;
 
-  user!: UserResponseI;
+  user!: any;
   validRoles: RoleResponseI[] = [];
   userRoles: string[] = [];
 
@@ -95,7 +97,9 @@ export class SidenavComponent {
         if (!user) return;
         this.user = user;
         this.currentName = user.name;
-        this.currentRole = user.roles.map(role => role.name).join(' - ');
+        this.currentPhoto = user.photo.data;
+        console.log(this.currentPhoto);
+        this.currentRole = user.roles.map((role: { name: any; }) => role.name).join(' - ');
         this.entries = this.getEntries();
       },
       error: (error) => {

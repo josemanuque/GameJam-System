@@ -12,7 +12,8 @@ export interface SiteResponseI {
     region: string,
     country: string,
     city: string,
-    modality: string
+    modality: string,
+    photo: string
 }
 
 // Works for getSites(From Region/Country)*

@@ -12,12 +12,12 @@ export class CategoryService {
 
   constructor(private http: HttpClient) { }
 
-  createCategory(categoryData: CategoryCreateRequestI): Observable<any> {
+  createCategory(categoryData: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/category`, categoryData);
   }
 
-  getCategoriesName(): Observable<CategoryListResponseI> {
-    return this.http.get<CategoryListResponseI>(`${this.apiUrl}/category`);
+  getCategoriesName(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/category`);
   }
 
   getCategory(categoryId: string): Observable<CategoryResponseI> {

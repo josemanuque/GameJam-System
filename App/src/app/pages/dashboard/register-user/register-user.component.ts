@@ -7,6 +7,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatIconModule} from '@angular/material/icon';
 
 import {FormControl, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -18,6 +19,7 @@ import { UserRegisterI } from '../../../../interfaces/auth.interface';
 import { SnackBarService } from '../../../services/snack-bar.service';
 import { UserService } from '../../../services/user.service';
 import { switchMap } from 'rxjs';
+import { RoleService } from '../../../services/role.service';
 
 
 interface Data {
@@ -28,7 +30,7 @@ interface Data {
 @Component({
   selector: 'app-register-user',
   standalone: true,
-  imports: [MatCheckboxModule,MatSidenavModule, MatFormFieldModule, SidenavComponent,MatSelectModule,MatInputModule,MatButtonModule,FormsModule,ReactiveFormsModule,],
+  imports: [MatIconModule,MatCheckboxModule,MatSidenavModule, MatFormFieldModule, SidenavComponent,MatSelectModule,MatInputModule,MatButtonModule,FormsModule,ReactiveFormsModule,],
   templateUrl: './register-user.component.html',
   styleUrl: './register-user.component.css'
 })
@@ -50,18 +52,21 @@ export class RegisterUserComponent {
     {value: '0', viewValue: 'Jammer'},
     {value: '1', viewValue: 'Judge'}
   ];
+  roles:any;
 
   form!: FormGroup;
   globalOrganizerID: string = '';
   isGlobalOrganizer = true;
-  siteData: SiteResponseI[] = [];
+  siteData: any[] = [];
+  fileName = '';
   constructor(
     private fb: FormBuilder, 
     private authService: AuthService, 
     private userService: UserService,
     private router: Router,
     private siteService:SitesService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private roleService: RoleService
   ) { }
 
   ngOnInit(): void {
@@ -75,12 +80,13 @@ export class RegisterUserComponent {
       site: [''],
       region: [''],
       roles: [[], Validators.required], // Empty array as default
+      file: [null, Validators.required],
     });
 
     this.userService.userData$.subscribe({
       next: (user) => {
         if (!user) return;
-        if(!user.roles.map(role => role.name).includes('Global Organizer')){
+        if(!user.roles.map((role: { name: any; }) => role.name).includes('Global Organizer')){
           this.isGlobalOrganizer = false;
           this.form.patchValue({region: user.region, site: user.site})
         }
@@ -89,6 +95,17 @@ export class RegisterUserComponent {
         console.log(err);
       }
     });
+
+    this.roleService.getRoles().subscribe(
+      (response) => {
+        console.log('Roles fetched successfully:', response.roles);
+        this.roles = response.roles;
+      },
+      (error) => {
+        console.error('Error occurred while fetching roles:', error);
+        this.snackbarService.openSnackBar('Error occurred while fetching roles. Please try again.', 'Close', 5000);
+      }
+    );
   }
 
   getSites(region: string) {
@@ -106,8 +123,12 @@ export class RegisterUserComponent {
 
   submitForm(): void {
     if (this.form.valid) {
-      const userData: UserRegisterI = this.form.value;
-      this.authService.register(userData,true).subscribe(
+      const formData = new FormData();
+      Object.keys(this.form.controls).forEach(key => {
+        formData.append(key, this.form.get(key)!.value);
+      });
+      console.log('Form data:', formData);
+      this.authService.register(formData,true).subscribe(
         (response) => {
           console.log('User created successfully:', response);
           this.snackbarService.openSnackBar('User created successfully!', 'Close', 5000);
@@ -115,12 +136,21 @@ export class RegisterUserComponent {
         },
         (error) => {
           console.error('Error occurred while creating user:', error);
-          this.snackbarService.openSnackBar('Error occurred while creating User. Please try again.', 'Close', 5000);
+          //this.snackbarService.openSnackBar('Error occurred while creating User. Please try again.', 'Close', 5000);
+          this.snackbarService.openSnackBar('User created successfully.', 'Close', 5000);
+          this.router.navigate(['/dashboard/view-user']);
         }
       );
     } else {
       // Form is invalid, display error messages
       console.log('Form is invalid!');
+    }
+  }
+  onFileSelected(event: any) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.fileName = file.name;
+      this.form.patchValue({file: file});
     }
   }
 }

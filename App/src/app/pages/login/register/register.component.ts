@@ -43,6 +43,7 @@ export class RegisterComponent {
   currentUser: any;
   form!: FormGroup;
   formStep: number = 1;
+  fileName = '';
 
   constructor(private fb: FormBuilder, private siteService:SitesService, private authService: AuthService, private router: Router){}
 
@@ -57,6 +58,7 @@ export class RegisterComponent {
       site: ['', Validators.required],
       region: ['', Validators.required],
       roles: [[], Validators.required], // Empty array as default
+      file: [null, Validators.required],
     });
   }
 
@@ -74,10 +76,14 @@ export class RegisterComponent {
   }
 
   onRegister(){
-    const userData: UserRegisterI = this.form.value;
-    this.authService.register(userData, false).subscribe({
+    const formData = new FormData();
+    Object.keys(this.form.controls).forEach(key => {
+      formData.append(key, this.form.get(key)!.value);
+    });
+    this.authService.register(formData, false).subscribe({
       next: () => {
-        this.router.navigate(['/dashboard']);
+        alert('User registered successfully. Please login to continue.');
+        this.router.navigate(['/']);
       },
       error: (error) => {
         console.error('Error occurred while registering user:', error);
@@ -101,6 +107,14 @@ export class RegisterComponent {
       }
     }
     return false;
+  }
+
+  onFileSelected(event: any) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.fileName = file.name;
+      this.form.patchValue({file: file});
+    }
   }
 
 }

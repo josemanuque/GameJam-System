@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId, ref: 'Site'
         },
         photo: {
-            type: String, trim: true
+            data: String
         }
     }
 );

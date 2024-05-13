@@ -30,7 +30,7 @@ interface Region {
   selector: 'app-create-site',
   standalone: true,
   imports: [MatCheckboxModule,MatSidenavModule, MatFormFieldModule, SidenavComponent,MatSelectModule,
-    MatInputModule,MatButtonModule,FormsModule,ReactiveFormsModule,MatDatepickerModule],
+    MatInputModule,MatButtonModule,FormsModule,ReactiveFormsModule,MatDatepickerModule,MatIconModule],
   templateUrl: './create-site.component.html',
   styleUrl: './create-site.component.css'
 })
@@ -45,10 +45,12 @@ export class CreateSiteComponent {
   modalities: Region[] = [
     {value: 'm1', viewValue: 'Virtual'},
     {value: 'm2', viewValue: 'Presential'},
-    {value: 'm3', viewValue: 'Mixed'}
+    {value: 'm3', viewValue: 'Hybrid'}
   ];
   form!: FormGroup;
+  selectedFile: any = null;
   constructor(private fb: FormBuilder, private siteService: SitesService, private router:Router) { }
+  fileName = '';
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -57,13 +59,40 @@ export class CreateSiteComponent {
       country: ['', Validators.required],
       city: ['', Validators.required],
       modality: ['', Validators.required],
+      file: [null, Validators.required],
     });
   }
 
+  // submitForm(): void {
+  //   if (this.form.valid) {
+  //     const siteData: SiteCreateRequestI = this.form.value;
+  //     console.log(this.form.get('file'));
+  //     this.siteService.createSite(siteData).subscribe(
+  //       (response) => {
+  //         console.log('Site created successfully:', response);
+  //         // Optionally, you can reset the form after successful submission
+  //         this.form.reset();
+  //         alert('Site created successfully!');
+  //         window.location.reload();
+  //       },
+  //       (error) => {
+  //         console.error('Error occurred while creating site:', error);
+  //         alert('Error occurred while creating site. Please try again.');
+  //       }
+  //     );
+  //   } else {
+  //     // Form is invalid, display error messages
+  //     console.log('Form is invalid!');
+  //   }
+  // }
   submitForm(): void {
     if (this.form.valid) {
-      const siteData: SiteCreateRequestI = this.form.value;
-      this.siteService.createSite(siteData).subscribe(
+      const formData = new FormData();
+      Object.keys(this.form.controls).forEach(key => {
+        formData.append(key, this.form.get(key)!.value);
+      });
+  
+      this.siteService.createSite(formData).subscribe(
         (response) => {
           console.log('Site created successfully:', response);
           // Optionally, you can reset the form after successful submission
@@ -85,32 +114,16 @@ export class CreateSiteComponent {
   goToViewSite(): void {
     this.router.navigate(['dashboard/sites']);
   }
+  // onFileSelected(event: any): void {
+  //   console.log(event.target.files[0]);
+  //   this.selectedFile = event.target.files[0];
+  // }
+  onFileSelected(event: any) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.fileName = file.name;
+      this.form.patchValue({file: file});
+    }
+  }
 
 }
-
-// @Component({
-//   selector: 'dialog-animations-example-dialog',
-//   templateUrl: 'create-site-dialog.html',
-//   styleUrl: './create-site-dialog.css',
-//   standalone: true,
-//   providers: [provideNativeDateAdapter()],
-//   imports: [MatDatepickerModule, MatButtonModule, MatDialogActions, MatDialogClose, MatDialogTitle,
-//            MatDialogContent, MatCardModule,MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule,
-//            FormsModule, RouterModule, MatSelectModule, MatMenuModule, MatDividerModule, MatCheckboxModule,
-//            NgbDatepickerModule, NgbAlertModule],
-// })
-// export class DialogAnimationsExampleDialog {
-//   presentialChecked: boolean = false;
-//   virtualChecked: boolean = false;
-//   mixedChecked: boolean = false;
-//   model: NgbDateStruct | undefined;
-//   model2: NgbDateStruct | undefined;
-//   regions: Region[] = [
-//     {value: 'steak-0', viewValue: 'North America'},
-//     {value: 'pizza-1', viewValue: 'LATAM'},
-//     {value: 'tacos-2', viewValue: 'Europe'},
-//     {value: 'tacos-3', viewValue: 'Asia'},
-//     {value: 'tacos-4', viewValue: 'MENA'},
-//   ];
-//   constructor(public dialogRef: MatDialogRef<DialogAnimationsExampleDialog>) {}
-// }

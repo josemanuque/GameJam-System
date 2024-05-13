@@ -21,7 +21,7 @@ const siteSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId, ref: 'Team'
         }],
         photo: {
-            type: String, trim: true
+            data: String
         }
 });
 
