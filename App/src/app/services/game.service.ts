@@ -12,7 +12,7 @@ export class GameService {
 
   constructor(private http: HttpClient) { }
 
-  submitGame(gameData: GameRequestI): Observable<GameMessageResponseI> {
-    return this.http.post<GameMessageResponseI>(`${this.apiUrl}/game`, gameData);
+  submitGame(gameData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/game`, gameData);
   }
 }

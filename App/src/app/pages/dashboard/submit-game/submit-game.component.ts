@@ -20,11 +20,12 @@ import { GameRequestI } from '../../../../interfaces/game.interface';
 import { UserService } from '../../../services/user.service';
 import { of, switchMap } from 'rxjs';
 import { FileService } from '../../../services/file.service';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-submit-game',
   standalone: true,
-  imports: [MatSidenavModule, MatFormFieldModule, SidenavComponent,MatSelectModule,MatInputModule,FormsModule,ReactiveFormsModule, MatButtonModule],
+  imports: [MatIconModule,MatSidenavModule, MatFormFieldModule, SidenavComponent,MatSelectModule,MatInputModule,FormsModule,ReactiveFormsModule, MatButtonModule],
   templateUrl: './submit-game.component.html',
   styleUrl: './submit-game.component.css'
 })
@@ -34,6 +35,7 @@ export class SubmitGameComponent {
   categories: any;
   notInTeam = true;
   teamData: TeamResponseI | undefined;
+  fileName = '';
 
   constructor(
     private fb: FormBuilder,
@@ -45,14 +47,15 @@ export class SubmitGameComponent {
   ) { }
 
   ngOnInit(): void {
+    
     this.form = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
-      teamID: [''],
       youtubeLinkGameplay: ['', Validators.required],
       buildLink: ['', Validators.required],
       youtubeLinkPitch: ['', Validators.required],
-      categories: [[], Validators.required]
+      categories: [[], Validators.required],
+      file: [null, Validators.required],
     });
     this.catService.getCategoriesName().subscribe(
       (response) => {
@@ -72,6 +75,7 @@ export class SubmitGameComponent {
         if (team) {
           this.notInTeam = false;
           this.teamData = team;
+          console.log('Team:', this.teamData);
         }
       },
       error: err => {
@@ -81,23 +85,24 @@ export class SubmitGameComponent {
   }
 
   onFileSelected(event: any) {
-    const selectedFile = event.target.files[0];
-    this.fileService.uploadPhoto(selectedFile).subscribe(
-      (response) => {
-        console.log('File uploaded successfully:', response);
-      },
-      (error) => {
-        console.error('Error occurred while uploading file:', error);
-      }
-    );
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.fileName = file.name;
+      this.form.patchValue({file: file});
+    }
   }
 
   submitForm(): void {
     if (this.form.valid) {
-      this.form.patchValue({teamID: this.teamData?._id});
-      const gameData: GameRequestI = this.form.value;
-      console.log('Game data:', gameData);
-      this.gameService.submitGame(gameData).subscribe(
+      const formData = new FormData();
+      formData.append('teamID', this.teamData?._id!);
+      Object.keys(this.form.controls).forEach(key => {
+        formData.append(key, this.form.get(key)!.value);
+      });
+      console.log('Form data:', formData.get('teamID'))
+
+
+      this.gameService.submitGame(formData).subscribe(
         (response) => {
           console.log('Game created successfully:', response);
           this.form.reset();
@@ -113,5 +118,7 @@ export class SubmitGameComponent {
       console.log('Form is invalid!');
     }
   }
+
+  
 
 }

@@ -98,7 +98,7 @@ export class CreateSiteComponent {
           // Optionally, you can reset the form after successful submission
           this.form.reset();
           alert('Site created successfully!');
-          window.location.reload();
+          this.router.navigate(['dashboard/sites']);
         },
         (error) => {
           console.error('Error occurred while creating site:', error);

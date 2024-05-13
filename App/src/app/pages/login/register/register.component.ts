@@ -83,6 +83,7 @@ export class RegisterComponent {
     this.authService.register(formData, false).subscribe({
       next: () => {
         alert('User registered successfully. Please login to continue.');
+        localStorage.clear();
         this.router.navigate(['/']);
       },
       error: (error) => {

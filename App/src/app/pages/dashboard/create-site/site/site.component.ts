@@ -65,4 +65,9 @@ export class SiteComponent {
   goToCreateSites(): void {
     this.router.navigate(['dashboard/sites/create']);
   }
+
+  goToUpdateSites(id: any): void {
+    this.router.navigate(['dashboard/sites/edit']);
+    localStorage.setItem('siteId', id);
+  }
 }
