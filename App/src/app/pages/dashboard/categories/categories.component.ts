@@ -9,7 +9,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCardModule} from '@angular/material/card';
-
+import {MatIconModule} from '@angular/material/icon';
 import {provideNativeDateAdapter} from '@angular/material/core';
 
 import {FormControl, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -21,7 +21,7 @@ import { CategoryCreateRequestI, CategoryListResponseI, CategoryResponseI } from
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [MatCardModule,MatCheckboxModule,MatSidenavModule, MatFormFieldModule, SidenavComponent,MatSelectModule,
+  imports: [MatIconModule,MatCardModule,MatCheckboxModule,MatSidenavModule, MatFormFieldModule, SidenavComponent,MatSelectModule,
     MatInputModule,MatButtonModule,FormsModule,ReactiveFormsModule,MatDatepickerModule],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss'
@@ -29,16 +29,30 @@ import { CategoryCreateRequestI, CategoryListResponseI, CategoryResponseI } from
 export class CategoriesComponent {
   form!: FormGroup;
   categories: any;
+  selectedFileEng: any = null;
+  selectedFileSpa: any = null;
+  selectedFilePort: any = null;
+  fileNameEng = '';
+  fileNameSpa = '';
+  fileNamePort = '';
   constructor(private fb: FormBuilder, private catService: CategoryService, private router:Router) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
+      nameEng: ['', Validators.required],
+      descriptionEng: ['', Validators.required],
+      nameSpa: ['', Validators.required],
+      descriptionSpa: ['', Validators.required],
+      namePort: ['', Validators.required],
+      descriptionPort: ['', Validators.required],
+      manualEng: [null, Validators.required],
+      manualSpa: [null, Validators.required],
+      manualPort: [null, Validators.required],
     });
     this.catService.getCategoriesName().subscribe(
       (response) => {
         this.categories = response.categoryNames;
+        console.log('Categories:', this.categories);
       },
       (error) => {
         console.error('Error occurred while fetching categories:', error);
@@ -49,8 +63,11 @@ export class CategoriesComponent {
 
   submitForm(): void {
     if (this.form.valid) {
-       const catData: CategoryCreateRequestI = this.form.value;
-       this.catService.createCategory(catData).subscribe(
+      const formData = new FormData();
+      Object.keys(this.form.controls).forEach(key => {
+        formData.append(key, this.form.get(key)!.value);
+      });
+       this.catService.createCategory(formData).subscribe(
          (response) => {
            console.log('Category created successfully:', response);
            // Optionally, you can reset the form after successful submission
@@ -64,8 +81,29 @@ export class CategoriesComponent {
          }
        );
     } else {
-      // Form is invalid, display error messages
       console.log('Form is invalid!');
+    }
+  }
+
+  onFileSelectedEng(event: any): void {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.fileNameEng = file.name;
+      this.form.patchValue({manualEng: file});
+    }
+  }
+  onFileSelectedSpa(event: any): void {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.fileNameSpa = file.name;
+      this.form.patchValue({manualSpa: file});
+    }
+  }
+  onFileSelectedPort(event: any): void {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.fileNamePort = file.name;
+      this.form.patchValue({manualPort: file});
     }
   }
 }

@@ -14,9 +14,13 @@ exports.createSite = async (req, res) => {
             country: req.body.country,
             city: req.body.city,
             modality: req.body.modality,
-            teams: req.body.teams,
-            photo: req.file.path
+            teams: req.body.teams
         };
+        if (req.photo) {
+            siteReq.photo = {
+                 data: req.photo.data
+            };
+        }
         const site = new SiteModel(siteReq);
         await site.save();
         siteReq.message = "Side created successfully";

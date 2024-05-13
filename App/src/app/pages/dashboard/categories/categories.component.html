@@ -10,24 +10,112 @@
             <h1>Categories</h1>
           </div>
         </div>
-          <form [formGroup]="form">
-            <div class="row d-flex justify-content-center">
-            
-                <mat-form-field>
-                  <mat-label>Name</mat-label>
-                  <input matInput formControlName="name">
-                </mat-form-field>
+        <form [formGroup]="form">
+          <div class="row d-flex justify-content-center">
+              <div class="col-md-3 mx-auto">
+                  <div class="d-flex justify-content-center">
+                      <h2>English</h2>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <mat-form-field>
+                          <mat-label>Name</mat-label>
+                          <input matInput formControlName="nameEng">
+                        </mat-form-field>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <mat-form-field>
+                          <mat-label>Description</mat-label>
+                          <input matInput formControlName="descriptionEng">
+                        </mat-form-field>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <!-- <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+                      <input formControlName="manualEng" hidden (change)="onFileSelectedEng($event)" #fileInput type="file" accept=".pdf">
+                    </div>
+                    <div class="d-flex justify-content-center">
+                      <span class="file-name">{{selectedFileEng?.name}}</span> -->
+                      <mat-form-field>
+                        <input matInput formControlName="manualEng" type="text" [value]="fileNameEng" readonly>
+                        <input type="file" id="file3" hidden (change)="onFileSelectedEng($event)" accept=".pdf">
+                        <label for="file3" mat-stroked-button aria-label="File input">
+                          <mat-icon>folder</mat-icon>
+                          Choose File
+                        </label>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="col-md-3 mx-auto">
+                  <div class="d-flex justify-content-center">
+                      <h2>Spanish</h2>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <mat-form-field>
+                          <mat-label>Name</mat-label>
+                          <input matInput formControlName="nameSpa">
+                        </mat-form-field>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <mat-form-field>
+                          <mat-label>Description</mat-label>
+                          <input matInput formControlName="descriptionSpa">
+                        </mat-form-field>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <!-- <button type="button" mat-raised-button (click)="fileInput2.click()">Choose File</button>
+                      <input formControlName="manualSpa" hidden (change)="onFileSelectedSpa($event)" #fileInput2 type="file" accept=".pdf">
+                    </div>
+                    <div class="d-flex justify-content-center">
+                      <span class="file-name">{{selectedFileSpa?.name}}</span> -->
+                      <mat-form-field>
+                        <input matInput formControlName="manualSpa" type="text" [value]="fileNameSpa" readonly>
+                        <input type="file" id="file2" hidden (change)="onFileSelectedSpa($event)" accept=".pdf">
+                        <label for="file2" mat-stroked-button aria-label="File input">
+                          <mat-icon>folder</mat-icon>
+                          Choose File
+                        </label>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="col-md-3 mx-auto">
+                  <div class="d-flex justify-content-center">
+                      <h2>Portuguese</h2>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <mat-form-field>
+                          <mat-label>Name</mat-label>
+                          <input matInput formControlName="namePort">
+                        </mat-form-field>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <mat-form-field>
+                          <mat-label>Description</mat-label>
+                          <input matInput formControlName="descriptionPort">
+                        </mat-form-field>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <!-- <button type="button" mat-raised-button (click)="fileInput3.click()">Choose File</button>
+                      <input formControlName="manualPort" hidden (change)="onFileSelectedPort($event)" #fileInput3 type="file" accept=".pdf">
+                    </div>
+                    <div class="d-flex justify-content-center">
+                      <span class="file-name">{{selectedFilePort?.name}}</span> -->
+                      <mat-form-field>
+                        <input matInput formControlName="manualPort" type="text" [value]="fileNamePort" readonly>
+                        <input type="file" id="file" hidden (change)="onFileSelectedPort($event)" accept=".pdf">
+                        <label for="file" mat-stroked-button aria-label="File input">
+                          <mat-icon>folder</mat-icon>
+                          Choose File
+                        </label>
+                      </mat-form-field>
+                  </div>
+              </div>
+          
               
-                <mat-form-field>
-                  <mat-label>Description</mat-label>
-                  <input matInput formControlName="description">
-                </mat-form-field>
 
-            </div>
-            <div class="row d-flex justify-content-center">
-                <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Create Category</button>
-            </div>
-        </form>
+          </div>
+          <div class="row d-flex justify-content-center">
+              <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Create Theme</button>
+          </div>
+      </form>
         <div class="row">
             @for (cat of categories; track cat) {
                 <mat-card class="example-card">

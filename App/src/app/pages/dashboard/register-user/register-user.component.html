@@ -65,8 +65,8 @@
                   <mat-form-field>
                     <mat-label>Select Roles</mat-label>
                     <mat-select formControlName="roles" multiple>
-                        @for (role of rolesGlobal; track role) {
-                        <mat-option [value]="role.viewValue">{{role.viewValue}}</mat-option>
+                        @for (role of roles; track role) {
+                        <mat-option [value]="role._id">{{role.name}}</mat-option>
                         }
                     </mat-select>
                 </mat-form-field>
@@ -75,12 +75,20 @@
                   <mat-form-field>
                     <mat-label>Select Roles</mat-label>
                     <mat-select formControlName="roles" multiple>
-                        @for (role of roleslocal; track role) {
-                        <mat-option [value]="role.viewValue">{{role.viewValue}}</mat-option>
+                        @for (role of roles; track role) {
+                        <mat-option [value]="role._id">{{role.name}}</mat-option>
                         }
                     </mat-select>
                 </mat-form-field>
                 }
+                <mat-form-field>
+                  <input matInput formControlName="file" type="text" [value]="fileName" readonly>
+                  <input type="file" id="file" hidden (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg">
+                  <label for="file" mat-stroked-button aria-label="File input">
+                    <mat-icon>folder</mat-icon>
+                    Basic Input
+                  </label>
+                </mat-form-field>
 
 
 

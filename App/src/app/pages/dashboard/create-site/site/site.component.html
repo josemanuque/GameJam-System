@@ -18,6 +18,7 @@
                       <mat-card-title>{{site.name}}</mat-card-title>
                       <mat-card-subtitle>{{site.region}}</mat-card-subtitle>
                     </mat-card-header>
+                    <img mat-card-image [src]="'data:image/jpeg;base64,' + site.photo.data" alt="Photo of a Shiba Inu">
                     <mat-card-content>
                       <p>Country: {{site.country}}, City: {{site.city}},  Modality: {{site.modality}}</p>
                     </mat-card-content>

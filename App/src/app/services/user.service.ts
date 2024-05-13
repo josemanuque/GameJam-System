@@ -11,7 +11,7 @@ import { RoleListResponseI } from '../../interfaces/role.interface';
 export class UserService {
   private apiUrl = API_IP;
   private userDataSubject: BehaviorSubject<UserResponseI> = new BehaviorSubject<UserResponseI>(null!);
-  userData$: Observable<UserResponseI> = this.userDataSubject.asObservable();
+  userData$: Observable<any> = this.userDataSubject.asObservable();
 
   constructor(private http: HttpClient) {
     this.fetchUserData();

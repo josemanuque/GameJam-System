@@ -94,6 +94,14 @@
                                 </mat-select>
                             </mat-form-field>
                             }
+                            <mat-form-field>
+                                <input matInput formControlName="file" type="text" [value]="fileName" readonly>
+                                <input type="file" id="file" hidden (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg">
+                                <label for="file" mat-stroked-button aria-label="File input">
+                                  <mat-icon>folder</mat-icon>
+                                  Basic Input
+                                </label>
+                              </mat-form-field>
                         }
                           <!-- <div class="d-flex justify-content-center">
                             <button class="cmenu" mat-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">Menu <mat-icon>dialpad</mat-icon></button>
