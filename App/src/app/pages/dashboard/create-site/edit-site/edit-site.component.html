@@ -27,12 +27,13 @@
                 <img class="siteImg " mat-card-image [src]="'data:image/jpeg;base64,' + siteData.photo.data" alt="Photo of a Shiba Inu">
               </div>
               <mat-form-field>
-                <input matInput formControlName="file" type="text" [value]="fileName" readonly>
-                <input type="file" id="file" hidden (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg">
+                
                 <label for="file" mat-stroked-button aria-label="File input">
                   <mat-icon>folder</mat-icon>
-                  Basic Input
+                  Choose Photo
                 </label>
+                <input matInput formControlName="file" type="text" [value]="fileName" readonly>
+                <input type="file" id="file" hidden (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg">
               </mat-form-field>
               <!-- <div class="d-flex justify-content-center">
                 

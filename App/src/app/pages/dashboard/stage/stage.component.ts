@@ -41,7 +41,7 @@ export class StageComponent {
       pitchPreviewDeliveryDate: [''],
       pitchDeliveryDate: [''],
       pitchTestDate: [''],
-      demoDayDate: ['', Validators.required],
+      demoDayDate: [''],
     });
   }
 
