@@ -81,6 +81,7 @@ mainRouter.delete("/category/:id", categoryController.removeCategory);
 
 // Game submission
 mainRouter.post("/game", multerFacade.handleImageUpload, gameController.submitGame);
+mainRouter.get("/game/:teamID", gameController.getGame);
 
 // Theme
 mainRouter.post("/theme", multerFacade.handleMultiplePDFUploads, themeController.createTheme);

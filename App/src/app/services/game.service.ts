@@ -15,4 +15,8 @@ export class GameService {
   submitGame(gameData: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/game`, gameData);
   }
+
+  getGame(teamId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/game/${teamId}`);
+  }
 }

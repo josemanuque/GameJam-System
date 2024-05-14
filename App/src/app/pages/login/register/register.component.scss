@@ -60,22 +60,22 @@ a{
   text-decoration: none;
 }
 
-input{
-    background-color: #505050;
-    border-color: #212121;
-    color: white;
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.19), 0px 6px 6px rgba(0, 0, 0, 0.23);
-    font-size: 15px;
-    margin-bottom: 20px !important;
-}
-input::placeholder {
-    color: #9c9c9c;
-    font-weight:600;
-}
-input:focus {
-    background-color: #212121;
-    color: white;
-  }
+// input{
+//     background-color: #505050;
+//     border-color: #212121;
+//     color: white;
+//     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.19), 0px 6px 6px rgba(0, 0, 0, 0.23);
+//     font-size: 15px;
+//     margin-bottom: 20px !important;
+// }
+// input::placeholder {
+//     color: #9c9c9c;
+//     font-weight:600;
+// }
+// input:focus {
+//     background-color: #212121;
+//     color: white;
+//   }
 .flex-container {
     display: flex;
     justify-content: center;
@@ -96,6 +96,22 @@ input:focus {
   mat-form-field{
     width: 100%;
     //height: auto;
+  }
+  .form-control{
+    background-color: #505050;
+    border-color: #212121;
+    color: white;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.19), 0px 6px 6px rgba(0, 0, 0, 0.23);
+    font-size: 15px;
+    margin-bottom: 20px !important;
+  }
+  .form-control::placeholder {
+    color: #9c9c9c;
+    font-weight:600;
+}
+.form-control:focus {
+    background-color: #212121;
+    color: white;
   }
 
 

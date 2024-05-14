@@ -5,33 +5,18 @@
     <div class="content mat-elevation-z4" #contentContainer>
       <div class="custom-container">
 
-        <div class="row">
-          <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
-            @if (jamData.length != 0) {
-              <h1>{{jamData[0].title}}</h1>
-            }
-            @if (jamData.length == 0) {
-              <h1>Create a Jam</h1>
-            }
-            
-            
+        @if (!editFlag) {
+          <div class="row">
+            <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+              @if (jamData.length != 0) {
+                <h1>{{jamData[0].title}}</h1>
+              }
+              @if (jamData.length == 0) {
+                <h1>Create a Jam</h1>
+              }
+            </div>
           </div>
-        </div>
 
-          <!-- <div class="row">
-            @for (jam of jamData; track jam) {
-                <mat-card class="example-card">
-                    <mat-card-header>
-                      <mat-card-title>{{jam.title}}</mat-card-title>
-                      <mat-card-subtitle>{{jam.theme}}</mat-card-subtitle>
-                    </mat-card-header>
-                    <mat-card-content>
-                      <p>Starting Date: {{jam.startingDate}}, Ending Date: {{jam.endingDate}}, Description: {{jam.description}}</p>
-                    </mat-card-content>
-                </mat-card>
-            }
-
-          </div> -->
           @if (jamData.length != 0) {
             <div class="row">
               <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
@@ -47,7 +32,7 @@
               <mat-divider style="margin-bottom: 10px; margin-top: 10px;"></mat-divider>
             </div>
 
-            @for (stage of stages.stages; track stage) {
+            @for (stage of jamStages; track stage) {
 
               <div class="row">
                 <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
@@ -108,12 +93,54 @@
           }
           @if (jamData.length != 0) {
             <div class="row d-flex justify-content-center">
-              <button class="btn" style="margin-top: 1rem;" (click)="deleteJam()">Delete Jam</button>
+              <button class="btn" style="margin-top: 1rem;" (click)="updateJam()">Update Jam</button>
             </div>
           }
-          
+          @if (jamData.length != 0) {
+            <div class="row d-flex justify-content-center">
+              <button class="btn" style="margin-top: 1rem; margin-bottom: 1rem;" (click)="deleteJam()">Delete Jam</button>
+            </div>
+          }
 
-        
+        }
+        @if (editFlag) {
+          <div class="row">
+            <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+              <h1>Edit JAM</h1>
+            </div>
+          </div>
+            <form [formGroup]="form">
+              <div class="row d-flex justify-content-center">
+              
+                  <mat-form-field>
+                    <mat-label>Title: {{jamData[0].title}}</mat-label>
+                    <input matInput formControlName="title">
+                  </mat-form-field>
+                
+                  <mat-form-field>
+                    <mat-label>Description: {{jamData[0].description}}</mat-label>
+                    <input matInput formControlName="description">
+                  </mat-form-field>
+  
+                  <mat-form-field>
+                    <mat-label>Select Stages</mat-label>
+                    <mat-select formControlName="stages" multiple>
+                        @for (stage of stages.stages; track stage) {
+                        <mat-option [value]="stage._id">{{stage.name}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+              
+  
+              </div>
+              <div class="row d-flex justify-content-center">
+                  <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Update JAM</button>
+              </div>
+            </form>
+          <div class="row d-flex justify-content-center">
+            <button class="btn" style="margin-top: 1rem;" (click)="updateJam()">View Jam</button>
+          </div>
+        }
 
       </div>
     </div>

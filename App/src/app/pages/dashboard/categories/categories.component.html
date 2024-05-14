@@ -35,12 +35,13 @@
                     <div class="d-flex justify-content-center">
                       <span class="file-name">{{selectedFileEng?.name}}</span> -->
                       <mat-form-field>
-                        <input matInput formControlName="manualEng" type="text" [value]="fileNameEng" readonly>
-                        <input type="file" id="file3" hidden (change)="onFileSelectedEng($event)" accept=".pdf">
+                        
                         <label for="file3" mat-stroked-button aria-label="File input">
                           <mat-icon>folder</mat-icon>
                           Choose File
                         </label>
+                        <input matInput formControlName="manualEng" type="text" [value]="fileNameEng" readonly>
+                        <input type="file" id="file3" hidden (change)="onFileSelectedEng($event)" accept=".pdf">
                       </mat-form-field>
                   </div>
               </div>
@@ -67,12 +68,13 @@
                     <div class="d-flex justify-content-center">
                       <span class="file-name">{{selectedFileSpa?.name}}</span> -->
                       <mat-form-field>
-                        <input matInput formControlName="manualSpa" type="text" [value]="fileNameSpa" readonly>
-                        <input type="file" id="file2" hidden (change)="onFileSelectedSpa($event)" accept=".pdf">
+                        
                         <label for="file2" mat-stroked-button aria-label="File input">
                           <mat-icon>folder</mat-icon>
                           Choose File
                         </label>
+                        <input matInput formControlName="manualSpa" type="text" [value]="fileNameSpa" readonly>
+                        <input type="file" id="file2" hidden (change)="onFileSelectedSpa($event)" accept=".pdf">
                       </mat-form-field>
                   </div>
               </div>
@@ -99,12 +101,13 @@
                     <div class="d-flex justify-content-center">
                       <span class="file-name">{{selectedFilePort?.name}}</span> -->
                       <mat-form-field>
-                        <input matInput formControlName="manualPort" type="text" [value]="fileNamePort" readonly>
-                        <input type="file" id="file" hidden (change)="onFileSelectedPort($event)" accept=".pdf">
+
                         <label for="file" mat-stroked-button aria-label="File input">
                           <mat-icon>folder</mat-icon>
                           Choose File
                         </label>
+                        <input matInput formControlName="manualPort" type="text" [value]="fileNamePort" readonly>
+                        <input type="file" id="file" hidden (change)="onFileSelectedPort($event)" accept=".pdf">
                       </mat-form-field>
                   </div>
               </div>
