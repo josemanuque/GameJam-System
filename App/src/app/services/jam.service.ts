@@ -35,4 +35,8 @@ export class JamService {
   getJam(jamId: string): Observable<JamResponseI> {
     return this.http.get<JamResponseI>(`${this.apiUrl}/jam/${jamId}`);
   }
+
+  updateJam(jamId: string, jamData: any): Observable<any> { 
+    return this.http.put<any>(`${this.apiUrl}/jam/${jamId}`, jamData);
+  }
 }

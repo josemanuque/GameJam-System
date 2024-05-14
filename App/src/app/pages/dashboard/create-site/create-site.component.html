@@ -46,20 +46,14 @@
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field>
-                  <input matInput formControlName="file" type="text" [value]="fileName" readonly>
-                  <input type="file" id="file" hidden (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg">
+                  
                   <label for="file" mat-stroked-button aria-label="File input">
                     <mat-icon>folder</mat-icon>
-                    Basic Input
+                    Select Photo
                   </label>
+                  <input type="file" id="file" hidden (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg">
+                  <input matInput formControlName="file" type="text" [value]="fileName" readonly>
                 </mat-form-field>
-                <!-- <div class="d-flex justify-content-center">
-                  <button type="button" mat-raised-button (click)="fileInput2.click()">Choose File</button>
-                  <input formControlName="file" hidden (change)="onFileSelected($event)" #fileInput2 type="file" accept=".png">
-                </div>
-                <div class="d-flex justify-content-center">
-                  <span class="file-name">{{selectedFile?.name}}</span>
-                </div> -->
 
             </div>
             <div class="row d-flex justify-content-center">

@@ -1,16 +1,19 @@
-<!-- <mat-toolbar *ngIf="toggleMenu">
-    
-  </mat-toolbar> -->
 
   @if (toggleMenu) {
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="openSN()">
-      <mat-icon>menu</mat-icon>
-    </button>
+    <mat-toolbar *ngIf="toggleMenu">
+      <button mat-icon-button class="btn example-icon" aria-label="Example icon-button with menu icon" (click)="openSN()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>Settings</span>
+    </mat-toolbar>
   }
   
   <mat-sidenav #sidenav="matSidenav">
     @if (toggleMenu) {
-        <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="closeSN()"><mat-icon>clear</mat-icon></button>
+      <div>
+        <button mat-icon-button class="btn example-icon" style="color: #FFA500;" aria-label="Example icon-button with menu icon" (click)="closeSN()"><mat-icon>clear</mat-icon></button>
+      </div>
+        
     }
 
     @if(currentPhoto == '' || currentPhoto == undefined){

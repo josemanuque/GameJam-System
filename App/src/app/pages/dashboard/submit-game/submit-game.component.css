@@ -48,6 +48,15 @@
     border-radius: 10px;
     overflow: hidden;
   }
+  .example-card {
+    max-width: 400px;
+    margin-top: 2rem;
+  }
+  
+  .example-header-image {
+    background-image: url('/assets/defaultTeam.png');
+    background-size: cover;
+  }
   
   
   @media (max-width: 770px) {

@@ -35,3 +35,17 @@ exports.submitGame = async (req, res) => {
         }
     }
 };
+
+exports.getGame = async (req, res) => {
+    try {
+        const game = await GameModel.findOne({ teamID: req.params.teamID });
+        if (!game) {
+            res.status(404).send({ message: 'Game not found' });
+        } else {
+            res.send(game);
+        }
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({ message: 'Server error' });
+    }
+};

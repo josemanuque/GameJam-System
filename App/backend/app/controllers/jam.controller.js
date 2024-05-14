@@ -114,19 +114,115 @@ exports.getJam = async (req, res) => {
     }
 };
 
+// exports.updateJam = async (req, res) => { 
+//     try {
+//         const jamID = req.params.id;
+//         const jamReq = req.body;
+//         const jam = await JamModel.findByIdAndUpdate(jamID, jamReq, {new: true});
+//         if(!jam){
+//             return res.status(404).send({ message: "Jam not found" });
+//         }
+//         res.send({ message: "Jam updated" });
+//     } catch (err) {
+//         console.log(err)
+//         res.status(500).send({ message: 'Server error' });
+//     }
+// };
+
+// exports.updateJam = async (req, res) => { 
+//     try {
+//         const jamID = req.params.id;
+//         const jamReq = req.body;
+//         console.log('jamReq:', jamReq); // log the request body
+
+//         const jam = await JamModel.findById(jamID);
+//         if(!jam){
+//             return res.status(404).send({ message: "Jam not found" });
+//         }
+
+//         console.log('jam before update:', jam); // log the jam document before update
+
+//         // Update the jam document
+//         Object.assign(jam, jamReq);
+
+//         console.log('jam after update:', jam); // log the jam document after update
+
+//         // Save the updated document
+//         await jam.save();
+
+//         res.send({ message: "Jam updated" });
+//     } catch (err) {
+//         console.log(err)
+//         res.status(500).send({ message: 'Server error' });
+//     }
+// };
+
+const multer = require('multer');
+const upload = multer();
+
+// exports.updateJam = async (req, res) => { 
+//     upload.none()(req, res, async (err) => {
+//         if (err instanceof multer.MulterError) {
+//             return res.status(500).send({ message: 'Multer error' });
+//         } else if (err) {
+//             return res.status(500).send({ message: 'Unknown error' });
+//         }
+
+//         try {
+//             const jamID = req.params.id;
+//             const jamReq = req.body;
+//             console.log('jamReq:', jamReq); // log the request body
+
+//             const jam = await JamModel.findById(jamID);
+//             if(!jam){
+//                 return res.status(404).send({ message: "Jam not found" });
+//             }
+
+//             // Update the jam document
+//             Object.assign(jam, jamReq);
+//             console.log('jam after update:', jam); // log the jam document after update
+
+//             // Save the updated document
+//             await jam.save();
+//             console.log('jam after save:', jam); // log the jam document after save
+
+//             res.send({ message: "Jam updated" });
+//         } catch (err) {
+//             console.log(err)
+//             res.status(500).send({ message: 'Server error' });
+//         }
+//     });
+// };
+
 exports.updateJam = async (req, res) => { 
-    try {
-        const jamID = req.params.id;
-        const jamReq = req.body;
-        const jam = await JamModel.findByIdAndUpdate(jamID, jamReq, {new: true});
-        if(!jam){
-            return res.status(404).send({ message: "Jam not found" });
+    upload.none()(req, res, async (err) => {
+        if (err instanceof multer.MulterError) {
+            return res.status(500).send({ message: 'Multer error' });
+        } else if (err) {
+            return res.status(500).send({ message: 'Unknown error' });
         }
-        res.send({ message: "Jam updated" });
-    } catch (err) {
-        console.log(err)
-        res.status(500).send({ message: 'Server error' });
-    }
+
+        try {
+            const jamID = req.params.id;
+            const jamReq = req.body;
+
+            const jam = await JamModel.findById(jamID);
+            if(!jam){
+                return res.status(404).send({ message: "Jam not found" });
+            }
+
+            // Update the jam document
+            jam.set(jamReq);
+
+            // Save the updated document
+            await jam.save();
+
+            res.send({ message: "Jam updated" });
+        } catch (err) {
+            console.log(err)
+            res.status(500).send({ message: 'Server error' });
+        }
+    });
 };
 
 exports.addStageToJam = async (req, res) => {
