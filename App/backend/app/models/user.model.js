@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema(
             type: String, required: true, trim: true
         },
         phone:{
-            type: String, required: true, trim: true
+            type: String, trim: true
         },
         roles: [
             { type: mongoose.Schema.Types.ObjectId, ref: 'Role' }

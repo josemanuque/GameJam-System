@@ -27,6 +27,12 @@ exports.createTeam = async (req, res) => {
                 return user._id;
             } 
         ));
+
+        // Checks if all users belong to the same site
+        if (!await usersFromSameSite(teamReq.members)){
+            return res.status(409).send({ message: "All users must belong to the same site" });
+        }
+
         const team = new TeamModel(teamReq);
         await team.save();
 
@@ -44,6 +50,13 @@ exports.createTeam = async (req, res) => {
     }
 };
 
+
+async function usersFromSameSite(users) {
+    const sites = await Promise.all(users.map(user => UserModel.findById(user).select('site -_id')));
+    return sites.every(site => site.equals(sites[0]));
+}
+
+
 /**
  * Validates that a team doesn't exceed the 6 member limit
  * @param {*} team 
@@ -59,6 +72,11 @@ async function validateTeamMembers(team, user) {
         const alreadyInTeam = team.members.includes(user._id);
         if (alreadyInTeam) {
             return { canJoin: false, message: "User already belongs to this team" };
+        }
+
+        // Checks if all users belong to the same site
+        if (!await usersFromSameSite([team.members[0], user._id])){
+            return {canJoin: false, message: "All users must belong to the same site"};
         }
 
         return {canJoin: true, message: "User can join the team"};

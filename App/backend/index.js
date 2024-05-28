@@ -6,7 +6,7 @@ const db = require('./config/db');
 const router = require('./app/routes');
 const roleController = require('./app/controllers/role.controller');
 const FRONTEND_IP = process.env.FRONTEND_IP;
-
+const setup = require('./app/utils/dbStartupScript');
 db();
 
 const app = express();
@@ -30,8 +30,9 @@ app.get('/db-status', (req, res) => {
     res.send(`Database status: ${dbStatus}`);
 });
 
-// Creates All Roles In Mongo if not stored
-roleController.createRolesIfNotExist();
+(async () => {
+    await setup();
+})();
 
 app.use('/api/v1', router);
 app.listen(properties.PORT, properties.IP, () => {
