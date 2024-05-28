@@ -10,8 +10,8 @@ exports.createJam = async (req, res) => {
         const jamReq = {
             title: req.body.title,
             description: req.body.description,
-            startingDate: req.body.startingDate,
-            endingDate: req.body.endingDate,
+            startingDate: new Date(req.body.startingDate),
+            endingDate: new Date(req.body.endingDate),
             theme: req.body.theme,
             stages: req.body.stages,
         };

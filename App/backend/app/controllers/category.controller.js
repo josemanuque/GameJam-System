@@ -1,20 +1,29 @@
 const CategoryModel = require('../models/category.model');
-const fs = require('fs');
 
 exports.createCategory = async (req, res) => {
     try {
-        const category = new CategoryModel({
+        const categoryReq = {
             nameEng: req.body.nameEng,
             descriptionEng: req.body.descriptionEng,
-            manualEng: req.files['manualEng'][0].path,
             nameSpa: req.body.nameSpa,
             descriptionSpa: req.body.descriptionSpa,
-            manualSpa: req.files['manualSpa'][0].path,
             namePort: req.body.namePort,
             descriptionPort: req.body.descriptionPort,
-            manualPort: req.files['manualPort'][0].path
-        });
+        };
 
+        if (req.pdfs) {
+            if (req.pdfs['manualEng']) {
+                categoryReq.manualEng = req.pdfs['manualEng'];
+            }
+            if (req.pdfs['manualSpa']) {
+                categoryReq.manualSpa = req.pdfs['manualSpa'];
+            }
+            if (req.pdfs['manualPort']) {
+                categoryReq.manualPort = req.pdfs['manualPort'];
+            }
+        }
+
+        const category = new CategoryModel(categoryReq);
         await category.save();
         res.send({ message: "Category created" });
 
@@ -56,24 +65,34 @@ exports.getCategory = async (req, res) => {
     }
 };
 
-/* exports.updateCategory = async (req, res) => {
+exports.updateCategory = async (req, res) => {
     try {
         const id = req.params.id;
-        const category = req.body;
+        const categoryData = req.body;
 
-        const updatedCategory = await CategoryModel.findByIdAndUpdate(id
-            , category
-            , { new: true });
+        if (req.pdfs){
+            if (req.pdfs['manualEng']) {
+                categoryData.manualEng = req.pdfs['manualEng'];
+            }
+            if (req.pdfs['manualSpa']) {
+                categoryData.manualSpa = req.pdfs['manualSpa'];
+            }
+            if (req.pdfs['manualPort']) {
+                categoryData.manualPort = req.pdfs['manualPort'];
+            }
+        }
+
+        const updatedCategory = await CategoryModel.findByIdAndUpdate(id, categoryData, { new: true });
 
         if (!updatedCategory) {
             return res.status(404).send({ message: "Category not found" });
         }
-        res.send(updatedCategory);
+        res.send({ message: "Site updated" });
     }
     catch {
-        res.status(500).send({ message: "Error" });
+        res.status(500).send({ message: "Server error" });
     }
-}; */
+}; 
 
 exports.removeCategory = async (req, res) => {
     try {
@@ -83,14 +102,6 @@ exports.removeCategory = async (req, res) => {
         if(!deletedCategory){
             return res.status(404).send({ message: "Category doesn't exist" });
         }
-
-        const filenames = [deletedCategory.manualEng, deletedCategory.manualSpa, deletedCategory.manualPort];
-        
-        filenames.forEach(filename => {
-            if(filename){
-                fs.unlinkSync(filename);
-            }
-        });
 
         res.send({ message: "Category deleted"});
 

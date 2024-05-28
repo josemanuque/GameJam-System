@@ -60,12 +60,9 @@ const uploadMultiplePDF = multer({
 
 function handleImageUpload(req, res, next) {
     uploadImage.single('file')(req, res, (err) => {
-        /* if (err instanceof multer.MulterError) {
-            console.log(err);
+        if (err) {
             return res.status(400).send({ message: err.message });
-        } else if (err) {
-            return res.status(400).send({ message: err.message });
-        } */
+        } 
 
         if (req.file) {
             const imageBuffer = fs.readFileSync(req.file.path);
@@ -96,8 +93,22 @@ function handleMultiplePDFUploads(req, res, next) {
     uploadMultiplePDF(req, res, (err) => {
         if (err instanceof multer.MulterError) {
             return res.status(400).send({ message: err.message });
-        } else if (err) {
-            return res.status(400).send({ message: err.message });
+        }
+
+        req.pdfs = {}
+        if (req.files){
+            for (const key in req.files){
+                if (req.files[key][0]){
+                    const fileBuffer = fs.readFileSync(req.files[key][0].path); 
+                    const base64Pdf = fileBuffer.toString('base64');
+                    req.pdfs[key] = {
+                        data: base64Pdf,
+                        contentType: req.files[key][0].mimetype
+                    };
+                    // Eliminar el archivo temporal después de convertirlo a Base64
+                    fs.unlinkSync(req.files[key][0].path);
+                }
+            }
         }
         next();
     });

@@ -2,9 +2,19 @@ const StageModel = require('../models/stage.model');
 
 exports.createStage = async (req, res) => {
     try {
-        const stageData = req.body;
+        const stageReq = {
+            name: req.body.name,
+            priority: req.body.priority,
+            startingDate: new Date(req.body.startingDate),
+            endingDate: new Date(req.body.endingDate),
+            buildDeliveryDate: new Date(req.body.buildDeliveryDate),
+            pitchPreviewDeliveryDate: new Date (req.body.pitchPreviewDeliveryDate),
+            pitchDeliveryDate: new Date(req.body.pitchDeliveryDate),
+            pitchTestDate: new Date(req.body.pitchTestDate),
+            judgeDeliveryDate: new Date(req.body.judgeDeliveryDate)
+        };
+
         const stage = new StageModel(stageData);
-    
         await stage.save();
         res.send({message: "Stage created successfully"});
 
