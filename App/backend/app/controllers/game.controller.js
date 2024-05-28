@@ -1,4 +1,4 @@
-const GameModel = require('../models/game.model')
+const GameModel = require('../models/game.model');
 
 /**
  * Submits game info to db
@@ -17,9 +17,7 @@ exports.submitGame = async (req, res) => {
             categories: req.body.categories
         };
         if (req.photo) {
-            gameReq.photo = {
-                 data: req.photo.data
-            };
+            gameReq.photo = req.photo
         }
 
         const game = new GameModel(gameReq);
@@ -30,7 +28,7 @@ exports.submitGame = async (req, res) => {
         if (err.code === 11000) {
             res.status(409).send({ message: 'Game already loaded' });
         } else {
-            console.log(err)
+            console.log(err);
             res.status(500).send({ message: 'Server error' });
         }
     }
@@ -45,7 +43,42 @@ exports.getGame = async (req, res) => {
             res.send(game);
         }
     } catch (err) {
+        res.status(500).send({ message: 'Server error' });
+    }
+};
+
+exports.updateGame = async (req, res) => {
+
+    try{
+        const gameID = req.params.id;
+        const gameData = req.body;
+        
+        if (req.file){
+            const game = await GameModel.findById(gameID);
+            if(!game){
+                return res.status(404).send({ message: "Game not found" });
+            }
+
+            if (req.photo) {
+                gameData.photo = req.photo;
+            }
+
+            const updatedGame = await GameModel.findByIdAndUpdate(gameID, { ...gameData}, { new: true });
+            if(!updatedGame){
+                return res.status(404).send({ message: "Game not found" });
+            }
+
+        } else{
+            const updatedGame = await GameModel.findByIdAndUpdate(gameID, gameData, { new: true });
+            if(!updatedGame){
+                return res.status(404).send({ message: "Game not found" });
+            }
+        }
+
+        res.send({ message: "Game updated" });
+
+    } catch (err) {
         console.log(err)
-        res.status(500).send({ message: 'Server error' });
-    }
+        res.status(500).send({ message: 'Server error' });
+    }
 };

@@ -9,7 +9,7 @@ const themeSchema = new mongoose.Schema(
             type: String, required: true, trim: true
         },
         manualEng: {
-            type: String, trim: true
+            data: String
         },
         nameSpa: {
             type: String, required: true, unique: true, trim: true
@@ -18,7 +18,7 @@ const themeSchema = new mongoose.Schema(
             type: String, required: true, trim: true
         },
         manualSpa: {
-            type: String, trim: true
+            data: String
         },
         namePort: {
             type: String, required: true, unique: true, trim: true
@@ -27,7 +27,7 @@ const themeSchema = new mongoose.Schema(
             type: String, required: true, trim: true
         },
         manualPort: {
-            type: String, trim: true
+            data: String
         }
     },
     {

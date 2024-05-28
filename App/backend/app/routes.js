@@ -76,16 +76,17 @@ mainRouter.patch("/jam/stage", jamController.addStageToJam);
 mainRouter.post("/category", multerFacade.handleMultiplePDFUploads, categoryController.createCategory);
 mainRouter.get("/category", categoryController.getCategoriesName);
 mainRouter.get("/category/:id", categoryController.getCategory);
-//mainRouter.put("/category/:id", categoryController.updateCategory);
+mainRouter.put("/category/:id", multerFacade.handleMultiplePDFUploads, categoryController.updateCategory);
 mainRouter.delete("/category/:id", categoryController.removeCategory);
 
 // Game submission
 mainRouter.post("/game", multerFacade.handleImageUpload, gameController.submitGame);
 mainRouter.get("/game/:teamID", gameController.getGame);
+mainRouter.put("/game/:id", multerFacade.handleImageUpload, gameController.updateGame);
 
 // Theme
 mainRouter.post("/theme", multerFacade.handleMultiplePDFUploads, themeController.createTheme);
-//mainRouter.put("/theme/:id", themeController.updateTheme);
+mainRouter.put("/theme/:id", multerFacade.handleMultiplePDFUploads, themeController.updateTheme);
 mainRouter.delete("/theme/:id", themeController.removeTheme);
 mainRouter.get("/theme", themeController.getThemesName);
 mainRouter.get("/theme/:id", themeController.getTheme);

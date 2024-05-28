@@ -30,9 +30,7 @@ exports.register = async (req, res) => {
             site: req.body.site
         };
         if (req.photo) {
-            userReq.photo = {
-                 data: req.photo.data
-            };
+            userReq.photo = req.photo
         }
 
 

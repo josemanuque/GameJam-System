@@ -1,6 +1,5 @@
-const fs = require('fs');
-
 const SiteModel = require('../models/site.model');
+
 /**
  * Creates a site in DB
  * @param {*} req: site object (name, country, array of team object id)
@@ -17,10 +16,9 @@ exports.createSite = async (req, res) => {
             teams: req.body.teams
         };
         if (req.photo) {
-            siteReq.photo = {
-                 data: req.photo.data
-            };
+            siteReq.photo = req.photo;
         }
+
         const site = new SiteModel(siteReq);
         await site.save();
         siteReq.message = "Side created successfully";
@@ -47,11 +45,6 @@ exports.removeSite = async (req, res) => {
 
         if(!deletedSite){
             return res.status(404).send({ message: "Site doesn't exist" });
-        }
-
-        const filePath = deletedSite.photo;
-        if(fs.existsSync(filePath)){
-            fs.unlinkSync(filePath);
         }
 
         res.send({ message: "Side deleted successfully"});
@@ -138,22 +131,15 @@ exports.updateSite = async (req, res) => {
             if (!site) {
                 return res.status(404).send({ message: "Site not found" });
             }
-            //const originalFilePath = site.photo;
+
             if (req.photo) {
-                siteData.photo = {
-                     data: req.photo.data
-                };
+                siteData.photo = req.photo;
             }
 
             const updatedSite = await SiteModel.findByIdAndUpdate(siteID, { ...siteData}, { new: true });
             if(!updatedSite){
                 return res.status(404).send({ message: "Site not found" });
             }
-
-            // if(fs.existsSync(originalFilePath)){
-            //     fs.unlinkSync(originalFilePath);
-            // }
-
         } else {
             const updatedSite = await SiteModel.findByIdAndUpdate(siteID, siteData, { new: true });
             if(!updatedSite){

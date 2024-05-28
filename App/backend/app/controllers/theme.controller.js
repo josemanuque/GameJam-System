@@ -1,21 +1,28 @@
-const fs = require('fs');
-
 const ThemeModel = require('../models/theme.model');
 
 exports.createTheme = async (req, res) => {
     try {
-        const theme = new ThemeModel({
+        const themeReq = {
             nameEng: req.body.nameEng,
             descriptionEng: req.body.descriptionEng,
-            //manualEng: req.files['manualEng'][0].path,
             nameSpa: req.body.nameSpa,
             descriptionSpa: req.body.descriptionSpa,
-            //manualSpa: req.files['manualSpa'][0].path,
             namePort: req.body.namePort,
             descriptionPort: req.body.descriptionPort,
-           // manualPort: req.files['manualPort'][0].path
-        });
+        };
 
+        if (req.pdfs) {
+            if (req.pdfs['manualEng']) {
+                themeReq.manualEng = req.pdfs['manualEng'];
+            }
+            if (req.pdfs['manualSpa']) {
+                themeReq.manualSpa = req.pdfs['manualSpa'];
+            }
+            if (req.pdfs['manualPort']) {
+                themeReq.manualPort = req.pdfs['manualPort'];
+            }
+        }
+        const theme = new ThemeModel(themeReq);
         await theme.save();
         res.send({ message: "Theme created" });
 
@@ -29,24 +36,34 @@ exports.createTheme = async (req, res) => {
     }
 };
 
-/* exports.updateTheme = async (req, res) => {
+exports.updateTheme = async (req, res) => {
     try {
         const id = req.params.id;
-        const theme = req.body;
+        const themeData = req.body;
 
-        const updatedTheme = await ThemeModel.findByIdAndUpdate(id
-            , theme
-            , { new: true });
+        if (req.pdfs){
+            if (req.pdfs['manualEng']) {
+                themeData.manualEng = req.pdfs['manualEng'];
+            }
+            if (req.pdfs['manualSpa']) {
+                themeData.manualSpa = req.pdfs['manualSpa'];
+            }
+            if (req.pdfs['manualPort']) {
+                themeData.manualPort = req.pdfs['manualPort'];
+            }
+        }
+
+        const updatedTheme = await ThemeModel.findByIdAndUpdate(id, themeData, { new: true });
 
         if (!updatedTheme) {
             return res.status(404).send({ message: "Theme not found" });
         }
-        res.send(updatedTheme);
+        res.send({ message: "Theme updated"});
     }
     catch {
-        res.status(500).send({ message: "Error" });
+        res.status(500).send({ message: "Server error" });
     }
-}; */
+}; 
 
 exports.removeTheme = async (req, res) => {
     try {
@@ -56,14 +73,6 @@ exports.removeTheme = async (req, res) => {
         if(!deletedTheme){
             return res.status(404).send({ message: "Theme doesn't exist" });
         }
-
-        const filenames = [deletedTheme.manualEng, deletedTheme.manualSpa, deletedTheme.manualPort];
-        
-        filenames.forEach(filename => {
-            if(filename){
-                fs.unlinkSync(filename);
-            }
-        });
 
         res.send({ message: "Theme deleted"});
 

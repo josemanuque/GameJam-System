@@ -9,10 +9,10 @@ const jamSchema = new mongoose.Schema(
             type: String, required: true, trim: true
         },
         startingDate: {
-            type: String, required: true, trim: true
+            type: Date, required: true
         },
         endingDate: {
-            type: String, required: true, trim: true
+            type: Date, required: true
         },
         theme : {
             type: mongoose.Schema.Types.ObjectId, ref: 'Theme'
