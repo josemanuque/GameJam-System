@@ -212,3 +212,17 @@ exports.getTeam = async (req, res) => {
         res.status(500).send({ message: "Error" });
     }
 }
+
+exports.getTeamNoHTTP = async (id) => {
+    try {
+        const team = await TeamModel.findById(id).populate('members', '-password');
+        
+        if(!team) {
+            throw new Error("Team not found");
+        }
+
+        return team;
+    } catch(error){
+        throw new Error("Error retrieving team");
+    }
+}

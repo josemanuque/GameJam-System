@@ -20,6 +20,7 @@ exports.submitGame = async (req, res) => {
             gameReq.photo = req.photo
         }
 
+
         const game = new GameModel(gameReq);
         await game.save();
         res.send({ message: "Game loaded" });
