@@ -86,3 +86,34 @@ exports.getStage = async (req, res) => {
     }
     
 };
+
+
+exports.getRemainingTime = async (req, res) => {
+    try {
+        const currentDate = new Date();
+        const stage = await StageModel.findOne({
+            startingDate: { $lte: currentDate },
+            endingDate: { $gte: currentDate }
+        });
+
+        if (!stage) {
+            res.status(404).send({ message: 'No current stage found' });
+        } else {
+            const remainingTimeMs = stage.endingDate - currentDate;
+            const remainingTimeSec = Math.floor(remainingTimeMs / 1000);
+            const remainingTimeMin = Math.floor(remainingTimeSec / 60);
+            const remainingTimeHrs = Math.floor(remainingTimeMin / 60);
+            const remainingTimeDays = Math.floor(remainingTimeHrs / 24);
+
+            res.send({
+                days: remainingTimeDays,
+                hours: remainingTimeHrs % 24,
+                minutes: remainingTimeMin % 60,
+                seconds: remainingTimeSec % 60
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send({ message: 'Server error' });
+    }
+};

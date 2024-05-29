@@ -97,6 +97,7 @@ mainRouter.put("/stage/:id", stageController.updateStage);
 mainRouter.delete("/stage/:id", stageController.removeStage);
 mainRouter.get("/stage", stageController.getStages);
 mainRouter.get("/stage/:id", stageController.getStage);
+mainRouter.get("/time", stageController.getRemainingTime);
 
 // Photo
 mainRouter.post("/photo", multerFacade.handleImageUpload);
