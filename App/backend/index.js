@@ -30,9 +30,9 @@ app.get('/db-status', (req, res) => {
     res.send(`Database status: ${dbStatus}`);
 });
 
-(async () => {
+/* (async () => {
     await setup();
-})();
+})(); */
 
 app.use('/api/v1', router);
 app.listen(properties.PORT, properties.IP, () => {
