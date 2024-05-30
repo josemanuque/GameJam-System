@@ -29,7 +29,12 @@ export class ThemeService {
   }
 
   // Get a theme by ID
-  getTheme(themeId: string): Observable<any> {
+  getTheme(themeId: any): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/theme/${themeId}`);
+  }
+
+  // Update a theme
+  updateTheme(formData: FormData, themeId: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/theme/${themeId}`, formData);
   }
 }
