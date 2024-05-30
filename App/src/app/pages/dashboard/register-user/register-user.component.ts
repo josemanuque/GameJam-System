@@ -30,7 +30,18 @@ interface Data {
 @Component({
   selector: 'app-register-user',
   standalone: true,
-  imports: [MatIconModule,MatCheckboxModule,MatSidenavModule, MatFormFieldModule, SidenavComponent,MatSelectModule,MatInputModule,MatButtonModule,FormsModule,ReactiveFormsModule,],
+  imports: [
+    MatIconModule,
+    MatCheckboxModule,
+    MatSidenavModule, 
+    MatFormFieldModule, 
+    SidenavComponent,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './register-user.component.html',
   styleUrl: './register-user.component.css'
 })

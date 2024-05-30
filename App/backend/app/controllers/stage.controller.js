@@ -16,7 +16,7 @@ exports.createStage = async (req, res) => {
 
         const stage = new StageModel(stageReq);
         await stage.save();
-        res.send({message: "Stage created successfully"});
+        res.send({message: "Stage created successfully", _id: stage._id});
 
     }catch(err) {
         if(err.code === 11000) {
@@ -31,7 +31,6 @@ exports.createStage = async (req, res) => {
 exports.removeStage = async (req, res) => {
     try {
         const stageID = req.params.id
-        
         const deletedStage = await StageModel.findByIdAndDelete(stageID);
         if(!deletedStage){
             return res.status(404).send({ message: "Stage doesn't exist" });

@@ -47,16 +47,16 @@
 
                 </div>
                 <mat-form-field>
-                  <mat-label>Select Stages</mat-label>
-                  <mat-select formControlName="stages" multiple>
-                      @for (stage of stagesData.stages; track stage) {
-                      <mat-option [value]="stage._id">{{stage.name}}</mat-option>
+                  <mat-label>Select Theme</mat-label>
+                  <mat-select formControlName="themes" multiple>
+                      @for (theme of themesData; track theme) {
+                      <mat-option [value]="theme._id">{{theme.nameEng}}</mat-option>
                       }
                   </mat-select>
               </mat-form-field>
             </div>
             <div class="row d-flex justify-content-center">
-                <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Create Jam</button>
+                <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Create Jam and Continue</button>
             </div>
             <div class="row d-flex justify-content-center">
               <button style="width: 15%;" mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="goToViewJam()">Go Back</button>

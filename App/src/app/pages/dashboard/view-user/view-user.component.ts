@@ -9,7 +9,8 @@ import { UserService } from '../../../services/user.service';
 import { switchMap } from 'rxjs';
 import { RoleResponseI } from '../../../../interfaces/role.interface';
 import { UpdateRolePopupComponent } from './update-role-popup/update-role-popup.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
@@ -21,19 +22,24 @@ import { RouterLink } from '@angular/router';
     MatSidenavModule, 
     SidenavComponent, 
     MatDialogModule,
-    RouterLink
+    RouterLink,
+    MatIconModule
   ],
   templateUrl: './view-user.component.html',
   styleUrl: './view-user.component.scss'
 })
 export class ViewUserComponent {
-  displayedColumns: string[] = ['username', 'name', 'lastname', 'email', 'region', 'roles', 'action'];
+  displayedColumns: string[] = ['username', 'name', 'lastname', 'email', 'region', 'roles', 'delete'];
   dataSource!: MatTableDataSource<UserResponseI>;
   validRoles: RoleResponseI[] = [];
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private userService: UserService, private dialog: MatDialog) { }
+  constructor(
+    private userService: UserService, 
+    private dialog: MatDialog,
+    private route: Router
+  ) { }
   
   ngOnInit() {
     this.userService.getAllValidRoles().pipe(switchMap(
@@ -63,5 +69,13 @@ export class ViewUserComponent {
 
   loadRoles(user: UserResponseI): string {
     return user.roles.map(role => role.name).join(', ');
+  }
+
+  onEditUser(user: UserResponseI) {
+    this.route.navigate([`dashboard/update-user/${user.username}`]);
+  }
+
+  onDelete(user: UserResponseI) {
+    this.userService.deleteUser(user.username).pipe(switchMap(() => this.userService.getAllUsers())).subscribe(this.handleUsers.bind(this));
   }
 }
