@@ -15,19 +15,19 @@ const stageSchema = new mongoose.Schema(
             type: Date, required: true
         },
         buildDeliveryDate: {
-            type: Date, required: true
+            type: Date
         },
         pitchPreviewDeliveryDate: {
-            type: Date, required: true
+            type: Date
         },
         pitchDeliveryDate: {
-            type: Date, required: true
+            type: Date
         },
         pitchTestDate: {
-            type: Date, required: true
+            type: Date
         },
         judgeDeliveryDate: {
-            type: Date, required: true
+            type: Date
         }
     },
     {

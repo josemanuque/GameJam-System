@@ -1,0 +1,93 @@
+<mat-card>
+    <mat-card-header>
+      <h1>Set Stage</h1>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="content" #contentContainer>
+            <div class="custom-container">
+
+                <form [formGroup]="form">
+                  <div class="row d-flex justify-content-center">
+                  
+                      <mat-form-field>
+                        <mat-label>Title</mat-label>
+                        <input matInput formControlName="name">
+                      </mat-form-field>
+                    
+                      <mat-form-field>
+                        <mat-label>Priority</mat-label>
+                        <input matInput formControlName="priority">
+                      </mat-form-field>
+      
+                      <mat-form-field>
+                        <mat-label>Start Date</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="startingDate">
+                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+      
+                      <mat-form-field>
+                          <mat-label>End Date</mat-label>
+                          <input matInput [matDatepicker]="picker2" formControlName="endingDate">
+                          <mat-hint>MM/DD/YYYY</mat-hint>
+                          <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                          <mat-datepicker #picker2></mat-datepicker>
+                      </mat-form-field>
+      
+                      <mat-form-field>
+                          <mat-label>Build Deadline</mat-label>
+                          <input matInput [matDatepicker]="picker3" formControlName="buildDeliveryDate">
+                          <mat-hint>MM/DD/YYYY</mat-hint>
+                          <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
+                          <mat-datepicker #picker3></mat-datepicker>
+                      </mat-form-field>
+      
+                      <mat-form-field>
+                          <mat-label>Pitch Preview Deadline</mat-label>
+                          <input matInput [matDatepicker]="picker4" formControlName="pitchPreviewDeliveryDate">
+                          <mat-hint>MM/DD/YYYY</mat-hint>
+                          <mat-datepicker-toggle matIconSuffix [for]="picker4"></mat-datepicker-toggle>
+                          <mat-datepicker #picker4></mat-datepicker>
+                      </mat-form-field>
+      
+                      <mat-form-field>
+                          <mat-label>Pitch Deadline</mat-label>
+                          <input matInput [matDatepicker]="picker5" formControlName="pitchDeliveryDate">
+                          <mat-hint>MM/DD/YYYY</mat-hint>
+                          <mat-datepicker-toggle matIconSuffix [for]="picker5"></mat-datepicker-toggle>
+                          <mat-datepicker #picker5></mat-datepicker>
+                      </mat-form-field>
+      
+                      <mat-form-field>
+                          <mat-label>Pitch Test Deadline</mat-label>
+                          <input matInput [matDatepicker]="picker6" formControlName="pitchTestDate">
+                          <mat-hint>MM/DD/YYYY</mat-hint>
+                          <mat-datepicker-toggle matIconSuffix [for]="picker6"></mat-datepicker-toggle>
+                          <mat-datepicker #picker6></mat-datepicker>
+                      </mat-form-field>
+      
+                      <mat-form-field>
+                          <mat-label>Demo Day</mat-label>
+                          <input matInput [matDatepicker]="picker7" formControlName="demoDayDate">
+                          <mat-hint>MM/DD/YYYY</mat-hint>
+                          <mat-datepicker-toggle matIconSuffix [for]="picker7"></mat-datepicker-toggle>
+                          <mat-datepicker #picker7></mat-datepicker>
+                      </mat-form-field>
+                  </div>
+                    @if (!this.data.stage){
+                    <div class="row d-flex justify-content-center">
+                        <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="onSubmit()">Create</button>
+                    </div>
+                    }
+                    @if (this.data.stage){
+                        <div class="row d-flex justify-content-center">
+                            <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="onUpdate()">Update</button>
+                        </div>
+                        }
+                </form>
+      
+            </div>
+          </div>
+    </mat-card-content>
+</mat-card>

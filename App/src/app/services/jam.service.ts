@@ -12,8 +12,8 @@ export class JamService {
 
   constructor(private http: HttpClient) { }
 
-  createJam(jamData: JamRequestI): Observable<JamRequestI> {
-    return this.http.post<JamRequestI>(`${this.apiUrl}/jam`, jamData);
+  createJam(jamData: JamRequestI): Observable<JamResponseI> {
+    return this.http.post<JamResponseI>(`${this.apiUrl}/jam`, jamData);
   }
 
   removeJam(jamId: string): Observable<JamMessageResponseI> {
@@ -28,6 +28,10 @@ export class JamService {
     return this.http.patch<JamMessageResponseI>(`${this.apiUrl}/jam/site`, { jamID: jamId, siteID: siteId });
   }
 
+  addStageToJam(jamId: string, stageId: string): Observable<JamMessageResponseI> {
+    return this.http.patch<JamMessageResponseI>(`${this.apiUrl}/jam/stage`, { jamID: jamId, stageID: stageId });
+  }
+
   getJams(): Observable<JamListResponseI> {
     return this.http.get<JamListResponseI>(`${this.apiUrl}/jam`);
   }
@@ -38,5 +42,13 @@ export class JamService {
 
   updateJam(jamId: string, jamData: any): Observable<any> { 
     return this.http.put<any>(`${this.apiUrl}/jam/${jamId}`, jamData);
+  }
+
+  removeStageFromJam(jamId: string, stageId: string): Observable<JamMessageResponseI> {
+    return this.http.delete<JamMessageResponseI>(`${this.apiUrl}/jam/${jamId}/stage/${stageId}`);
+  }
+
+  updateStagePriority(jamId: string, stages: string[]): Observable<JamMessageResponseI> {
+    return this.http.patch<JamMessageResponseI>(`${this.apiUrl}/jam/stage/priority`, { jamID: jamId, stages });
   }
 }

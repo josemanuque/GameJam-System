@@ -19,6 +19,7 @@ mat-sidenav-container {
     min-height: calc(100vh - 4rem);
     margin-bottom: 2rem;
     background-color: #212121 !important;
+    box-sizing: border-box;
   }
   
   .custom-container {
@@ -42,10 +43,31 @@ mat-sidenav-container {
     overflow: hidden;
   }
     
-  mat-form-field{
-    max-width: 50%;
+
+
+  .container-dates {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
   }
   
+  mat-form-field.input-init-date {
+    max-width: 45%;
+  }
+  
+  mat-form-field.input-end-date {
+    max-width: 45%;
+  }
+
+  .form-container{
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+  
+
+
   @media (max-width: 770px) {
     .d-flex {
       flex-direction: column;

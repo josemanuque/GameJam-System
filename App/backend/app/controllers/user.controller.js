@@ -95,10 +95,12 @@ exports.updateUser = async (req, res) => {
     try {
         const username = req.params.username;
         const user = req.body;
-        console.log(user);
+        if (user.password) {
+            user.password = authUtils.hashPassword(user.password);
+        }
 
         const updatedUser = await UserModel.findOneAndUpdate({ username }, {$set: user}, { new: true }).populate('roles', '-__v -description');
-        console.log(updatedUser._doc);
+        //console.log(updatedUser._doc);
         if (!updatedUser) {
             return res.status(404).send({ message: "User not found" });
         }
@@ -175,3 +177,19 @@ exports.updatePassword = async (req, res) => {
         res.status(500).send({message: "Server error"});
     }
 };
+
+exports.deleteUser = async (req, res) => {
+    try {
+        const username = req.params.username;
+
+        const deletedUser = await UserModel.findOneAndDelete({ username });
+
+        if (!deletedUser) {
+            return res.status(409).send({ message: "User not found" });
+        }
+
+        res.send({ message: "User deleted" });
+    } catch (err) {
+        res.status(500).send({ message: "Server error" });
+    }
+}

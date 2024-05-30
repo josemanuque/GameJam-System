@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_IP } from '../environments/environment';
+import { StageListI } from '../../interfaces/stage.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +28,8 @@ export class StageService {
   }
 
   // Get all stages
-  getStages(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/stage`);
+  getStages(): Observable<StageListI> {
+    return this.http.get<StageListI>(`${this.apiUrl}/stage`);
   }
 
   // Get a stage by ID

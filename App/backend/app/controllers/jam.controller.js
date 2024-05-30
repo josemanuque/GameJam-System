@@ -17,7 +17,7 @@ exports.createJam = async (req, res) => {
         };
         const jam = new JamModel(jamReq);
         await jam.save();
-        res.send({ message: "Jam created"});
+        res.send({ message: "Jam created", _id: jam._id});
 
     } catch (err) {
         if (err.code === 11000) {
@@ -71,7 +71,7 @@ exports.addSiteToJam = async (req, res) => {
     try {
         const jamID = req.body.jamID;
         const siteID = req.body.siteID;
-
+        
         const jam = await JamModel.findById({ jamID });
 
         if(!jam){
@@ -230,7 +230,8 @@ exports.addStageToJam = async (req, res) => {
         const jamID = req.body.jamID;
         const stageID = req.body.stageID;
 
-        const jam = await JamModel.findById({ jamID });
+
+        const jam = await JamModel.findById(jamID);
 
         if(!jam){
             return res.status(404).send({ message: "Invalid Jam ID" });
@@ -245,3 +246,47 @@ exports.addStageToJam = async (req, res) => {
         res.status(500).send({ message: "Server error" })
     }
 };
+
+exports.removeStageFromJam = async (req, res) => {
+    try {
+        const jamID = req.params.jamID;
+        const stageID = req.params.stageID;
+
+        const jam = await JamModel.findById(jamID);
+
+        if(!jam){
+            return res.status(404).send({ message: "Invalid Jam ID" });
+        }
+        
+        jam.stages = jam.stages.filter(value => !value.equals(stageID));
+        
+        await jam.save();
+
+        res.send({ message: "Stage removed from Jam" });
+    } catch(err){
+        console.log(err);
+        res.status(500).send({ message: "Server error" })
+    }
+}
+
+
+exports.updateStagePriority = async (req, res) => {
+    try {
+        const jamID = req.body.jamID;
+        const stages = req.body.stages;
+
+        const jam = await JamModel.findById(jamID);
+
+        if(!jam){
+            return res.status(404).send({ message: "Invalid Jam ID" });
+        }
+
+        jam.stages = stages;
+        await jam.save();
+        res.send({ message: "Stage priority updated" });
+        
+    } catch(err){
+        console.log(err);
+        res.status(500).send({ message: "Server error" })
+    }
+}

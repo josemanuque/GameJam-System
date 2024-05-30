@@ -10,10 +10,7 @@ KEY_EXPIRES_IN = process.env.KEY_EXPIRES_IN;
 exports.register = async (req, res) => {
     try {
         let roles = req.body.roles;
-        if (Array.isArray(roles) && roles.length > 0){
-            roles = await roleController.getRoleIDs(roles);
-        }
-        else if(!roles || roles.length === 0){
+        if(!roles || roles.length === 0){
             const defaultRoleID = await roleController.getDefaultRoleID();
             roles = [defaultRoleID];
         }
@@ -33,11 +30,8 @@ exports.register = async (req, res) => {
             userReq.photo = req.photo
         }
 
-
         const user = new UserModel(userReq);
         await user.save();
-
-        const userRoles = await roleController.getRoleNamesFromIDs(userReq.roles);
 
         const resUser = {
             message: "Logged in",
@@ -46,7 +40,7 @@ exports.register = async (req, res) => {
             email: user.email,
             phone: user.phone,
             username: user.username,
-            roles: userRoles,
+            roles: user.roles,
             photo: user.photo
         };
 
@@ -84,7 +78,6 @@ exports.login = async (req, res) => {
             return res.status(409).send({ message: 'Authentication failed' });
         }
         
-        const userRoles = await roleController.getRoleNamesFromIDs(foundPerson.roles);
         const user = {
             message: "Logged in",
             name: foundPerson.name,
@@ -92,7 +85,7 @@ exports.login = async (req, res) => {
             username: foundPerson.username,
             email: foundPerson.email,
             phone: foundPerson.phone,
-            roles: userRoles,
+            roles: foundPerson.roles,
             region: foundPerson.region,
             site: foundPerson.site,
             photo: foundPerson.photo
@@ -185,3 +178,34 @@ exports.authenticateToken = (req, res, next) => {
         return res.status(403).send({ message: 'Invalid token' });
     } 
 }
+
+exports.registerNoHTTP = async function(user) {
+    try{
+        let roles = user.roles;
+        if(!roles || roles.length === 0){
+            const defaultRoleID = await roleController.getDefaultRoleID();
+            roles = [defaultRoleID];
+        }
+        const userReq = {
+            name: user.name,
+            lastname: user.lastname,
+            username: user.username,
+            email: user.email,
+            password: authUtils.hashPassword(user.password),
+            phone: user.phone,
+            roles: roles,
+            region: user.region,
+            site: user.site
+        };
+
+        const newUser = new UserModel(userReq);
+        await newUser.save();
+    } catch (err) {
+        if (err.code === 11000) {
+            throw new Error('Email or username already exists');
+        } else {
+            console.log(err)
+            throw new Error('Server error');
+        }
+    }
+};
