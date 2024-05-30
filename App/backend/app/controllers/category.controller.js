@@ -37,6 +37,12 @@ exports.createCategory = async (req, res) => {
     }
 };
 
+
+
+
+
+
+
 exports.getCategoriesName = async (req, res) => {
     try {
         const categories = await CategoryModel.find({}, 'nameEng');

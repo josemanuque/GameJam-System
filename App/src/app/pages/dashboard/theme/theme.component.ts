@@ -9,6 +9,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
 
 import {provideNativeDateAdapter} from '@angular/material/core';
 
@@ -22,17 +23,20 @@ import { ThemeService } from '../../../services/theme.service';
 @Component({
   selector: 'app-theme',
   standalone: true,
-  imports: [MatCardModule,MatCheckboxModule,MatSidenavModule, MatFormFieldModule, SidenavComponent,MatSelectModule,
+  imports: [MatIconModule,MatCardModule,MatCheckboxModule,MatSidenavModule, MatFormFieldModule, SidenavComponent,MatSelectModule,
     MatInputModule,MatButtonModule,FormsModule,ReactiveFormsModule,MatDatepickerModule],
   templateUrl: './theme.component.html',
   styleUrl: './theme.component.scss'
 })
 export class ThemeComponent {
   form!: FormGroup;
-  categories: any;
   selectedFileEng: any = null;
   selectedFileSpa: any = null;
   selectedFilePort: any = null;
+  themes: any;
+  fileNameEng = '';
+  fileNameSpa = '';
+  fileNamePort = '';
   constructor(private fb: FormBuilder, private themeService: ThemeService, private router:Router) { }
 
   ngOnInit(): void {
@@ -47,47 +51,62 @@ export class ThemeComponent {
       manualSpa: [null],
       manualPort: [null],
     });
+    this.themeService.getThemesName().subscribe(
+      (response) => {
+        
+        this.themes = response.themesNames;
+        console.log('Themes:', this.themes);
+        
+      },
+      (error) => {
+        console.error('Error occurred while fetching themes:', error);
+      }
+    );
   }
-
   submitForm(): void {
     if (this.form.valid) {
-      const data = this.form.value;
-      // if (this.selectedFileEng) {
-      //   data.manualEng = this.selectedFileEng;
-      // }
-      // if (this.selectedFileSpa) {
-      //   data.manualSpa = this.selectedFileSpa;
-      // }
-      // if (this.selectedFilePort) {
-      //   data.manualPort = this.selectedFilePort;
-      // }
-      this.themeService.createTheme(data).subscribe(
-        (response) => {
-          console.log('Theme created successfully:', response);
-          // Optionally, you can reset the form after successful submission
-          this.form.reset();
-          alert('Theme created successfully!');
-          window.location.reload();
-          this.router.navigate(['/dashboard/theme']);
-        },
-        (error) => {
-          console.error('Error occurred while creating theme:', error);
-          alert('Error occurred while creating theme. Please try again.');
-        }
-      );
+      const formData = new FormData();
+      Object.keys(this.form.controls).forEach(key => {
+        formData.append(key, this.form.get(key)!.value);
+      });
+      console.log('Form data:', formData);
+       this.themeService.createTheme(formData).subscribe(
+         (response) => {
+           console.log('theme created successfully:', response);
+           // Optionally, you can reset the form after successful submission
+           this.form.reset();
+           alert('Theme created successfully!');
+           window.location.reload();
+         },
+         (error) => {
+           console.error('Error occurred while creating category:', error);
+           alert('Error occurred while creating category. Please try again.');
+         }
+       );
     } else {
-      // Form is invalid, display error messages
       console.log('Form is invalid!');
     }
   }
   onFileSelectedEng(event: any): void {
-    this.selectedFileEng = event.target.files[0] ?? null;
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.fileNameEng = file.name;
+      this.form.patchValue({manualEng: file});
+    }
   }
   onFileSelectedSpa(event: any): void {
-    this.selectedFileSpa = event.target.files[0] ?? null;
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.fileNameSpa = file.name;
+      this.form.patchValue({manualSpa: file});
+    }
   }
   onFileSelectedPort(event: any): void {
-    this.selectedFilePort = event.target.files[0] ?? null;
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.fileNamePort = file.name;
+      this.form.patchValue({manualPort: file});
+    }
   }
 
 }

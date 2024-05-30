@@ -36,4 +36,9 @@ export class StageService {
   getStage(stageId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/stage/${stageId}`);
   }
+
+  // Get time remaining for stage
+  getTimeRemaining(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/time`);
+  }
 }

@@ -75,6 +75,10 @@
   
               <div class="row d-flex justify-content-center">
                 <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Submit Game</button>
+                  
+              </div>
+              <div class="row d-flex justify-content-center">
+                Time remaining: {{ getFormattedTime() }}
               </div>
               
                 <!-- Assuming `themes` and `categories` are arrays, you can use mat-chips for them -->
@@ -86,37 +90,123 @@
       }
     }
     @if (gameData) {
-      <div class="row">
-        <div class="col-md-12 mx-auto d-flex justify-content-center align-items-center">
-          <h1>Your Team submitted <span class="org">{{gameData.title}}!</span></h1>
+      @if (!updateModeFlag) {
+        <div class="row">
+          <div class="col-md-12 mx-auto d-flex justify-content-center align-items-center">
+            <h1>Your Team submitted <span class="org">{{gameData.title}}!</span></h1>
+          </div>
+          <!-- <div class="col-md-12 mx-auto d-flex justify-content-center align-items-center" style="height: calc(100vh - 12rem);"> -->
+          <div class="col-md-12 mx-auto d-flex justify-content-center align-items-center">
+            <mat-card class="example-card">
+              <mat-card-header (click)="updateMode()">
+                <div mat-card-avatar class="example-header-image"></div>
+                <mat-card-title  class="org">{{gameData.title}}</mat-card-title>
+                <mat-card-subtitle>{{teamData!.name}}</mat-card-subtitle>
+              </mat-card-header>
+              <img mat-card-image [src]="'data:image/jpeg;base64,' + gameData!.photo.data" alt="Photo of a Shiba Inu"  (click)="updateMode()">
+              <mat-card-content  (click)="updateMode()">
+                <p style="margin-top: 10px; margin-bottom: 10px;">
+                  {{gameData.description}}
+                </p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-button (click)="redirectYT()">GAMEPLAY</button>
+                <button mat-button (click)="redirectBuild()">BUILD</button>
+                <!-- <button mat-button>SHARE</button> -->
+              </mat-card-actions>
+              <mat-card-footer>
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              </mat-card-footer>
+            </mat-card>
+            
+          </div>
+          <div class="row d-flex justify-content-center align-items-center" style="margin-top: 1rem;">
+            Time remaining for making changes: {{ getFormattedTime() }}
+          </div>
         </div>
-        <!-- <div class="col-md-12 mx-auto d-flex justify-content-center align-items-center" style="height: calc(100vh - 12rem);"> -->
-        <div class="col-md-12 mx-auto d-flex justify-content-center align-items-center">
-          <mat-card class="example-card">
-            <mat-card-header>
-              <div mat-card-avatar class="example-header-image"></div>
-              <mat-card-title  class="org">{{gameData.title}}</mat-card-title>
-              <mat-card-subtitle>{{teamData!.name}}</mat-card-subtitle>
-            </mat-card-header>
-            <img mat-card-image [src]="'data:image/jpeg;base64,' + gameData!.photo.data" alt="Photo of a Shiba Inu">
-            <mat-card-content>
-              <p style="margin-top: 10px; margin-bottom: 10px;">
-                {{gameData.description}}
-              </p>
-            </mat-card-content>
-            <mat-card-actions>
-              <button mat-button (click)="redirect()">GAMEPLAY</button>
-              <!-- <button mat-button>SHARE</button> -->
-            </mat-card-actions>
-            <mat-card-footer>
-              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-            </mat-card-footer>
-          </mat-card>
+      } 
+      @if (updateModeFlag) {
+        <div class="row">
+          <div class="col-md-12 mx-auto d-flex justify-content-center align-items-center">
+            <h1>Update Game</h1>
+          </div>
         </div>
+        <div class="row">
+          <div class="col-md-12 mx-auto d-flex justify-content-center align-items-center">
+            <h2 class="org">Team:</h2><h2>{{teamData?.name}}</h2>
+          </div>
+        </div>
+        <form [formGroup]="form2">
+          <div class="row d-flex justify-content-center">
+          
+              <mat-form-field>
+                <mat-label>Game Title</mat-label>
+                <textarea matInput formControlName="title"></textarea>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description"></textarea>
+              </mat-form-field>
+            
+              <mat-form-field>
+                <mat-label>Gameplay Video (1 minute)</mat-label>
+                <input matInput formControlName="youtubeLinkGameplay">
+              </mat-form-field>
+            
+              <mat-form-field>
+                <mat-label>Pitch Video</mat-label>
+                <input matInput formControlName="youtubeLinkPitch">
+              </mat-form-field>
+            
+              <mat-form-field>
+                <mat-label>Build Link</mat-label>
+                <input matInput formControlName="buildLink">
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="categories" multiple>
+                    @for (cat of categories; track cat) {
+                    <mat-option [value]="cat.id">{{cat.name}}</mat-option>
+                    }
+                </mat-select>
+
+            </mat-form-field>
+            <div class="row d-flex justify-content-center">
+              <mat-form-field>
+                
+                <label for="file" mat-stroked-button aria-label="File input">
+                  <mat-icon>folder</mat-icon>
+                  Game photo
+                </label>
+                <input matInput formControlName="file" type="text" [value]="fileName" readonly>
+                <input type="file" id="file" hidden (change)="onFileSelected($event)" accept=".png, .jpg, .jpeg">
+              </mat-form-field>
+            </div>
 
 
-        
-      </div>
+
+            <div class="row d-flex justify-content-center">
+              <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Update Game</button>
+                
+            </div>
+            <div class="row d-flex justify-content-center">
+              <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="updateMode()">View Game</button>
+            </div>
+            <div class="row d-flex justify-content-center">
+              Time remaining: {{ getFormattedTime() }}
+            </div>
+            
+              <!-- Assuming `themes` and `categories` are arrays, you can use mat-chips for them -->
+              
+
+            
+          </div>
+      </form>
+
+      }
+
     }
     
 
