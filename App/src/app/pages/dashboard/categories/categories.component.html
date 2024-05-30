@@ -120,7 +120,7 @@
           </div>
       </form>
         <div class="row">
-            @for (cat of categories; track cat) {
+            @for (cat of categories.themeNames; track cat) {
                 <mat-card class="example-card">
                     <mat-card-header>
                       <mat-card-title class="d-flex justify-content-center">{{cat.name}}</mat-card-title>

@@ -29,12 +29,17 @@
                           </mat-form-field>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
-                        <input formControlName="manualEng" hidden (change)="onFileSelectedEng($event)" #fileInput type="file" accept=".pdf">
-                      </div>
-                      <div class="d-flex justify-content-center">
-                        <span class="file-name">{{selectedFileEng?.name}}</span>
+                      <mat-form-field>
+                        
+                        <label for="file3" mat-stroked-button aria-label="File input">
+                          <mat-icon>folder</mat-icon>
+                          Choose File
+                        </label>
+                        <input matInput formControlName="manualEng" type="text" [value]="fileNameEng" readonly>
+                        <input type="file" id="file3" hidden (change)="onFileSelectedEng($event)" accept=".pdf">
+                      </mat-form-field>
                     </div>
+                    
                 </div>
                 <div class="col-md-3 mx-auto">
                     <div class="d-flex justify-content-center">
@@ -53,12 +58,17 @@
                           </mat-form-field>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="button" mat-raised-button (click)="fileInput2.click()">Choose File</button>
-                        <input formControlName="manualSpa" hidden (change)="onFileSelectedSpa($event)" #fileInput2 type="file" accept=".pdf">
-                      </div>
-                      <div class="d-flex justify-content-center">
-                        <span class="file-name">{{selectedFileSpa?.name}}</span>
+                      <mat-form-field>
+                        
+                        <label for="file2" mat-stroked-button aria-label="File input">
+                          <mat-icon>folder</mat-icon>
+                          Choose File
+                        </label>
+                        <input matInput formControlName="manualSpa" type="text" [value]="fileNameSpa" readonly>
+                        <input type="file" id="file2" hidden (change)="onFileSelectedSpa($event)" accept=".pdf">
+                      </mat-form-field>
                     </div>
+                    
                 </div>
                 <div class="col-md-3 mx-auto">
                     <div class="d-flex justify-content-center">
@@ -77,11 +87,15 @@
                           </mat-form-field>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button type="button" mat-raised-button (click)="fileInput3.click()">Choose File</button>
-                        <input formControlName="manualPort" hidden (change)="onFileSelectedPort($event)" #fileInput3 type="file" accept=".pdf">
-                      </div>
-                      <div class="d-flex justify-content-center">
-                        <span class="file-name">{{selectedFilePort?.name}}</span>
+                      <mat-form-field>
+
+                        <label for="file" mat-stroked-button aria-label="File input">
+                          <mat-icon>folder</mat-icon>
+                          Choose File
+                        </label>
+                        <input matInput formControlName="manualPort" type="text" [value]="fileNamePort" readonly>
+                        <input type="file" id="file" hidden (change)="onFileSelectedPort($event)" accept=".pdf">
+                      </mat-form-field>
                     </div>
                 </div>
             
@@ -92,6 +106,18 @@
                 <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Create Theme</button>
             </div>
         </form>
+        <div class="row">
+          @for (cat of themes; track cat) {
+              <mat-card class="example-card">
+                  <mat-card-header>
+                    <mat-card-title class="d-flex justify-content-center">{{cat.name}}</mat-card-title>
+                    <!-- <mat-card-subtitle class="d-flex justify-content-center">{{cat.description}}</mat-card-subtitle> -->
+                  </mat-card-header>
+                  <mat-card-content>
+                  </mat-card-content>
+              </mat-card>
+          }
+      </div>
 
       </div>
     </div>

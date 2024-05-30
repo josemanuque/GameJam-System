@@ -33,8 +33,8 @@ const categorySchema = new mongoose.Schema(
     {
         versionKey: false,
     }
-)
+);
 
 const CategoryModel = mongoose.model('Category', categorySchema);
 
-module.exports = CategoryModel
+module.exports = CategoryModel;

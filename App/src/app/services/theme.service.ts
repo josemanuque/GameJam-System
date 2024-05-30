@@ -20,16 +20,16 @@ export class ThemeService {
 
   // Remove a theme
   removeTheme(themeId: string): Observable<any> {
-    return this.http.delete<any>(`/${this.apiUrl}/theme/${themeId}`);
+    return this.http.delete<any>(`${this.apiUrl}/theme/${themeId}`);
   }
 
   // Get all theme names
-  getThemesName(): Observable<string[]> {
-    return this.http.get<string[]>(`/${this.apiUrl}/theme`);
+  getThemesName(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/theme`);
   }
 
   // Get a theme by ID
   getTheme(themeId: string): Observable<any> {
-    return this.http.get<any>(`/${this.apiUrl}/theme/${themeId}`);
+    return this.http.get<any>(`${this.apiUrl}/theme/${themeId}`);
   }
 }

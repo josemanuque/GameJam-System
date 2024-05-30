@@ -67,6 +67,7 @@ export class CategoriesComponent {
       Object.keys(this.form.controls).forEach(key => {
         formData.append(key, this.form.get(key)!.value);
       });
+      console.log('Form data:', formData);
        this.catService.createCategory(formData).subscribe(
          (response) => {
            console.log('Category created successfully:', response);

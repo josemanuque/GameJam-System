@@ -19,4 +19,7 @@ export class GameService {
   getGame(teamId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/game/${teamId}`);
   }
+  updateGame(gameId: string,gameData: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/game/${gameId}`, gameData);
+  }
 }
