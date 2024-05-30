@@ -51,10 +51,10 @@ export class ThemeComponent {
       manualSpa: [null],
       manualPort: [null],
     });
-    this.themeService.getThemesName().subscribe(
+    this.themeService.getThemes().subscribe(
       (response) => {
-        
-        this.themes = response.themesNames;
+        console.log('Themes:', response);
+        this.themes = response;
         console.log('Themes:', this.themes);
         
       },
