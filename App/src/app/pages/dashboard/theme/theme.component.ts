@@ -37,6 +37,8 @@ export class ThemeComponent {
   fileNameEng = '';
   fileNameSpa = '';
   fileNamePort = '';
+  updateModeFlag = false;
+  currentThemeId: any;
   constructor(private fb: FormBuilder, private themeService: ThemeService, private router:Router) { }
 
   ngOnInit(): void {
@@ -63,29 +65,84 @@ export class ThemeComponent {
       }
     );
   }
-  submitForm(): void {
-    if (this.form.valid) {
-      const formData = new FormData();
-      Object.keys(this.form.controls).forEach(key => {
-        formData.append(key, this.form.get(key)!.value);
-      });
-      console.log('Form data:', formData);
-       this.themeService.createTheme(formData).subscribe(
-         (response) => {
-           console.log('theme created successfully:', response);
-           // Optionally, you can reset the form after successful submission
-           this.form.reset();
-           alert('Theme created successfully!');
-           window.location.reload();
-         },
-         (error) => {
-           console.error('Error occurred while creating category:', error);
-           alert('Error occurred while creating category. Please try again.');
-         }
-       );
-    } else {
-      console.log('Form is invalid!');
+  openUpdateMode(id:any){
+    this.themeService.getTheme(id).subscribe(
+      (response) => {
+        console.log('Theme:', response);
+        this.currentThemeId = id;
+        this.form.patchValue({
+          nameEng: response.nameEng,
+          descriptionEng: response.descriptionEng,
+          nameSpa: response.nameSpa,
+          descriptionSpa: response.descriptionSpa,
+          namePort: response.namePort,
+          descriptionPort: response.descriptionPort,
+          manualSpa: response.manualSpa.data,
+          manualEng: response.manualEng.data,
+          manualPort: response.manualPort.data
+        });
+        this.updateModeFlag = true;
+      },
+      (error) => {
+        console.error('Error occurred while fetching theme:', error);
+      }
+    );
+    this.updateModeFlag = true;
+  }
+  closeUpdateMode(){
+    this.updateModeFlag = false;
+    this.form.reset();
+  }
+  submitForm(mode:any): void {
+    if (mode === 'create') {
+      if (this.form.valid) {
+        const formData = new FormData();
+        Object.keys(this.form.controls).forEach(key => {
+          formData.append(key, this.form.get(key)!.value);
+        });
+        console.log('Form data:', formData);
+         this.themeService.createTheme(formData).subscribe(
+           (response) => {
+             console.log('theme created successfully:', response);
+             // Optionally, you can reset the form after successful submission
+             this.form.reset();
+             alert('Theme created successfully!');
+             window.location.reload();
+           },
+           (error) => {
+             console.error('Error occurred while creating category:', error);
+             alert('Error occurred while creating category. Please try again.');
+           }
+         );
+      } else {
+        console.log('Form is invalid!');
+      }
     }
+    if (mode === 'update'){
+      if (this.form.valid) {
+        const formData = new FormData();
+        Object.keys(this.form.controls).forEach(key => {
+          formData.append(key, this.form.get(key)!.value);
+        });
+        console.log('Form data:', formData);
+        this.themeService.updateTheme(formData,this.currentThemeId).subscribe(
+          (response) => {
+            console.log('theme updated successfully:', response);
+            // Optionally, you can reset the form after successful submission
+            this.form.reset();
+            alert('Theme updated successfully!');
+            window.location.reload();
+          },
+          (error) => {
+            console.error('Error occurred while updating theme:', error);
+            alert('Error occurred while updating theme. Please try again.');
+          }
+        );
+      } else {
+        console.log('Form is invalid!');
+      }
+    }
+
   }
   onFileSelectedEng(event: any): void {
     if (event.target.files.length > 0) {
@@ -107,6 +164,17 @@ export class ThemeComponent {
       this.fileNamePort = file.name;
       this.form.patchValue({manualPort: file});
     }
+  }
+  openPdf(base64Pdf: string) {
+    const byteCharacters = atob(base64Pdf);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
   }
 
 }
