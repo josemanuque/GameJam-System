@@ -24,7 +24,7 @@ export class ThemeService {
   }
 
   // Get all theme names
-  getThemesName(): Observable<any> {
+  getThemes(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/theme`);
   }
 

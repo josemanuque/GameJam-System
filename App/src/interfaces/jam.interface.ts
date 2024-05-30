@@ -30,3 +30,8 @@ export interface JamSiteAssignRequestI {
 export interface JamMessageResponseI {
     message: string
 }
+
+export interface JamResponseI {
+    message: string,
+    _id: string,
+}

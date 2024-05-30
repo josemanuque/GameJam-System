@@ -108,3 +108,9 @@ mat-sidenav-container {
     background-color: #FFA500 !important;
     border-color: #FFA500;
   }
+
+  button.btn-invisible {
+    background-color: transparent !important;
+    border: none;
+    color: white;
+  }

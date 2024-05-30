@@ -5,18 +5,18 @@ exports.createStage = async (req, res) => {
         const stageReq = {
             name: req.body.name,
             priority: req.body.priority,
-            startingDate: new Date(req.body.startingDate),
-            endingDate: new Date(req.body.endingDate),
-            buildDeliveryDate: new Date(req.body.buildDeliveryDate),
-            pitchPreviewDeliveryDate: new Date (req.body.pitchPreviewDeliveryDate),
-            pitchDeliveryDate: new Date(req.body.pitchDeliveryDate),
-            pitchTestDate: new Date(req.body.pitchTestDate),
-            judgeDeliveryDate: new Date(req.body.judgeDeliveryDate)
+            startingDate: req.body.startingDate ? new Date(req.body.startingDate) : undefined,
+            endingDate: req.body.endingDate ? new Date(req.body.endingDate) : undefined,
+            buildDeliveryDate: req.body.buildDeliveryDate ? new Date(req.body.buildDeliveryDate) : undefined,
+            pitchPreviewDeliveryDate: req.body.pitchPreviewDeliveryDate ? new Date(req.body.pitchPreviewDeliveryDate) : undefined,
+            pitchDeliveryDate: req.body.pitchDeliveryDate ? new Date(req.body.pitchDeliveryDate) : undefined,
+            pitchTestDate: req.body.pitchTestDate ? new Date(req.body.pitchTestDate) : undefined,
+            judgeDeliveryDate: req.body.judgeDeliveryDate ? new Date(req.body.judgeDeliveryDate) : undefined
         };
 
-        const stage = new StageModel(stageData);
+        const stage = new StageModel(stageReq);
         await stage.save();
-        res.send({message: "Stage created successfully"});
+        res.send({message: "Stage created successfully", _id: stage._id});
 
     }catch(err) {
         if(err.code === 11000) {
@@ -31,7 +31,6 @@ exports.createStage = async (req, res) => {
 exports.removeStage = async (req, res) => {
     try {
         const stageID = req.params.id
-        
         const deletedStage = await StageModel.findByIdAndDelete(stageID);
         if(!deletedStage){
             return res.status(404).send({ message: "Stage doesn't exist" });

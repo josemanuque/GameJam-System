@@ -13,11 +13,15 @@ import { MatDivider } from '@angular/material/divider';
 
 import { JamListResponseI, JamResponseI, JamRequestI, JamMessageResponseI } from '../../../../../interfaces/jam.interface';
 import { JamService } from '../../../../services/jam.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { StageService } from '../../../../services/stage.service';
 
 import { CommonModule } from '@angular/common';
-
+import { switchMap } from 'rxjs';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { ThemeService } from '../../../../services/theme.service';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import { SnackBarService } from '../../../../services/snack-bar.service';
 
 interface Region {
   value: string;
@@ -27,15 +31,36 @@ interface Region {
 @Component({
   selector: 'app-view-jam',
   standalone: true,
-  imports: [MatInputModule,ReactiveFormsModule,MatIconModule,MatSelectModule,MatSidenavModule, MatFormFieldModule, SidenavComponent, MatCardModule, MatDivider],
+  providers: [provideNativeDateAdapter()],
+  imports: [
+    MatInputModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatSelectModule,
+    MatSidenavModule, 
+    MatFormFieldModule, 
+    SidenavComponent, 
+    MatCardModule, 
+    MatDivider,
+    MatDatepickerModule
+  ],
   templateUrl: './view-jam.component.html',
   styleUrl: './view-jam.component.scss'
 })
 export class ViewJamComponent {
-  constructor(private fb: FormBuilder,private jamService: JamService, private router: Router, private stageService: StageService) {}
-  jamData: JamResponseI[] = [];
+  constructor(
+    private fb: FormBuilder,
+    private jamService: JamService, 
+    private router: Router, 
+    private stageService: StageService,
+    private route: ActivatedRoute,
+    private themeService: ThemeService,
+    private snackBarService: SnackBarService,
+  ) {}
+  jamData: JamResponseI = {} as JamResponseI;
   stages: any;
   jamStages: any;
+  themesData: any;
   editFlag: boolean = false;
   form!: FormGroup;
   fileName = '';
@@ -46,42 +71,28 @@ export class ViewJamComponent {
   ];
 
   ngOnInit(): void {
-    this.jamService.getJams().subscribe(
-      (response) => {
-        console.log('Jams fetched successfully:', response);
-        this.jamData = response.jams;
+    this.route.params.pipe(switchMap((params) => {
+      return this.jamService.getJam(params['id']);
+    })).subscribe({
+      next: (response: JamResponseI) => {
+        this.jamData = response;
         this.initializeForm();
-        this.jamStages = []; // Initialize this.jamStages as an array
-    
-        for (const stage of this.jamData[0].stages) {
-          this.stageService.getStage(stage).subscribe(
-            (response) => {
-              console.log('Stage:', response);
-              this.jamStages.push(response); // Append each stage to this.jamStages
-              console.log('Jam Stages:', this.jamStages);
-            },
-            (error) => {
-              console.error('Error occurred while fetching stage:', error);
-            }
-          );
-        }
+        this.jamStages = this.jamData.stages;
       },
-      (error) => {
-        console.error('Error occurred while fetching jams:', error);
-        alert('Error occurred while fetching jams. Please try again.');
+      error: (error) => {
+        console.error('Error occurred while fetching jam:', error);
       }
-    );
+    });
     
-    this.stageService.getStages().subscribe(
-      (response) => {
-        console.log('Stages:', response);
-        this.stages = response;
+    this.themeService.getThemes().subscribe({
+      next: (response) => {
+        console.log('Themes fetched successfully:', response);
+        this.themesData = response;
       },
-      (error) => {
-        console.error('Error occurred while fetching stages:', error);
+      error: (error) => {
+        console.error('Error occurred while fetching themes:', error);
       }
-    );
-
+    });
   }
 
   isStageSelected(stageId: string): boolean {
@@ -94,20 +105,25 @@ export class ViewJamComponent {
 
 initializeForm(): void {
   this.form = this.fb.group({
-    title: [''],
-    description: [''],
-    stages: ['', Validators.required],
+    title: ['', Validators.required],
+    description: ['', Validators.required],
+    themes: [''],
+    startingDate: ['', Validators.required],
+    endingDate: ['', Validators.required]
   });
 
   // Set selected stages based on jam's stages
-  if (this.jamData && this.jamData.length > 0) {
-    const jamStages = this.jamData[0].stages; // Assuming stages are stored in the first jam's stages property
+  if (this.jamData) {
+    const jamStages = this.jamData.stages; // Assuming stages are stored in the first jam's stages property
     if (jamStages && jamStages.length > 0) {
       const selectedStages = jamStages.map(stage => stage);
       this.form.get('stages')?.setValue(selectedStages);
     }
-    this.form.get('title')?.setValue(this.jamData[0].title);
-    this.form.get('description')?.setValue(this.jamData[0].description);
+    this.form.get('title')?.setValue(this.jamData.title);
+    this.form.get('description')?.setValue(this.jamData.description);
+    this.form.get('startingDate')?.setValue(this.jamData.startingDate);
+    this.form.get('endingDate')?.setValue(this.jamData.endingDate);
+    this.form.get('theme')?.setValue(this.jamData.theme);
     console.log('Form initialized:', this.form.value);
   }
 }
@@ -132,16 +148,17 @@ initializeForm(): void {
         }
       }
   
-      this.jamService.updateJam(this.jamData[0]._id, formData).subscribe(
+      this.jamService.updateJam(this.jamData._id, formData).subscribe(
         (response: any) => {
           console.log('Jam updated successfully:', response);
-          alert('Jam updated successfully.');
+          this.snackBarService.openSnackBar('Jam updated successfully', "Close", 5000);
           this.editFlag = false;
-          window.location.reload();
+          const params = this.route.snapshot.params['id'];
+          this.router.navigate(['dashboard/jam', params, 'stages']);
         },
         (error) => {
           console.error('Error occurred while updating jam:', error);
-          alert('Error occurred while updating jam. Please try again.');
+          this.snackBarService.openSnackBar('Error occurred while updating jam. Please try again.', "Close", 5000);
         }
       );
     }
@@ -152,12 +169,11 @@ initializeForm(): void {
   }
 
   deleteJam(): void {
-    const jamId = this.jamData[0]._id;
+    const jamId = this.jamData._id;
     this.jamService.removeJam(jamId).subscribe(
       (response: JamMessageResponseI) => {
         console.log('Jam deleted successfully:', response);
         alert('Jam deleted successfully.');
-        this.jamData = this.jamData.filter((jam) => jam._id !== jamId);
         window.location.reload();
       },
       (error) => {
