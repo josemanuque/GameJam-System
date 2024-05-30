@@ -91,7 +91,7 @@ export class RegisterUserComponent {
       site: [''],
       region: [''],
       roles: [[], Validators.required], // Empty array as default
-      file: [null, Validators.required],
+      file: [null],
     });
 
     this.userService.userData$.subscribe({

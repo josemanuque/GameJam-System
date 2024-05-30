@@ -13,6 +13,8 @@ import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 import { SnackBarService } from '../../../services/snack-bar.service';
+import { TableSkeletonComponent } from '../../../shared/table-skeleton/table-skeleton.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 
 @Component({
@@ -25,7 +27,9 @@ import { SnackBarService } from '../../../services/snack-bar.service';
     SidenavComponent, 
     MatDialogModule,
     RouterLink,
-    MatIconModule
+    MatIconModule,
+    NgxSkeletonLoaderModule,
+    TableSkeletonComponent
   ],
   templateUrl: './view-user.component.html',
   styleUrl: './view-user.component.scss'
@@ -33,6 +37,7 @@ import { SnackBarService } from '../../../services/snack-bar.service';
 export class ViewUserComponent {
   displayedColumns: string[] = ['username', 'name', 'lastname', 'email', 'region', 'roles', 'delete'];
   dataSource!: any;
+  loaded = false;
   validRoles: RoleResponseI[] = [];
   @ViewChild(MatTable) table!: MatTable<UserResponseI[]>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -50,7 +55,16 @@ export class ViewUserComponent {
         this.validRoles = data.roles;
         this.validRoles.map((role: RoleResponseI) => role.name);
         return this.userService.getAllUsers();
-      })).subscribe(this.handleUsers.bind(this));
+      })).subscribe({
+        next: (response) => {
+          this.handleUsers(response); // Call handleUsers as a function
+          this.loaded = true;
+        },
+        error: (err) => {
+          console.error('Error occurred while fetching users:', err);
+          this.snackBarService.openSnackBar('Error occurred while fetching users. Please try again.', 'OK', 5000);
+        }
+      });
   }
 
   private handleUsers(users: UserResponseI[]) {
