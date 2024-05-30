@@ -12,6 +12,7 @@ import { StageService } from '../../../../services/stage.service';
 import { JamService } from '../../../../services/jam.service';
 import { switchMap } from 'rxjs';
 import { SnackBarService } from '../../../../services/snack-bar.service';
+import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
 
 export interface PeriodicElement {
   name: string;
@@ -52,7 +53,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 
 export class StagesViewComponent {
-  displayedColumns: string[] = ['dragHandle','name', 'startingDate', 'endingDate', 'buildDeliveryDate', 'pitchDeliveryDate', 'judgeDeliveryDate', 'delete'];
+  displayedColumns: string[] = ['dragHandle','name', 'startingDate', 'endingDate', 'buildDeliveryDate', 'pitchDeliveryDate', 'delete'];
   dataSource: any = ELEMENT_DATA;
   @ViewChild(MatTable) table!: MatTable<PeriodicElement>;
 
@@ -113,17 +114,30 @@ export class StagesViewComponent {
   }
 
   onDelete(stage: any) {
-    this.jamService.removeStageFromJam(this.route.snapshot.params['id'], stage._id).pipe(switchMap((response) => {
-      return this.stageService.removeStage(stage._id);
-    })).subscribe({
-      next: (response) => {
-        this.snackbarService.openSnackBar('Stage deleted successfully!', 'Close', 5000);
-        this.dataSource = this.dataSource.filter((item: any) => item._id !== stage._id);
-        this.table.renderRows();
-      },
-      error: (error) => {
-        console.error('Error occurred while deleting stage:', error);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '250px',
+      data: {
+        title: 'Delete Stage',
+        message: `Are you sure you want to delete ${stage.name}?`
       }
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.jamService.removeStageFromJam(this.route.snapshot.params['id'], stage._id).pipe(switchMap((response) => {
+          return this.stageService.removeStage(stage._id);
+        })).subscribe({
+          next: (response) => {
+            this.snackbarService.openSnackBar('Stage deleted successfully!', 'Close', 5000);
+            this.dataSource = this.dataSource.filter((item: any) => item._id !== stage._id);
+            this.table.renderRows();
+          },
+          error: (error) => {
+            console.error('Error occurred while deleting stage:', error);
+          }
+        });
+      }
+    });
+    
   }
 }

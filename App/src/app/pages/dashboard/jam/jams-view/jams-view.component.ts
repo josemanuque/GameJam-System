@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { SidenavComponent } from '../../../../shared/sidenav/sidenav.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { SnackBarService } from '../../../../services/snack-bar.service';
 import { JamService } from '../../../../services/jam.service';
 import { JamResponseI } from '../../../../../interfaces/jam.interface';
 import { Router } from '@angular/router';
+import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-jams-view',
@@ -30,6 +31,7 @@ export class JamsViewComponent {
 
   constructor(
     private router: Router,
+    private dialog: MatDialog,
     private jamService: JamService,
     private snackbarService: SnackBarService
   ) { }
@@ -54,15 +56,28 @@ export class JamsViewComponent {
   }
 
   onDelete(jam: any){
-    this.jamService.removeJam(jam._id).subscribe({
-      next: (response) => {
-        this.snackbarService.openSnackBar(response.message, 'Close', 5000);
-        this.dataSource = this.dataSource.filter((element) => element._id !== jam._id);
-      },
-      error: (error) => {
-        console.error('Error occurred while deleting jam:', error);
-        this.snackbarService.openSnackBar('Error occurred while deleting jam', 'Close', 5000);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '250px',
+      data: {
+        title: 'Delete Jam',
+        message: `Are you sure you want to delete ${jam.title}?`
       }
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.jamService.removeJam(jam._id).subscribe({
+          next: (response) => {
+            this.snackbarService.openSnackBar(response.message, 'Close', 5000);
+            this.dataSource = this.dataSource.filter((element) => element._id !== jam._id);
+          },
+          error: (error) => {
+            console.error('Error occurred while deleting jam:', error);
+            this.snackbarService.openSnackBar('Error occurred while deleting jam', 'Close', 5000);
+          }
+        });
+      }
+    });
+    
   }
 }

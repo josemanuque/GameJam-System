@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { UserResponseI } from '../../../../interfaces/user.interface';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SidenavComponent } from '../../../shared/sidenav/sidenav.component';
@@ -11,6 +11,8 @@ import { RoleResponseI } from '../../../../interfaces/role.interface';
 import { UpdateRolePopupComponent } from './update-role-popup/update-role-popup.component';
 import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import { SnackBarService } from '../../../services/snack-bar.service';
 
 
 @Component({
@@ -30,15 +32,16 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class ViewUserComponent {
   displayedColumns: string[] = ['username', 'name', 'lastname', 'email', 'region', 'roles', 'delete'];
-  dataSource!: MatTableDataSource<UserResponseI>;
+  dataSource!: any;
   validRoles: RoleResponseI[] = [];
-  
+  @ViewChild(MatTable) table!: MatTable<UserResponseI[]>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private userService: UserService, 
     private dialog: MatDialog,
-    private route: Router
+    private route: Router,
+    private snackBarService: SnackBarService
   ) { }
   
   ngOnInit() {
@@ -76,6 +79,33 @@ export class ViewUserComponent {
   }
 
   onDelete(user: UserResponseI) {
-    this.userService.deleteUser(user.username).pipe(switchMap(() => this.userService.getAllUsers())).subscribe(this.handleUsers.bind(this));
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '250px',
+      data: {
+        title: 'Delete User',
+        message: `Are you sure you want to delete ${user.username}?`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        // User clicked 'OK', delete the user
+        this.snackBarService.openSnackBar('User deleted successfully', 'OK', 5000);
+        this.userService.deleteUser(user.username).pipe(switchMap(() => this.userService.getAllUsers())).subscribe({
+          next: (response) => {
+            this.handleUsers(response); // Call handleUsers as a function
+            this.dataSource.data = this.dataSource.data.filter((item: any) => item._id !== user._id);
+            this.table.renderRows();
+            this.snackBarService.openSnackBar('User deleted successfully', 'OK', 5000);
+          },
+          error: (err) => {
+            console.error('Error occurred while deleting user:', err);
+            this.snackBarService.openSnackBar('Error occurred while deleting user. Please try again.', 'OK', 5000);
+          }
+        });
+
+      }
+    });
+    //this.userService.deleteUser(user.username).pipe(switchMap(() => this.userService.getAllUsers())).subscribe(this.handleUsers.bind(this));
   }
 }
