@@ -110,3 +110,14 @@ exports.getTheme = async (req, res) => {
         res.status(500).send({ message: "Error" });
     }
 };
+
+exports.getThemes = async (req, res) => {
+    try {
+        console.log('Getting themes')
+        const themes = await ThemeModel.find();
+        res.send(themes);
+    } catch (error) {
+        return res.status(404).json({ message: 'No themes exist' });
+    }
+}
+

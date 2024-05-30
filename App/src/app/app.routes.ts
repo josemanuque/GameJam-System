@@ -21,6 +21,9 @@ import { ViewUserComponent } from './pages/dashboard/view-user/view-user.compone
 import { ThemeComponent } from './pages/dashboard/theme/theme.component';
 import { StageComponent } from './pages/dashboard/stage/stage.component';
 import { EditSiteComponent } from './pages/dashboard/create-site/edit-site/edit-site.component';
+import { StagesViewComponent } from './pages/dashboard/jam/stages-view/stages-view.component';
+import { JamsViewComponent } from './pages/dashboard/jam/jams-view/jams-view.component';
+import { UpdateUserComponent } from './pages/dashboard/view-user/update-user/update-user.component';
 
 export const routes: Routes = [
     {
@@ -84,14 +87,25 @@ export const routes: Routes = [
                 component:  ViewUserComponent
             },
             {
+                path:  'update-user/:username',
+                component: UpdateUserComponent
+            },
+            {
                 path:   'notifications',
                 component:  NotificationsComponent
             },
             {
                 path:   'jam',
+                component:  JamsViewComponent
+            },
+            {
+                path:   'jam/edit/:id',
                 component:  ViewJamComponent
-            }
-            ,
+            },
+            {
+                path:   'jam/:id/stages',
+                component:  StagesViewComponent
+            },
             {
                 path:   'jam/create',
                 component:  JamComponent

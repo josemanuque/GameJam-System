@@ -63,8 +63,9 @@ export class UserService {
   /**
    * @deprecated use updateUserData instead
    */
-  updateUserByUsername(username: string, userData: any): Observable<UserResponseI> {
-    return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, userData);
+  updateUserByUsername(username: string, newData: any): Observable<UserResponseI> {
+
+    return this.http.put<UserResponseI>(`${this.apiUrl}/user/${username}`, newData);
   }
 
   /**
@@ -88,5 +89,9 @@ export class UserService {
 
   setRoles(username: string, roles: string[]): Observable<UserResponseI> {
     return this.http.patch<UserResponseI>(`${this.apiUrl}/role/set`, { username, roles });
+  }
+
+  deleteUser(username: string): Observable<UserResponseI> {
+    return this.http.delete<UserResponseI>(`${this.apiUrl}/user/${username}`);
   }
 }

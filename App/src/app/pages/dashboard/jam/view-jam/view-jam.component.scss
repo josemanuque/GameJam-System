@@ -25,6 +25,31 @@ mat-sidenav-container {
     margin-left: 100px;
     margin-right: 100px;
   }
+
+  
+
+  .container-dates {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+  mat-form-field.input-init-date {
+    max-width: 45%;
+  }
+  
+  mat-form-field.input-end-date {
+    max-width: 45%;
+  }
+
+  .form-container{
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+  
+
   
   h1{
     margin-top: 3rem;

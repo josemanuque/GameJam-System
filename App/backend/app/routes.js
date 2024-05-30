@@ -38,6 +38,7 @@ mainRouter.get("/user/id/:id", userController.getUser);
 mainRouter.get("/user", userController.getUsers);
 mainRouter.put("/user/:username", userController.updateUser);
 mainRouter.post("/user/password/update", userController.updatePassword);
+mainRouter.delete("/user/:username", userController.deleteUser);
 
 // Teams
 mainRouter.post("/team", teamController.createTeam);
@@ -71,6 +72,8 @@ mainRouter.get("/jam/:id", jamController.getJam);
 mainRouter.patch("/jam/site", jamController.addSiteToJam);
 mainRouter.delete("/jam/site", jamController.removeSiteFromJam);
 mainRouter.patch("/jam/stage", jamController.addStageToJam);
+mainRouter.delete("/jam/:jamID/stage/:stageID", jamController.removeStageFromJam);
+mainRouter.patch("/jam/stage/priority", jamController.updateStagePriority);
 
 // Categories
 mainRouter.post("/category", multerFacade.handleMultiplePDFUploads, categoryController.createCategory);
@@ -88,7 +91,7 @@ mainRouter.put("/game/:id", multerFacade.handleImageUpload, gameController.updat
 mainRouter.post("/theme", multerFacade.handleMultiplePDFUploads, themeController.createTheme);
 mainRouter.put("/theme/:id", multerFacade.handleMultiplePDFUploads, themeController.updateTheme);
 mainRouter.delete("/theme/:id", themeController.removeTheme);
-mainRouter.get("/theme", themeController.getThemesName);
+mainRouter.get("/theme", themeController.getThemes);
 mainRouter.get("/theme/:id", themeController.getTheme);
 
 // Stage

@@ -98,7 +98,6 @@ export class SidenavComponent {
         this.user = user;
         this.currentName = user.name;
         this.currentPhoto = user.photo.data;
-        console.log(this.currentPhoto);
         this.currentRole = user.roles.map((role: { name: any; }) => role.name).join(' - ');
         this.entries = this.getEntries();
       },
