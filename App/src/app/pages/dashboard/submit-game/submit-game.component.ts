@@ -45,6 +45,7 @@ export class SubmitGameComponent {
   timeRemaining: any;
   timeIsUp: boolean = false; // Add this flag
   updateModeFlag = false;
+  isTimeLoaded = false;
 
   constructor(
     private fb: FormBuilder,
@@ -80,54 +81,26 @@ export class SubmitGameComponent {
         console.error('Error occurred while fetching categories:', error);
       }
     );
-    // this.userService.userData$.pipe(
-    //   switchMap(user => {
-    //     if(!user) return of(null);
-    //     return this.teamService.getUserTeam(user.username);
-    //   })
-    // ).subscribe({
-    //   next: team => {
-    //     if (team) {
-    //       this.notInTeam = false;
-    //       this.teamData = team;
-    //       console.log('Team:', this.teamData);
-    //       this.gameService.getGame(this.teamData?._id!).subscribe(
-    //         (response) => {
-    //           this.gameData = response;
-    //           console.log('Game:', this.gameData);
-    //           this.form2 = this.fb.group({
-    //             title: [this.gameData.title, Validators.required],
-    //             description: [this.gameData.description, Validators.required],
-    //             youtubeLinkGameplay: [this.gameData.youtubeLinkGameplay, Validators.required],
-    //             buildLink: [this.gameData.buildLink, Validators.required],
-    //             youtubeLinkPitch: [this.gameData.youtubeLinkPitch, Validators.required],
-    //             categories: [this.gameData.categories, Validators.required],
-    //             file: [this.gameData.photo.data, Validators.required],
-    //           });
-    //         },
-    //         (error) => {
-    //           console.error('Error occurred while fetching game:', error);
-    //         }
-    //       );
-    //     }
-    //   },
-    //   error: err => {
-    //     console.error('Error occurred while getting user or team:', err);
-    //   }
-    // });
     this.getGameData();
     this.stageService.getTimeRemaining().subscribe(
       (response) => {
-        console.log('Time remaining:', response);
+        if(response){
+          console.log('Time remaining:', response);
         this.timeRemaining = response;
+        this.intervalId = setInterval(() => {
+          this.updateTimeRemaining();
+        }, 1000);
+        this.isTimeLoaded = true;
+        }
+         
       },
       (error) => {
         console.error('Error occurred while fetching time remaining:', error);
       }
     );
-    this.intervalId = setInterval(() => {
-      this.updateTimeRemaining();
-    }, 1000);
+      
+
+    
     
   }
   getGameData(){
@@ -167,11 +140,11 @@ export class SubmitGameComponent {
       }
     });
   }
-  ngOnDestroy() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-  }
+  // ngOnDestroy() {
+  //   if (this.intervalId) {
+  //     clearInterval(this.intervalId);
+  //   }
+  // }
   updateTimeRemaining() {
     if (this.timeRemaining.seconds > 0) {
       this.timeRemaining.seconds--;
@@ -195,8 +168,12 @@ export class SubmitGameComponent {
     }
   }
   getFormattedTime(): string {
-    const { days, hours, minutes, seconds } = this.timeRemaining;
-    return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+    if(this.isTimeLoaded){
+      const { days, hours, minutes, seconds } = this.timeRemaining;
+      return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+    } return 'Submisisions are closed!';
+    
+    
   }
 
   onFileSelected(event: any) {
