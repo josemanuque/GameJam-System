@@ -44,12 +44,19 @@ exports.createCategory = async (req, res) => {
 
 
 exports.getCategoriesName = async (req, res) => {
+    // try {
+    //     const categories = await CategoryModel.find({}, 'nameEng');
+    //     const categoryNames = categories.map(category => {
+    //         return { id: category._id, name: category.nameEng }
+    //     });
+    //     res.send({categoryNames});
+    // } catch (error) {
+    //     return res.status(404).json({ message: 'No categories exist' });
+    // }
     try {
-        const categories = await CategoryModel.find({}, 'nameEng');
-        const categoryNames = categories.map(category => {
-            return { id: category._id, name: category.nameEng }
-        });
-        res.send({categoryNames});
+        console.log('Getting categories')
+        const categories = await CategoryModel.find();
+        res.send(categories);
     } catch (error) {
         return res.status(404).json({ message: 'No categories exist' });
     }

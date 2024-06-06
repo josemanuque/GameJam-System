@@ -77,9 +77,12 @@
                 <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Submit Game</button>
                   
               </div>
-              <div class="row d-flex justify-content-center">
-                Time remaining: {{ getFormattedTime() }}
-              </div>
+              @if (isTimeLoaded) {
+                <div class="row d-flex justify-content-center">
+                  Time remaining: {{ getFormattedTime() }}
+                </div>
+              }
+              
               
                 <!-- Assuming `themes` and `categories` are arrays, you can use mat-chips for them -->
                 

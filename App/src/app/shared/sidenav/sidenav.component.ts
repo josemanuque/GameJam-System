@@ -41,7 +41,7 @@ export class SidenavComponent {
   adminDict = new Dictionary<[string, string], string>([
     //icon // ruta //boton
     [['settings', '/settings'], 'Settings'],
-    [['assignment', '/dashboard/stages'], 'Stages'],
+    //[['assignment', '/dashboard/stages'], 'Stages'],
     [['calendar_today', '/dashboard/jam'], 'Jam'],
     [['location_on', '/dashboard/sites'], 'Sites'],
     [['person', '/dashboard/view-user'], 'Users'],

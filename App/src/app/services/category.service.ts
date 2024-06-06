@@ -20,11 +20,11 @@ export class CategoryService {
     return this.http.get<any>(`${this.apiUrl}/category`);
   }
 
-  getCategory(categoryId: string): Observable<CategoryResponseI> {
-    return this.http.get<CategoryResponseI>(`${this.apiUrl}/category/${categoryId}`);
+  getCategory(categoryId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/category/${categoryId}`);
   }
 
-  updateCategory(categoryId: string, categoryData: CategoryCreateRequestI): Observable<CategoryResponseI> {
+  updateCategory(categoryData: FormData, categoryId: string): Observable<CategoryResponseI> {
     return this.http.put<CategoryResponseI>(`${this.apiUrl}/category/${categoryId}`, categoryData);
   }
 }

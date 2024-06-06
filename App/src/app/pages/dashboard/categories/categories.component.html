@@ -4,7 +4,7 @@
   <mat-sidenav-content>
     <div class="content mat-elevation-z4" #contentContainer>
       <div class="custom-container">
-
+      @if (!updateModeFlag) {
         <div class="row">
           <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
             <h1>Categories</h1>
@@ -116,22 +116,136 @@
 
           </div>
           <div class="row d-flex justify-content-center">
-              <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm()">Create Category</button>
+              <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm('create')">Create Category</button>
           </div>
       </form>
         <div class="row">
             @for (cat of categories; track cat) {
                 <mat-card class="example-card">
-                    <mat-card-header>
-                      <mat-card-title class="d-flex justify-content-center">{{cat.name}}</mat-card-title>
-                      <!-- <mat-card-subtitle class="d-flex justify-content-center">{{cat.description}}</mat-card-subtitle> -->
-                    </mat-card-header>
-                    <mat-card-content>
-                    </mat-card-content>
+                  <mat-card-header (click)="openUpdateMode(cat._id)">
+                    <mat-card-title>{{cat.nameEng}}</mat-card-title>
+                    <mat-card-subtitle>{{cat.nameSpa}}/{{cat.namePort}}</mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content (click)="openUpdateMode(cat._id)">
+                    <p>English: {{cat.descriptionEng}}</p>
+                    <p>Spanish: {{cat.descriptionSpa}}</p>
+                    <p>Portuguese: {{cat.descriptionPort}}</p>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <button mat-button (click)="openPdf(cat.manualEng.data)">Eng PDF</button>
+                    <button mat-button (click)="openPdf(cat.manualSpa.data)">Spa PDF</button>
+                    <button mat-button (click)="openPdf(cat.manualPort.data)">Port PDF</button>
+                  </mat-card-actions>
                 </mat-card>
             }
         </div>
+      }
+      @if (updateModeFlag) {
+        <div class="row">
+          <div class="col-md-12 mx-auto d-flex justify-content-center align-self-center">
+            <h1>Update Category</h1>
+          </div>
+        </div>
+        <form [formGroup]="form">
+          <div class="row d-flex justify-content-center">
+              <div class="col-md-3 mx-auto">
+                  <div class="d-flex justify-content-center">
+                      <h2>English</h2>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <mat-form-field>
+                          <mat-label>Name</mat-label>
+                          <input matInput formControlName="nameEng">
+                        </mat-form-field>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <mat-form-field>
+                          <mat-label>Description</mat-label>
+                          <input matInput formControlName="descriptionEng">
+                        </mat-form-field>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <mat-form-field>
+                      
+                      <label for="file3" mat-stroked-button aria-label="File input">
+                        <mat-icon>folder</mat-icon>
+                        Choose File
+                      </label>
+                      <input matInput formControlName="manualEng" type="text" [value]="fileNameEng" readonly>
+                      <input type="file" id="file3" hidden (change)="onFileSelectedEng($event)" accept=".pdf">
+                    </mat-form-field>
+                  </div>
+                  
+              </div>
+              <div class="col-md-3 mx-auto">
+                  <div class="d-flex justify-content-center">
+                      <h2>Spanish</h2>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <mat-form-field>
+                          <mat-label>Name</mat-label>
+                          <input matInput formControlName="nameSpa">
+                        </mat-form-field>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <mat-form-field>
+                          <mat-label>Description</mat-label>
+                          <input matInput formControlName="descriptionSpa">
+                        </mat-form-field>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <mat-form-field>
+                      
+                      <label for="file2" mat-stroked-button aria-label="File input">
+                        <mat-icon>folder</mat-icon>
+                        Choose File
+                      </label>
+                      <input matInput formControlName="manualSpa" type="text" [value]="fileNameSpa" readonly>
+                      <input type="file" id="file2" hidden (change)="onFileSelectedSpa($event)" accept=".pdf">
+                    </mat-form-field>
+                  </div>
+                  
+              </div>
+              <div class="col-md-3 mx-auto">
+                  <div class="d-flex justify-content-center">
+                      <h2>Portuguese</h2>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <mat-form-field>
+                          <mat-label>Name</mat-label>
+                          <input matInput formControlName="namePort">
+                        </mat-form-field>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                      <mat-form-field>
+                          <mat-label>Description</mat-label>
+                          <input matInput formControlName="descriptionPort">
+                        </mat-form-field>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <mat-form-field>
 
+                      <label for="file" mat-stroked-button aria-label="File input">
+                        <mat-icon>folder</mat-icon>
+                        Choose File
+                      </label>
+                      <input matInput formControlName="manualPort" type="text" [value]="fileNamePort" readonly>
+                      <input type="file" id="file" hidden (change)="onFileSelectedPort($event)" accept=".pdf">
+                    </mat-form-field>
+                  </div>
+              </div>
+          
+              
+
+          </div>
+          <div class="row d-flex justify-content-center">
+              <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="submitForm('update')">Update Category</button>
+          </div>
+      </form>
+        <div class="row d-flex justify-content-center">
+          <button mat-flat-button class="btn btn-primary submit-button" mat-raised-button color="primary" (click)="closeUpdateMode()">Go back</button>
+        </div>
+      }
       </div>
     </div>
   </mat-sidenav-content>
